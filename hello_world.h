@@ -9,6 +9,14 @@
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9]
  * [File Use: Stefano & Smith, 2009 ] */
 
+char* Hello_Message = "Hello World!";
+char* Help_Message =  "Usage: ./hello_world [OPTIONS]\n"
+                      "Prints \"Hello World!\".\n"
+                      "\n"
+                      " any arguments - Prints this message.\n"
+                      " no arguments  - Prints Hello World.\n";
+/* Mutl-line string: Fisher, 2016 */
+
 int main(int argc, char *argv[]); /* [from WG14, 2018, p. 11] */
 
 /* Works Cited:
@@ -16,7 +24,9 @@ int main(int argc, char *argv[]); /* [from WG14, 2018, p. 11] */
  *    Retrieved from https://stackoverflow.com/questions/1695224/what-do-c-and-h-file-extensions-mean-to-c on 
  * Brian W. Kernighan & Dennis M. Ritchie.  1988.  The C Programming Language.  
  *     Second Edition.  Prentise Hall.  ISBN 0-13-110370-9. 
- *  WG14. (2018).  Programming Languages -- C. 9899:202x (E).  ISO/IEC.
+ * Fisher, Jim. (2016). How do I write a multi-line string literal in C?.  
+ *     Retrieved from https://jameshfisher.com/2016/11/30/c-multiline-literal/ on 2022 June 03.
+ * WG14. (2018).  Programming Languages -- C. 9899:202x (E).  ISO/IEC.
  *     Retrieved from https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf
  *     on 2022 June 03.
  */
