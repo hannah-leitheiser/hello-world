@@ -9,6 +9,7 @@
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
 #include <stdio.h> /* [Kernighan & Ritchie, 1988, p. 6] */
+#include "hello_world.h"
 
 /******************* int main() **************************
  * Outpus "Hello World!" to stdout -- likely as text to 
@@ -16,7 +17,16 @@
  * [function similar to Kernighan & Ritchie, 1998, p. 6] */
 
 int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
-  printf("Hello World!");
+  if(argc == 0) {
+    printf(Hello_Message); /* if no command-line argument is */
+                           /* supplied. */
+  }
+  else {
+    printf(Help_Message);  /* if any command-line argument is */
+                           /* supplied.  */
+  }
+  /* [if statement modeled after Kernighan & Richie, 1998, p. 20
+          or similar ] */
   return 0;               /* [program exit: WG14, 2018, p. 11] */
 }
 
