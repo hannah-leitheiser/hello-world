@@ -13,14 +13,17 @@
 /******************* int main() **************************
  * Outpus "Hello World!" to stdout -- likely as text to 
  * the terminal.
- * [program similar to Kernighan & Ritchie, 1998, p. 6] */
+ * [function similar to Kernighan & Ritchie, 1998, p. 6] */
 
-int main() { /* todo: reference for use of int */
+int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
   printf("Hello World!");
-  return 0; /*  todo: reference for happy exit */
+  return 0;               /* [program exit: WG14, 2018, p. 11] */
 }
 
 /*  Works Cited:
- *  Brian W. Kernighan & Dennis M. Ritchie.  1988.  The C Programming Language.  
+ *  WG14. (2018).  Programming Languages -- C. 9899:202x (E).  ISO/IEC.
+ *     Retrieved from https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf
+ *     on 2022 June 03.
+ *  Kernighan, Brian W. & Ritchie, Dennis M.  (1988).  The C Programming Language.  
  *     Second Edition.  Prentise Hall.  ISBN 0-13-110370-9. 
  */
