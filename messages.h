@@ -1,5 +1,5 @@
-/* Filename        : hello_world.c
- * Type of File    : C Source Code
+/* Filename        : messages.h
+ * Type of File    : C Source Code, Header
  * Date Created    : 2022JUN02
  * Author          : Hannah Leitheiser
  * Project Name    : Hello World
@@ -8,30 +8,18 @@
  *  and Run        : ./hello_world
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
-#include <stdio.h> /* [Kernighan & Ritchie, 1988, p. 6] */
-#include "hello_world.h"
+#ifndef __MESSAGES.H /* [guard modeled on cschol, 2008] */
+#define __MESSAGES.H
 
-/******************* int main() **************************
- * Outpus "Hello World!" to stdout -- likely as text to 
- * the terminal.
- * [function similar to Kernighan & Ritchie, 1998, p. 6] */
+const char* helloMessage(void);
 
-int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
-  if(argc == 0) {
-    printf(Hello_Message); /* if no command-line argument is */
-                           /* supplied. */
-  }
-  else {
-    printf(Help_Message);  /* if any command-line argument is */
-                           /* supplied.  */
-  }
-  /* [if statement modeled after Kernighan & Richie, 1998, p. 20
-          or similar ] */
-  return EXIT_SUCCESS;  /* [program exit: WG14, 2018, p. 11,
-                            EXIT_SUCCESS: Thompson, 2012 ] */
-}
+const char* helpMessage(const char* programName);
+
+#endif
 
 /*  Works Cited:
+ *  cschol.  (2008).  "Organization of C files: Answer."  Stackoverflow.  
+ *     Retrieved from https://stackoverflow.com/questions/47919/organization-of-c-files on 2022 June 03.
  *  WG14. (2018).  Programming Languages -- C. 9899:202x (E).  ISO/IEC.
  *     Retrieved from https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf
  *     on 2022 June 03.
