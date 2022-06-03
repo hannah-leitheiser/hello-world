@@ -15,7 +15,6 @@
 
 #define _(STRING) gettext(STRING) /* [ Fleury, 2016, Hello World! Example ] */
 
-
 /******************* helloMessage  **************************/
 
 const char* helloMessage(void) {
@@ -24,7 +23,25 @@ const char* helloMessage(void) {
 
 /******************* helpMessage  **************************/
 
-const char* helpMessage(const char* programName) { }
+const char* helpMessage(const char* programName) {
+    const size_t bufferSize = 500;
+    char* returnString = malloc( sizeof(char) * bufferSize);
+
+/* https://stackoverflow.com/questions/3115564/allocating-char-array-using-malloc */
+
+    snprintf(returnString, bufferSize, _("Usage: %s [OPTIONS]\n%s\n%s%s"), 
+       programName,
+       _("Prints \"Hello World!\".\n"),
+       _(" any arguments - Prints this message.\n"),
+       _(" no arguments  - Prints Hello World.\n") );
+
+    return returnString;
+}
+/* https://libslack.org/manpages/snprintf.3.html */
+/* [Mutl-line string: Fisher, 2016] */
+/* [Help message format: Torbjorn & Stallman, 2022, line 93-125. ] */
+/* [Avoid buffer overflow: https://stackoverflow.com/questions/4282281/sprintf-functions-buffer-overflow] */
+/* [https://www.cplusplus.com/reference/cstdio/snprintf/] */
 
 /*  Works Cited:
  *  WG14. (2018).  Programming Languages -- C. 9899:202x (E).  ISO/IEC.
