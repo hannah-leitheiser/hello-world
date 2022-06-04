@@ -8,13 +8,10 @@
  *  and Run        : ./hello_world
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
-#include <stdio.h> /* [Kernighan & Ritchie, 1988, p. 6] */
-#include "hello_world.h"
+#include "printf.c"
+#include "debug_log.h"
 
-/******************* int main() **************************
- * Outpus "Hello World!" to stdout -- likely as text to 
- * the terminal.
- * [function similar to Kernighan & Ritchie, 1998, p. 6] */
+int logLevel = 0;
 
 int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
   if(argc == 0) {

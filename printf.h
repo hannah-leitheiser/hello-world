@@ -9,16 +9,7 @@
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9]
  * [File Use: Stefano & Smith, 2009 ] */
 
-char* Hello_Message = "Hello World!";
-char* Help_Message =  "Usage: ./hello_world [OPTIONS]\n"
-                      "Prints \"Hello World!\".\n"
-                      "\n"
-                      " any arguments - Prints this message.\n"
-                      " no arguments  - Prints Hello World.\n";
-/* [Mutl-line string: Fisher, 2016] */
-/* [Help message format: Torbjorn & Stallman, 2022, line 93-125. ] */
-
-int main(int argc, char *argv[]); /* [from WG14, 2018, p. 11] */
+#define printf printf_mine
 
 /* Works Cited:
  *  Borini, Stefano & Smith, Jed.  2009.  "What do .c and .h file extensions mean to C?"  Stack Overflow.  

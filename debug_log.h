@@ -10,6 +10,15 @@
 
 /* https://pvs-studio.com/en/blog/posts/a0023/ */
 
+#define LOG_LEVEL_ERROR    0
+#define LOG_LEVEL_WARNING  1
+#define LOG_LEVEL_NORMAL   2
+#define LOG_LEVEL_VERBOSE  3
+
+void debugLog( int logLevel, const char* message_format, ... );
+int getLogLevel( void );
+int setLogLevel( int level );
+int setLogOutput( FILE* file );
 
 /*  Works Cited:
  *  WG14. (2018).  Programming Languages -- C. 9899:202x (E).  ISO/IEC.
