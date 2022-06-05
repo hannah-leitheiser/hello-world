@@ -8,14 +8,7 @@
  *  and Run        : ./hello_world
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
-#include <stdio.h> /* [Kernighan & Ritchie, 1988, p. 6] */
-#include "hello_world.h"
-
-/******************* int main() **************************
- * Outpus "Hello World!" to stdout -- likely as text to 
- * the terminal.
- * [function similar to Kernighan & Ritchie, 1998, p. 6] */
-
+#include "command_line_args.h"
 
 /*  Works Cited:
  *  WG14. (2018).  Programming Languages -- C. 9899:202x (E).  ISO/IEC.

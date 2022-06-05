@@ -11,6 +11,7 @@
 #include "hello_world.h"
 #include "printf.c"
 #include "messages.c"
+#include "command_line_args.c"
 
 /******************* int main() **************************
  * Outpus "Hello World!" to stdout -- likely as text to 
@@ -18,17 +19,26 @@
  * [function similar to Kernighan & Ritchie, 1998, p. 6] */
 
 const char* programName;
+/* https://stackoverflow.com/questions/12189480/why-structs-cannot-be-assigned-directly */
+struct commandLineOption commandLineOptions[] = {
+    (struct commandLineOption){"w", "width", "Terminal Width for Word Wrap", "int" },
+    (struct commandLineOption){"n", "nowrap", "Disable Word Wrap", "bool" },
+    (struct commandLineOption){"l", "lang", "Language", "string" } };
 
 int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
   if(argc > 0) {
       programName = argv[0];
-  }
+  }    
+
+
+
+
   if(argc == 1) {
     printf( helloMessage() ); /* if no command-line argument is */
                            /* supplied. */
     }
   else {
-    printf(Help_Message);  /* if any command-line argument is */
+    printf( helpMessage( programName ));  /* if any command-line argument is */
                            /* supplied.  */
   }
   /* [if statement modeled after Kernighan & Richie, 1998, p. 20

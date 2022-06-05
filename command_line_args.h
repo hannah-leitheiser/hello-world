@@ -9,12 +9,17 @@
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9]
  * [File Use: Stefano & Smith, 2009 ] */
 
-/* [Mutl-line string: Fisher, 2016] */
-/* [Help message format: Torbjorn & Stallman, 2022, line 93-125. ] */
+/* https://www.programiz.com/c-programming/c-structures */
 
-int main(int argc, char *argv[]); /* [from WG14, 2018, p. 11] */
+struct commandLineOption {
+    char* shortForm;
+    char* longForm;
+    char* description;
+    char* dataType;
+    };
 
-void aBadEnd( void );
+int readCommandLineOption( struct commandLineOption* option,  int argc, char *argv[]);
+const char* commandLineOptionHelpString( struct commandLineOption* option );
 
 /* Works Cited:
  *  Borini, Stefano & Smith, Jed.  2009.  "What do .c and .h file extensions mean to C?"  Stack Overflow.  
