@@ -18,7 +18,7 @@
 /******************* helloMessage  **************************/
 
 const char* helloMessage(void) {
-    return _("Hello World!");
+    return _("Hello World!\n");
 }
 
 /******************* helpMessage  **************************/

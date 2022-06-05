@@ -54,12 +54,11 @@ int vfprintf_mine(FILE* __stream, const char *__format, va_list argptr) { /* htt
         char* errorMessage;
         asprintf(&errorMessage, _("Failure in attempting to print \"%s\" to %s"), whatWeTriedtoPrint, whereWeTriedToPrintIt);
         perror( errorMessage);
-        fprintf( stderr, _("Aborting.\n"));
-        exit( EXIT_FAILURE ); /* https://www.tutorialspoint.com/c_standard_library/c_function_exit.htm */
+        aBadEnd();
     }
     if(flushReturn == EOF )  { /* https://www.tutorialspoint.com/c_standard_library/c_function_fflush.htm */ 
         perror( _("Attempting to flush STDOUT") );
-        exit( EXIT_FAILURE ); /* https://www.tutorialspoint.com/c_standard_library/c_function_exit.htm */
+        aBadEnd();
     }
     return fprintfReturn;
 

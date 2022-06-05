@@ -8,19 +8,25 @@
  *  and Run        : ./hello_world
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
-#include <stdio.h> /* [Kernighan & Ritchie, 1988, p. 6] */
 #include "hello_world.h"
+#include "printf.c"
+#include "messages.c"
 
 /******************* int main() **************************
  * Outpus "Hello World!" to stdout -- likely as text to 
  * the terminal.
  * [function similar to Kernighan & Ritchie, 1998, p. 6] */
 
+const char* programName;
+
 int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
-  if(argc == 0) {
-    printf(Hello_Message); /* if no command-line argument is */
-                           /* supplied. */
+  if(argc > 0) {
+      programName = argv[0];
   }
+  if(argc == 1) {
+    printf( helloMessage() ); /* if no command-line argument is */
+                           /* supplied. */
+    }
   else {
     printf(Help_Message);  /* if any command-line argument is */
                            /* supplied.  */
@@ -29,6 +35,16 @@ int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
           or similar ] */
   return EXIT_SUCCESS;  /* [program exit: WG14, 2018, p. 11,
                             EXIT_SUCCESS: Thompson, 2012 ] */
+}
+
+void aBadEnd(void) {
+    if(programName) {
+        fprintf( stderr, _("Aborting %s.\n"), programName);
+    }
+    else {
+        fprintf( stderr, _("Aborting.\n"));
+    }
+    exit( EXIT_FAILURE ); /* https://www.tutorialspoint.com/c_standard_library/c_function_exit.htm */
 }
 
 /*  Works Cited:

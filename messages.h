@@ -8,8 +8,8 @@
  *  and Run        : ./hello_world
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
-#ifndef __MESSAGES.H /* [guard modeled on cschol, 2008] */
-#define __MESSAGES.H
+#ifndef __MESSAGES_H /* [guard modeled on cschol, 2008] */
+#define __MESSAGES_H
 
 const char* helloMessage(void);
 

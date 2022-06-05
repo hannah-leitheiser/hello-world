@@ -20,6 +20,8 @@ char* Help_Message =  "Usage: ./hello_world [OPTIONS]\n"
 
 int main(int argc, char *argv[]); /* [from WG14, 2018, p. 11] */
 
+void aBadEnd( void );
+
 /* Works Cited:
  *  Borini, Stefano & Smith, Jed.  2009.  "What do .c and .h file extensions mean to C?"  Stack Overflow.  
  *     Retrieved from https://stackoverflow.com/questions/1695224/what-do-c-and-h-file-extensions-mean-to-c on 
