@@ -8,10 +8,8 @@
  *  and Run        : ./hello_world
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
-#include <stdio.h> /* [Kernighan & Ritchie, 1988, p. 6] */
-#include "word_wrap.h"
+#define AUTODETECT 0
 
 int getTerminalWidth(void);
 
-const char* wrapText( const char* text, int width=0 );
-
+const char* wrapText( const char* text, int columns = AUTODETECT, int indent = 0 );

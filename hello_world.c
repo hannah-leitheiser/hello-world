@@ -12,6 +12,7 @@
 #include "printf.c"
 #include "messages.c"
 #include "command_line_args.c"
+#include "gettext.c"
 
 /******************* int main() **************************
  * Outpus "Hello World!" to stdout -- likely as text to 
@@ -21,23 +22,29 @@
 const char* programName;
 /* https://stackoverflow.com/questions/12189480/why-structs-cannot-be-assigned-directly */
 struct commandLineOption commandLineOptions[] = {
-    (struct commandLineOption){"w", "width", "Terminal Width for Word Wrap", "int" },
-    (struct commandLineOption){"n", "nowrap", "Disable Word Wrap", "bool" },
-    (struct commandLineOption){"l", "lang", "Language", "string" } };
+    (struct commandLineOption){"w", "width", "Terminal Width in Columns for Word Wrap\n0 for autodetect", "int", "0" },
+    (struct commandLineOption){"n", "nowrap", "Disable Word Wrap", "bool", "false" },
+    (struct commandLineOption){"l", "lang", "Language", "string", "" },
+    (struct commandLineOption){"d", "debug", "Debug Level:\n0 Errors\n1 Warnings\n2 Verbose", "0" } };
+const int commandLineOptionCount = 4;
 
 int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
-  if(argc > 0) {
-      programName = argv[0];
-  }    
 
+    debugLog( LOG_LEVEL_VERBOSE, "Entering main().\n" );
 
-
+    if(argc > 0) {
+        debugLog( LOG_LEVEL_VERBOSE, "Saving program name \"%s\" from command line arguments.\n", argv[0] );
+        programName = argv[0];
+    }    
 
   if(argc == 1) {
-    printf( helloMessage() ); /* if no command-line argument is */
+        debugLog( LOG_LEVEL_VERBOSE, "No command line arguments, printing hello message." );
+        printf( helloMessage() ); /* if no command-line argument is */
                            /* supplied. */
     }
   else {
+    int additionalArguments = readCommandLineOptions( commandLineOptionCount, &commandLineOptions, argc, argv );
+
     printf( helpMessage( programName ));  /* if any command-line argument is */
                            /* supplied.  */
   }

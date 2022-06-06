@@ -12,8 +12,7 @@
 
 #define LOG_LEVEL_ERROR    0
 #define LOG_LEVEL_WARNING  1
-#define LOG_LEVEL_NORMAL   2
-#define LOG_LEVEL_VERBOSE  3
+#define LOG_LEVEL_VERBOSE  2
 
 void debugLog( int logLevel, const char* message_format, ... );
 int getLogLevel( void );

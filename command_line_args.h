@@ -16,9 +16,10 @@ struct commandLineOption {
     char* longForm;
     char* description;
     char* dataType;
+    char* currentValueString;
     };
 
-int readCommandLineOption( struct commandLineOption* option,  int argc, char *argv[]);
+int readCommandLineOptions(int commandLineOptionC, struct commandLineOption* options[], int argc, char *argv[]);
 const char* commandLineOptionHelpString( struct commandLineOption* option );
 
 /* Works Cited:
