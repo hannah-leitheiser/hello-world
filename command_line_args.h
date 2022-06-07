@@ -19,7 +19,7 @@ struct commandLineOption {
     char* currentValueString;
     };
 
-int readCommandLineOptions(int commandLineOptionC, struct commandLineOption* options[], int argc, char *argv[]);
+int readCommandLineOptions(int commandLineOptionC, struct commandLineOption* options[], int argc, char *argv[]) {}
 const char* commandLineOptionHelpString( struct commandLineOption* option );
 
 /* Works Cited:

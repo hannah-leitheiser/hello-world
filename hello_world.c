@@ -13,6 +13,7 @@
 #include "messages.c"
 #include "command_line_args.c"
 #include "gettext.c"
+#include "debug_log.c"
 
 /******************* int main() **************************
  * Outpus "Hello World!" to stdout -- likely as text to 
@@ -29,16 +30,18 @@ struct commandLineOption commandLineOptions[] = {
 const int commandLineOptionCount = 4;
 
 int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
+    setDebugLogOutput( stdout );
 
-    debugLog( LOG_LEVEL_VERBOSE, "Entering main().\n" );
+    debugLog( LOG_LEVEL_VERBOSE, "main():Entering function." );
+    setDebugLogLevel( 3 );
 
     if(argc > 0) {
-        debugLog( LOG_LEVEL_VERBOSE, "Saving program name \"%s\" from command line arguments.\n", argv[0] );
+        debugLog( LOG_LEVEL_VERBOSE, "main():Saving program name \"%s\" from command line arguments.", argv[0] );
         programName = argv[0];
     }    
 
   if(argc == 1) {
-        debugLog( LOG_LEVEL_VERBOSE, "No command line arguments, printing hello message." );
+        debugLog( LOG_LEVEL_VERBOSE, "main():No user-supplied command line arguments, printing hello message." );
         printf( helloMessage() ); /* if no command-line argument is */
                            /* supplied. */
     }
@@ -50,6 +53,8 @@ int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
   }
   /* [if statement modeled after Kernighan & Richie, 1998, p. 20
           or similar ] */
+
+    debugLog( LOG_LEVEL_VERBOSE, "main():EXIT_SUCCESS" );
   return EXIT_SUCCESS;  /* [program exit: WG14, 2018, p. 11,
                             EXIT_SUCCESS: Thompson, 2012 ] */
 }

@@ -10,6 +10,7 @@
  * [File Use: Stefano & Smith, 2009 ] */
 
 #define printf printf_mine
+char* nameStream( FILE* __stream);
 
 /* Works Cited:
  *  Borini, Stefano & Smith, Jed.  2009.  "What do .c and .h file extensions mean to C?"  Stack Overflow.  

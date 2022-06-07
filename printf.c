@@ -17,6 +17,20 @@
 #include "gettext.c"
 #include "printf.h"
 
+
+char* nameStream( FILE* __stream) {
+        if(__stream == NULL) {
+            return "NULL";
+        }
+        if( __stream == stdout) {
+                return "the standard output";
+                }
+        if(__stream == stdin) {
+                return "the standard input";
+                }
+        return "a file";
+}
+
 /* https://stackoverflow.com/questions/61306157/unable-to-compile-program-due-to-function-asprintf */
 
 /******************* printf_mine() **************************
@@ -38,18 +52,7 @@ int vfprintf_mine(FILE* __stream, const char *__format, va_list argptr) { /* htt
         /* https://en.cppreference.com/w/c/io/perror */
         char* whatWeTriedtoPrint;
         vasprintf( &whatWeTriedtoPrint, __format, argptr);
-        char* whereWeTriedToPrintIt;
-        if( __stream == stdout) {
-                asprintf( &whereWeTriedToPrintIt, _("the standard output"));
-                }
-            else if(__stream == stdin) {
-                asprintf( &whereWeTriedToPrintIt, _("the standard input"));
-                }
-                else if (__stream == stderr) {
-                asprintf( &whereWeTriedToPrintIt, _("the standard error output"));
-                } else {
-                 asprintf( &whereWeTriedToPrintIt, _("a file") );
-                }
+        char* whereWeTriedToPrintIt = nameStream(__stream);
         
         char* errorMessage;
         asprintf(&errorMessage, _("Failure in attempting to print \"%s\" to %s"), whatWeTriedtoPrint, whereWeTriedToPrintIt);
