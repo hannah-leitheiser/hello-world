@@ -8,12 +8,15 @@
  *  and Run        : ./hello_world
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
+#include <stdbool.h>
+
 #include "hello_world.h"
 #include "printf.c"
 #include "messages.c"
 #include "command_line_args.c"
 #include "gettext.c"
 #include "debug_log.c"
+#include "word_wrap.c"
 
 /******************* int main() **************************
  * Outpus "Hello World!" to stdout -- likely as text to 
@@ -26,14 +29,29 @@ struct commandLineOption commandLineOptions[] = {
     (struct commandLineOption){"w", "width", "Terminal Width in Columns for Word Wrap\n0 for autodetect", "int", "0" },
     (struct commandLineOption){"n", "nowrap", "Disable Word Wrap", "bool", "false" },
     (struct commandLineOption){"l", "lang", "Language", "string", "" },
-    (struct commandLineOption){"d", "debug", "Debug Level:\n0 Errors\n1 Warnings\n2 Verbose", "0" } };
+    (struct commandLineOption){"d", "debug", "Debug Level:\n0 Error\n1 Warning\n2 Verbose", "string", "0" } };
 const int commandLineOptionCount = 4;
+
+int wrapWidth = 0;
+bool noWrap = false;
+
+void greetWorld() {
+    if(wrapWidth >= 0 && !noWrap) {
+        printf( 
+            wrapText( 
+               helloMessage(), wrapWidth, 0 )
+            ); /* if no command-line argument is */
+        }
+    else {
+        printf( helloMessage() );
+    }
+
+}
+
 
 int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
     setDebugLogOutput( stdout );
-
     debugLog( LOG_LEVEL_VERBOSE, "main():Entering function." );
-    setDebugLogLevel( 3 );
 
     if(argc > 0) {
         debugLog( LOG_LEVEL_VERBOSE, "main():Saving program name \"%s\" from command line arguments.", argv[0] );
@@ -42,14 +60,34 @@ int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
 
   if(argc == 1) {
         debugLog( LOG_LEVEL_VERBOSE, "main():No user-supplied command line arguments, printing hello message." );
-        printf( helloMessage() ); /* if no command-line argument is */
+        greetWorld(); /* if no command-line argument is */
                            /* supplied. */
     }
   else {
-    int additionalArguments = readCommandLineOptions( commandLineOptionCount, &commandLineOptions, argc, argv );
+    int optionReadSuccess = readCommandLineOptions( commandLineOptionCount, commandLineOptions, argc, argv );
+    if(!optionReadSuccess) {
+        printf( helpMessage( programName, commandLineOptionCount, commandLineOptions ));  /* if any unlised command-line argument is */
+        }
+    if(optionReadSuccess) {
 
-    printf( helpMessage( programName ));  /* if any command-line argument is */
+        int level;
+        sscanf(commandLineOptions[3].currentValueString, "%d\n", &level);
+        setDebugLogLevel( level );
+
+        int width;
+        sscanf(commandLineOptions[0].currentValueString, "%d\n", &width);
+        wrapWidth = width;
+
+        debugLog( LOG_LEVEL_VERBOSE, "main():read width %d", width );
+        noWrap = commandLineOptions[1].currentValueString[0] == 't';
+
+        
+
+        greetWorld();
+        }
+
                            /* supplied.  */
+
   }
   /* [if statement modeled after Kernighan & Richie, 1998, p. 20
           or similar ] */

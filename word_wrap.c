@@ -9,12 +9,77 @@
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
 #include <stdio.h> /* [Kernighan & Ritchie, 1988, p. 6] */
-#include "hello_world.h"
+#include <string.h>
 
-/******************* int main() **************************
- * Outpus "Hello World!" to stdout -- likely as text to 
- * the terminal.
- * [function similar to Kernighan & Ritchie, 1998, p. 6] */
+#include "word_wrap.h"
+#include "debug_log.h"
+
+int getTerminalWidth(void) { return 20; }
+
+const char* wrapText( const char* text, int columns , int indent ) {
+if(columns == AUTODETECT) {
+    columns = getTerminalWidth();
+}
+int textColumns = columns - indent;
+
+debugLog( LOG_LEVEL_VERBOSE, "wrapText():columns:%d, textColumns:%d, indent: %d", columns, textColumns, indent );
+
+
+int inputTextIndex = 0;
+char* outputText = "";
+char* line = malloc( sizeof(char) * (textColumns+1) );
+/*https://www.programiz.com/c-programming/library-function/string.h/strlen*/
+int inputTextLength = strlen(text);
+while( inputTextIndex < inputTextLength) {
+    int breakPoint;
+
+    /* trim out spaces, but only if textColumns is greater than 1 */
+    while( textColumns > 1 && text[inputTextIndex] == ' ') {
+        inputTextIndex++;
+    }
+
+    if( inputTextIndex + textColumns < inputTextLength ) {
+
+        debugLog( LOG_LEVEL_VERBOSE, "wrapText():line has to be split" );
+        /* we have to find a breakpoint */
+        breakPoint = textColumns-1;
+        while( (text[inputTextIndex + breakPoint] != ' ') && (breakPoint >= 0) ) {
+            breakPoint--;
+            }
+        if(breakPoint == -1) {
+
+            debugLog( LOG_LEVEL_VERBOSE, "wrapText():no good split found." );
+            breakPoint = textColumns;
+        }
+        if(breakPoint == 0) {
+            /* first char is a space */
+            breakPoint = 1;
+
+            }
+    }
+    else {
+        breakPoint = inputTextLength - inputTextIndex;
+        debugLog( LOG_LEVEL_VERBOSE, "wrapText():last line, breakpoint=%d", breakPoint );
+    }
+        int i=-1;
+        for(i = 0 ; i < breakPoint ; i++) {
+            debugLog( LOG_LEVEL_VERBOSE, "wrapText():char to line:%c, i=%d", text[inputTextIndex], i );
+            line[i] = text[inputTextIndex];
+            inputTextIndex++;
+        }
+
+        debugLog( LOG_LEVEL_VERBOSE, "wrapText():termination i=%d", i );
+        line[i] = '\0';
+        
+        asprintf( &outputText, "%s%*s%s\n", outputText, indent, "", line); 
+
+    }
+
+free( line );
+return outputText;
+}
+
+
 
 
 /*  Works Cited:

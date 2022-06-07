@@ -12,4 +12,6 @@
 
 int getTerminalWidth(void);
 
-const char* wrapText( const char* text, int columns = AUTODETECT, int indent = 0 );
+/* https://stackoverflow.com/questions/2988038/default-values-on-arguments-in-c-functions-and-function-overloading-in-c */
+
+const char* wrapText( const char* text, int columns, int indent);

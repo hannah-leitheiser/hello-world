@@ -23,7 +23,7 @@ for reference
 */
 
 FILE* debugLogOutput;
-int debugLogLevel = LOG_LEVEL_VERBOSE;
+int debugLogLevel = LOG_LEVEL_ERROR;
 
 char* logLevelString( int level ) {
 

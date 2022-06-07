@@ -11,6 +11,9 @@
 
 /* https://www.programiz.com/c-programming/c-structures */
 
+#ifndef __COMMAND_LINE_ARGS_H /* [guard modeled on cschol, 2008] */
+#define __COMMAND_LINE_ARGS_H
+
 struct commandLineOption {
     char* shortForm;
     char* longForm;
@@ -18,9 +21,10 @@ struct commandLineOption {
     char* dataType;
     char* currentValueString;
     };
-
-int readCommandLineOptions(int commandLineOptionC, struct commandLineOption* options[], int argc, char *argv[]) {}
+int readCommandLineOptions(int commandLineOptionC, struct commandLineOption options[], int argc, char *argv[]);
 const char* commandLineOptionHelpString( struct commandLineOption* option );
+
+#endif
 
 /* Works Cited:
  *  Borini, Stefano & Smith, Jed.  2009.  "What do .c and .h file extensions mean to C?"  Stack Overflow.  

@@ -8,12 +8,16 @@
  *  and Run        : ./hello_world
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
-#include "messages.h"
 
+#define _GNU_SOURCE
+#include <stdio.h> /* [Kernighan & Ritchie, 1988, p. 6] */
 #include <libintl.h> /* [ Fleury, 2016 ] */
 #include <locale.h>  /* [ Fleury, 2016 ] */
 
-#define _(STRING) gettext(STRING) /* [ Fleury, 2016, Hello World! Example ] */
+#include "gettext.h"
+#include "command_line_args.h"
+
+#include "messages.h"
 
 /******************* helloMessage  **************************/
 
@@ -23,17 +27,29 @@ const char* helloMessage(void) {
 
 /******************* helpMessage  **************************/
 
-const char* helpMessage(const char* programName) {
-    const size_t bufferSize = 500;
-    char* returnString = malloc( sizeof(char) * bufferSize);
+const char* helpMessage(const char* programName, int commandLineOptionC, struct commandLineOption options[]) {
+    char* returnString = "Hello World!\n"
+                         " Version 0.9.  Hannah Leitheiser.\n\n";
 
 /* https://stackoverflow.com/questions/3115564/allocating-char-array-using-malloc */
 
-    snprintf(returnString, bufferSize, _("Usage: %s [OPTIONS]\n%s\n%s%s"), 
-       programName,
-       _("Prints \"Hello World!\".\n"),
-       _(" any arguments - Prints this message.\n"),
-       _(" no arguments  - Prints Hello World.\n") );
+   asprintf(&returnString, "%sUsage: %s [OPTIONS]\n\n", returnString, programName); 
+
+/* struct commandLineOption {
+    char* shortForm;
+    char* longForm;
+    char* description;
+    char* dataType;
+    char* currentValueString;
+    }; */
+
+for(int i = 0 ; i < commandLineOptionC ; i++) {
+    
+    asprintf(&returnString, "%s -%s --%s %s\n", returnString, options[i].shortForm, options[i].longForm, options[i].description);
+
+}
+
+asprintf(&returnString, "%s -%s --%s %s\n", returnString, "h", "help", "Displays this message.");
 
     return returnString;
 }
