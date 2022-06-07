@@ -11,10 +11,21 @@
 #include <stdio.h> /* [Kernighan & Ritchie, 1988, p. 6] */
 #include <string.h>
 
+#include <sys/ioctl.h>
+#include <stdio.h>
+#include <unistd.h>
+
 #include "word_wrap.h"
 #include "debug_log.h"
 
-int getTerminalWidth(void) { return 20; }
+int getTerminalWidth(void) { 
+/* https://stackoverflow.com/questions/1022957/getting-terminal-width-in-c */
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+    return w.ws_col;
+}
+
 
 const char* wrapText( const char* text, int columns , int indent ) {
 if(columns == AUTODETECT) {
@@ -34,7 +45,11 @@ while( inputTextIndex < inputTextLength) {
     int breakPoint;
 
     /* trim out spaces, but only if textColumns is greater than 1 */
-    while( textColumns > 1 && text[inputTextIndex] == ' ') {
+    while( text[inputTextIndex] == ' ') {
+        if( textColumns < 3 ) {
+            /* if we are in 1 or 2 columns, make spaces new lines. */
+            asprintf( &outputText, "%s%*s%s\n", outputText, indent, "", ""); 
+            }
         inputTextIndex++;
     }
 
@@ -43,7 +58,7 @@ while( inputTextIndex < inputTextLength) {
         debugLog( LOG_LEVEL_VERBOSE, "wrapText():line has to be split" );
         /* we have to find a breakpoint */
         breakPoint = textColumns-1;
-        while( (text[inputTextIndex + breakPoint] != ' ') && (breakPoint >= 0) ) {
+        while( (text[inputTextIndex + breakPoint] != ' ' && text[inputTextIndex + breakPoint] != '\n')  && (breakPoint >= 0) ) {
             breakPoint--;
             }
         if(breakPoint == -1) {
@@ -51,17 +66,14 @@ while( inputTextIndex < inputTextLength) {
             debugLog( LOG_LEVEL_VERBOSE, "wrapText():no good split found." );
             breakPoint = textColumns;
         }
-        if(breakPoint == 0) {
-            /* first char is a space */
-            breakPoint = 1;
-
-            }
     }
     else {
         breakPoint = inputTextLength - inputTextIndex;
+
+        
         debugLog( LOG_LEVEL_VERBOSE, "wrapText():last line, breakpoint=%d", breakPoint );
     }
-        int i=-1;
+        int i;
         for(i = 0 ; i < breakPoint ; i++) {
             debugLog( LOG_LEVEL_VERBOSE, "wrapText():char to line:%c, i=%d", text[inputTextIndex], i );
             line[i] = text[inputTextIndex];
@@ -69,9 +81,17 @@ while( inputTextIndex < inputTextLength) {
         }
 
         debugLog( LOG_LEVEL_VERBOSE, "wrapText():termination i=%d", i );
-        line[i] = '\0';
+        if( line[i-1] == '\n') {
+            line[i-1] = '\0'; /* it will add a return, so don't double. */
+        }
+        else {
+            line[i] = '\0';
+        }
         
-        asprintf( &outputText, "%s%*s%s\n", outputText, indent, "", line); 
+        asprintf( &outputText, "%s%*s%s\n", outputText, indent, "", line);
+        /* alternately, if the new line is next, go past that */
+        if( text[ inputTextIndex ] == '\n') {
+            inputTextIndex++; } 
 
     }
 
