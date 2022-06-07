@@ -30,3 +30,8 @@ void aBadEnd( void );
  *      on 2022 June 03.
  *
  */
+ /* Works Cited */
+ /* 
+Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C Programming Language, Second Edition.." Prentise Hall..  ISBN 0-13-110370-9.
+WG14. (2018). "Programming Languages -- C. 9899:202x (E)." ISO/IEC.  Retrieved from https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf on 2022 June 03.
+ */
