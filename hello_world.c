@@ -32,21 +32,14 @@ struct commandLineOption commandLineOptions[] = {
     (struct commandLineOption){"d", "debug", "Debug Level:\n0 Error\n1 Warning\n2 Verbose", "string", "0" } };
 const int commandLineOptionCount = 4;
 
-int wrapWidth = 0;
-bool noWrap = false;
 
 void greetWorld() {
-    if(wrapWidth >= 0 && !noWrap) {
         printf( 
             wrapText( 
-               helloMessage(), wrapWidth, 0 )
+               helloMessage(), 0 )
             ); /* if no command-line argument is */
         }
-    else {
-        printf( helloMessage() );
-    }
 
-}
 
 
 int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
@@ -65,10 +58,7 @@ int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
     }
   else {
     int optionReadSuccess = readCommandLineOptions( commandLineOptionCount, commandLineOptions, argc, argv );
-    if(!optionReadSuccess) {
-        printf( helpMessage( programName, commandLineOptionCount, commandLineOptions ));  /* if any unlised command-line argument is */
-        }
-    if(optionReadSuccess) {
+
 
         int level;
         sscanf(commandLineOptions[3].currentValueString, "%d\n", &level);
@@ -76,10 +66,18 @@ int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
 
         int width;
         sscanf(commandLineOptions[0].currentValueString, "%d\n", &width);
-        wrapWidth = width;
+        wrapColumns = width;
 
         debugLog( LOG_LEVEL_VERBOSE, "main():read width %d", width );
         noWrap = commandLineOptions[1].currentValueString[0] == 't';
+
+
+if(!optionReadSuccess) {
+        printf( helpMessage( programName, commandLineOptionCount, commandLineOptions ));  /* if any unlised command-line argument is */
+        }
+    if(optionReadSuccess) {
+
+
 
         
 

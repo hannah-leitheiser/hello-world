@@ -26,21 +26,42 @@ int getTerminalWidth(void) {
     return w.ws_col;
 }
 
+const char* wrapText( const char* text, int indent ) {
 
-const char* wrapText( const char* text, int columns , int indent ) {
+
+int inputTextIndex = 0;
+char* outputText = "";
+
+/*https://www.programiz.com/c-programming/library-function/string.h/strlen*/
+int inputTextLength = strlen(text);
+
+if(noWrap) {
+    /* we still need to add the indent */
+
+    asprintf( &outputText, "%s%*s", outputText, indent, ""); 
+    for( ; inputTextIndex < inputTextLength; inputTextIndex++) {
+
+        asprintf(&outputText, "%s%c", outputText, text[inputTextIndex]);
+        if( text[inputTextIndex] == '\n' && inputTextIndex < inputTextLength-1 ) {
+        asprintf(&outputText, "%s%*s", outputText, indent, "");
+        }
+
+    }
+    return outputText;
+}
+
+
+int columns = wrapColumns;
 if(columns == AUTODETECT) {
     columns = getTerminalWidth();
 }
 int textColumns = columns - indent;
 
+char* line = malloc( sizeof(char) * (textColumns+1) );
 debugLog( LOG_LEVEL_VERBOSE, "wrapText():columns:%d, textColumns:%d, indent: %d", columns, textColumns, indent );
 
 
-int inputTextIndex = 0;
-char* outputText = "";
-char* line = malloc( sizeof(char) * (textColumns+1) );
-/*https://www.programiz.com/c-programming/library-function/string.h/strlen*/
-int inputTextLength = strlen(text);
+
 while( inputTextIndex < inputTextLength) {
     int breakPoint;
 
@@ -74,7 +95,7 @@ while( inputTextIndex < inputTextLength) {
         debugLog( LOG_LEVEL_VERBOSE, "wrapText():last line, breakpoint=%d", breakPoint );
     }
         int i;
-        for(i = 0 ; i < breakPoint ; i++) {
+        for(i = 0 ; i < breakPoint && text[inputTextIndex] != '\n' ; i++) {
             debugLog( LOG_LEVEL_VERBOSE, "wrapText():char to line:%c, i=%d", text[inputTextIndex], i );
             line[i] = text[inputTextIndex];
             inputTextIndex++;

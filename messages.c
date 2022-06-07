@@ -16,6 +16,7 @@
 
 #include "gettext.h"
 #include "command_line_args.h"
+#include "word_wrap.h"
 
 #include "messages.h"
 
@@ -43,13 +44,25 @@ const char* helpMessage(const char* programName, int commandLineOptionC, struct 
     char* currentValueString;
     }; */
 
-for(int i = 0 ; i < commandLineOptionC ; i++) {
-    
-    asprintf(&returnString, "%s -%s --%s %s\n", returnString, options[i].shortForm, options[i].longForm, options[i].description);
+returnString = wrapText(returnString, 0);
 
+for(int i = 0 ; i < commandLineOptionC ; i++) {
+    char* firstPart;
+    asprintf(&firstPart, " -%s --%s\n", options[i].shortForm, options[i].longForm);
+    char* descp;
+    descp = wrapText( options[i].description, 5);
+    firstPart = wrapText(firstPart,0);
+    asprintf(&returnString, "%s%s%s\n", returnString, firstPart, descp);
 }
 
-asprintf(&returnString, "%s -%s --%s %s\n", returnString, "h", "help", "Displays this message.");
+
+char* firstPart;
+asprintf(&firstPart, " -%s --%s\n", "h", "help");
+char* descp;
+descp = wrapText( "Display this message.", 5);
+firstPart = wrapText(firstPart,0);
+asprintf(&returnString, "%s%s%s\n", returnString, firstPart, descp);
+
 
     return returnString;
 }
