@@ -10,15 +10,17 @@
 
 #include <stdbool.h>
 
-
 #ifndef __WORD_WRAP_H /* [guard modeled on cschol, 2008] */
 #define __WORD_WRAP_H
 
 #define AUTODETECT 0
 
 int getTerminalWidth(void);
-int wrapColumns = AUTODETECT;
-bool noWrap = false;
+int setWrapWidth(int width);
+int setNoWrap(bool value);
+
+/* https://stackoverflow.com/questions/14526153/multiple-definition-of-a-global-variable */
+
 /* https://stackoverflow.com/questions/2988038/default-values-on-arguments-in-c-functions-and-function-overloading-in-c */
 
 const char* wrapText( const char* text, int indent);

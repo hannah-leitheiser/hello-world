@@ -9,14 +9,16 @@
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
 #include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "hello_world.h"
-#include "printf.c"
-#include "messages.c"
-#include "command_line_args.c"
-#include "gettext.c"
-#include "debug_log.c"
-#include "word_wrap.c"
+#include "printf.h"
+#include "messages.h"
+#include "command_line_args.h"
+#include "gettext.h"
+#include "debug_log.h"
+#include "word_wrap.h"
 
 /******************* int main() **************************
  * Outpus "Hello World!" to stdout -- likely as text to 
@@ -43,6 +45,7 @@ void greetWorld() {
 
 
 int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
+
     setDebugLogOutput( stdout );
     debugLog( LOG_LEVEL_VERBOSE, "main():Entering function." );
 
@@ -66,10 +69,10 @@ int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
 
         int width;
         sscanf(commandLineOptions[0].currentValueString, "%d\n", &width);
-        wrapColumns = width;
+        setWrapWidth(  width );
 
         debugLog( LOG_LEVEL_VERBOSE, "main():read width %d", width );
-        noWrap = commandLineOptions[1].currentValueString[0] == 't';
+        setNoWrap ( commandLineOptions[1].currentValueString[0] == 't' );
 
 
 if(!optionReadSuccess) {

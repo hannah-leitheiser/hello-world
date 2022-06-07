@@ -11,6 +11,7 @@
 
 #define printf printf_mine
 char* nameStream( FILE* __stream);
+int printf_mine(const char *__format, ...);
 
 /* Works Cited:
  *  Borini, Stefano & Smith, Jed.  2009.  "What do .c and .h file extensions mean to C?"  Stack Overflow.  

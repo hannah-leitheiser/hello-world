@@ -11,6 +11,8 @@
 #ifndef __MESSAGES_H /* [guard modeled on cschol, 2008] */
 #define __MESSAGES_H
 
+#include "command_line_args.h"
+
 const char* helloMessage(void);
 
 const char* helpMessage(const char* programName, int commandLineOptionC, struct commandLineOption options[]);

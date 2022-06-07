@@ -8,8 +8,11 @@
  *  and Run        : ./hello_world
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
+#define _GNU_SOURCE
+
 #include <stdio.h> /* [Kernighan & Ritchie, 1988, p. 6] */
 #include <string.h>
+#include <stdlib.h>
 
 #include <sys/ioctl.h>
 #include <stdio.h>
@@ -17,6 +20,19 @@
 
 #include "word_wrap.h"
 #include "debug_log.h"
+
+
+int wrapColumns = AUTODETECT;
+bool noWrap = false;
+
+int setWrapWidth(int width) {
+    wrapColumns = width;
+}
+int setNoWrap(bool value) {
+    noWrap = value;
+}
+
+
 
 int getTerminalWidth(void) { 
 /* https://stackoverflow.com/questions/1022957/getting-terminal-width-in-c */
@@ -52,8 +68,12 @@ if(noWrap) {
 
 
 int columns = wrapColumns;
+
 if(columns == AUTODETECT) {
     columns = getTerminalWidth();
+    if(columns <= 0) {
+        columns = 80;
+        }
 }
 int textColumns = columns - indent;
 

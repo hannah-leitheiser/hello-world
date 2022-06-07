@@ -11,6 +11,8 @@
 #define _GNU_SOURCE
 #include <stdio.h> /* [Kernighan & Ritchie, 1988, p. 6] */
 #include <stdbool.h> /* https://stackoverflow.com/questions/2254075/using-true-and-false-in-c */
+#include <stdarg.h> /* https://en.cppreference.com/w/c/variadic/va_list */
+
 #include "debug_log.h"
 #include "printf.h" /* for nameStream() */
 
