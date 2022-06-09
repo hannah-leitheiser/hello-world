@@ -42,7 +42,7 @@ int getTerminalWidth(void) {
     return w.ws_col;
 }
 
-const char* wrapText( const char* text, int indent ) {
+char* wrapText( const char* text, int indent ) {
 
 
 int inputTextIndex = 0;

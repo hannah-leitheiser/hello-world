@@ -23,9 +23,10 @@ int setNoWrap(bool value);
 
 /* https://stackoverflow.com/questions/2988038/default-values-on-arguments-in-c-functions-and-function-overloading-in-c */
 
-const char* wrapText( const char* text, int indent);
+char* wrapText( const char* text, int indent);
 
 #endif
+
  /* Works Cited */
  /* 
 Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C Programming Language, Second Edition.." Prentise Hall..  ISBN 0-13-110370-9.

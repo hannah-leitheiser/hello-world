@@ -17,7 +17,17 @@ citations = [  { "short form"         : "WG14, 2018",
                    "title"            :  "Should I return EXIT_SUCCESS or 0 from main()?: Answer",
                    "publisher"        :  "Stack Overflow.",
                    "url"              :  "https://stackoverflow.com/questions/8867871/should-i-return-exit-success-or-0-from-main",
-                   "url retrieved date": "2022 June 03" } ]
+                   "url retrieved date": "2022 June 03" },
+
+                { "short form"        : "Parahar, 2020",
+                   "authors"          : "Parahar, Mahesh",
+                   "date"             :  "2020",
+                   "title"            :  "Difference between const char* p, char * const p, and const char * const p in C",
+                   "publisher"        :  "Tutorialspoint",
+                   "url"              :  "https://www.tutorialspoint.com/difference-between-const-char-p-char-const-p-and-const-char-const-p-in-c",
+                   "url retrieved date": "2022 June 09" }
+
+                   ]
 
 
 
@@ -28,12 +38,13 @@ for f in files:
         print(f)
         inputfile = open(f, "r")
         lines = inputfile.readlines()
-        output = open(f+"_cite", "w")
+        outputString = ""
+
         citationsInFileShort = set()
         for line in lines:
             if line == " /* Works Cited */\n":
                 break;
-            output.write(line)
+            outputString = outputString + line
             for c in citations:
                 if c["short form"] in line:
                     citationsInFileShort.add(c["short form"])
@@ -45,12 +56,16 @@ for f in files:
         citationsInFile = list(citationsInFile)
         citationsInFile.sort( key = lambda x : x["authors"] )
         if len(citationsInFile) > 0:
+            output = open(f+"_cite", "w")
+            output.write(outputString)
             output.write(" /* Works Cited */\n");
             output.write(" /* \n")
             for c in citationsInFile:
                 if "url" in c:
-                    output.write( "{:}. ({:}). \"{:}.\" {:}.  Retrieved from {:} on {:}.\n".format( c["authors"], c["date"], c["title"], c["publisher"], c["url"], c["url retrieved date"] ) )
 
+                    citationString =  "{:}. ({:}). \"{:}.\" {:}.  Retrieved from {:} on {:}.\n".format( c["authors"], c["date"], c["title"], c["publisher"], c["url"], c["url retrieved date"] )
+                    output.write( citationString )
+                    print(citationString)
                 if "ISBN" in c:
                     output.write( "{:}. ({:}). \"{:}.\" {:}.  ISBN {:}.\n".format( c["authors"], c["date"], c["title"], c["publisher"], c["ISBN"] ) )
             output.write(" */\n")

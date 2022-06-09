@@ -20,29 +20,26 @@
 #include "debug_log.h"
 #include "word_wrap.h"
 
-/******************* int main() **************************
- * Outpus "Hello World!" to stdout -- likely as text to 
- * the terminal.
- * [function similar to Kernighan & Ritchie, 1998, p. 6] */
+const char* programName; /* [ Parahar, 2020 ] */
 
-const char* programName;
 /* https://stackoverflow.com/questions/12189480/why-structs-cannot-be-assigned-directly */
 struct commandLineOption commandLineOptions[] = {
     (struct commandLineOption){"w", "width", "Terminal Width in Columns for Word Wrap\n0 for autodetect", "int", "0" },
     (struct commandLineOption){"n", "nowrap", "Disable Word Wrap", "bool", "false" },
     (struct commandLineOption){"l", "lang", "Language", "string", "" },
     (struct commandLineOption){"d", "debug", "Debug Level:\n0 Error\n1 Warning\n2 Verbose", "string", "0" } };
-const int commandLineOptionCount = 4;
+const int commandLineOptionCount = sizeof( commandLineOptions ) / sizeof(struct commandLineOption);
 
+/* ----------------------------- greetWorld() ----------------------------------- */
 
 void greetWorld() {
         printf( 
             wrapText( 
                helloMessage(), 0 )
-            ); /* if no command-line argument is */
+            ); 
         }
 
-
+/* ----------------------------- main() ----------------------------------- */
 
 int main(int argc, char *argv[]) { /* [from WG14, 2018, p. 11] */
 
@@ -111,6 +108,7 @@ void aBadEnd(void) {
  /* Works Cited */
  /* 
 Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C Programming Language, Second Edition.." Prentise Hall..  ISBN 0-13-110370-9.
+Parahar, Mahesh. (2020). "Difference between const char* p, char * const p, and const char * const p in C." Tutorialspoint.  Retrieved from https://www.tutorialspoint.com/difference-between-const-char-p-char-const-p-and-const-char-const-p-in-c on 2022 June 09.
 Thompson, Keith. (2012). "Should I return EXIT_SUCCESS or 0 from main()?: Answer." Stack Overflow..  Retrieved from https://stackoverflow.com/questions/8867871/should-i-return-exit-success-or-0-from-main on 2022 June 03.
 WG14. (2018). "Programming Languages -- C. 9899:202x (E)." ISO/IEC.  Retrieved from https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf on 2022 June 03.
  */
