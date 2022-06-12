@@ -1,3 +1,6 @@
+import textwrap
+citationHeading = "/* -------------------- Works Cited -------------------- */\n"
+
 citations = [  { "short form"         : "WG14, 2018",
                  "authors"            : "WG14",
                  "date"               : "2018",
@@ -25,7 +28,15 @@ citations = [  { "short form"         : "WG14, 2018",
                    "title"            :  "Difference between const char* p, char * const p, and const char * const p in C",
                    "publisher"        :  "Tutorialspoint",
                    "url"              :  "https://www.tutorialspoint.com/difference-between-const-char-p-char-const-p-and-const-char-const-p-in-c",
-                   "url retrieved date": "2022 June 09" }
+                   "url retrieved date": "2022 June 09" },
+
+                { "short form"        : "Berger, 2012",
+                   "authors"          : "Berger, Avi",
+                   "date"             :  "2012",
+                   "title"            :  "Why structs cannot be assigned directly?: Answer",
+                   "publisher"        :  "Stackoverflow",
+                   "url"              :  "https://stackoverflow.com/questions/12189480/why-structs-cannot-be-assigned-directly",
+                   "url retrieved date": "2022 June 03" }
 
                    ]
 
@@ -42,7 +53,7 @@ for f in files:
 
         citationsInFileShort = set()
         for line in lines:
-            if line == " /* Works Cited */\n":
+            if line == citationHeading:
                 break;
             outputString = outputString + line
             for c in citations:
@@ -58,16 +69,30 @@ for f in files:
         if len(citationsInFile) > 0:
             output = open(f+"_cite", "w")
             output.write(outputString)
-            output.write(" /* Works Cited */\n");
+            output.write(citationHeading);
             output.write(" /* \n")
             for c in citationsInFile:
                 if "url" in c:
 
                     citationString =  "{:}. ({:}). \"{:}.\" {:}.  Retrieved from {:} on {:}.\n".format( c["authors"], c["date"], c["title"], c["publisher"], c["url"], c["url retrieved date"] )
+                    citationString = textwrap.wrap( citationString, width=60, initial_indent=" * ", subsequent_indent=" *      " )
+                    s=""
+                    for t in citationString:
+                        s=s+t+"\n";
+                    citationString = s
+                    
                     output.write( citationString )
                     print(citationString)
                 if "ISBN" in c:
-                    output.write( "{:}. ({:}). \"{:}.\" {:}.  ISBN {:}.\n".format( c["authors"], c["date"], c["title"], c["publisher"], c["ISBN"] ) )
+                    citationString =  "{:}. ({:}). \"{:}.\" {:}.  ISBN {:}.\n".format( c["authors"], c["date"], c["title"], c["publisher"], c["ISBN"] ) 
+                    citationString = textwrap.wrap( citationString, width=60, initial_indent=" * ", subsequent_indent=" *      " )
+                    
+                    s=""
+                    for t in citationString:
+                        s=s+t+"\n";
+                    citationString = s
+                    output.write( citationString )
+                    print(citationString)
             output.write(" */\n")
             output.close()
             inputfile.close()

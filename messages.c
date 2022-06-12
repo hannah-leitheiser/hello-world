@@ -11,6 +11,7 @@
 
 #define _GNU_SOURCE
 #include <stdio.h> /* [Kernighan & Ritchie, 1988, p. 6] */
+#include <stdlib.h>
 #include <libintl.h> /* [ Fleury, 2016 ] */
 #include <locale.h>  /* [ Fleury, 2016 ] */
 
@@ -26,15 +27,42 @@ const char* helloMessage(void) {
     return _("Hello World!\n");
 }
 
+const char* defaultBanner = "Hello World!\n";
+
+const char* getBanner() {
+    /* https://www.tutorialkart.com/c-programming/c-read-text-file/ */
+    FILE    *bannerFile;
+    char    *text;
+    long    numbytes;
+
+    bannerFile = fopen("banner.txt", "r");
+    if(bannerFile == NULL) {
+        return defaultBanner;
+    }
+
+    fseek(bannerFile, 0L, SEEK_END);
+    numbytes = ftell(bannerFile);
+    fseek(bannerFile, 0L, SEEK_SET);
+
+    text = (char*)calloc(numbytes, sizeof(char));
+    if(text == NULL)
+        return defaultBanner;
+
+    fread(text, sizeof(char), numbytes, bannerFile);
+    fclose(bannerFile);
+
+    return text;
+
+}
+
 /******************* helpMessage  **************************/
 
 const char* helpMessage(const char* programName, int commandLineOptionC, struct commandLineOption options[]) {
-    char* returnString = "Hello World!\n"
-                         " Version 0.9.  Hannah Leitheiser.\n\n";
+    char* returnString;
 
 /* https://stackoverflow.com/questions/3115564/allocating-char-array-using-malloc */
 
-   asprintf(&returnString, "%sUsage: %s [OPTIONS]\n\n", returnString, programName); 
+   asprintf(&returnString, "%sUsage: %s [OPTIONS]\n\n", getBanner(), programName); 
 
 /* struct commandLineOption {
     char* shortForm;
@@ -87,7 +115,9 @@ asprintf(&returnString, "%s%s%s\n", returnString, firstPart, descp);
  *     https://stackoverflow.com/questions/8867871/should-i-return-exit-success-or-0-from-main
  *     on 2022 June 03.
  */
- /* Works Cited */
+/* -------------------- Works Cited -------------------- */
  /* 
-Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C Programming Language, Second Edition.." Prentise Hall..  ISBN 0-13-110370-9.
+ * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
+ *      Programming Language, Second Edition.." Prentise
+ *      Hall..  ISBN 0-13-110370-9.
  */

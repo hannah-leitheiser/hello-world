@@ -15,6 +15,7 @@
 #include <stdlib.h> /*https://www.tutorialspoint.com/c_standard_library/c_function_exit.htm*/
 #include <stdarg.h> /* https://en.cppreference.com/w/c/variadic/va_list */
 #include "gettext.c"
+#include "hello_world.h"
 #include "printf.h"
 
 
@@ -85,7 +86,9 @@ int printf_mine(const char *__format, ...) {
  *     https://stackoverflow.com/questions/8867871/should-i-return-exit-success-or-0-from-main
  *     on 2022 June 03.
  */
- /* Works Cited */
+/* -------------------- Works Cited -------------------- */
  /* 
-Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C Programming Language, Second Edition.." Prentise Hall..  ISBN 0-13-110370-9.
+ * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
+ *      Programming Language, Second Edition.." Prentise
+ *      Hall..  ISBN 0-13-110370-9.
  */
