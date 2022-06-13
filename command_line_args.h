@@ -14,13 +14,20 @@
 #ifndef __COMMAND_LINE_ARGS_H /* [guard modeled on cschol, 2008] */
 #define __COMMAND_LINE_ARGS_H
 
+#include <stdbool.h>
+
+//typedef   int (*Operation)(int a , int b );
+
 struct commandLineOption {
     char* shortForm;
     char* longForm;
     char* description;
     char* dataType;
     char* currentValueString;
+    bool (*setSetting)(const char*);
     };
+/* https://www.geeksforgeeks.org/function-pointer-in-c/ */
+
 int readCommandLineOptions(int commandLineOptionC, struct commandLineOption options[], int argc, char *argv[]);
 const char* commandLineOptionHelpString( struct commandLineOption* option );
 

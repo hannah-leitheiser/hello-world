@@ -15,7 +15,7 @@
 
 const char* helloMessage(void);
 
-const char* helpMessage(const char* programName, int commandLineOptionC, struct commandLineOption options[]);
+const char* helpMessage(const char* programName, int commandLineOptionC, struct commandLineOption options[], int width);
 
 #endif
 

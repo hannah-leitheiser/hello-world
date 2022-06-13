@@ -36,7 +36,16 @@ citations = [  { "short form"         : "WG14, 2018",
                    "title"            :  "Why structs cannot be assigned directly?: Answer",
                    "publisher"        :  "Stackoverflow",
                    "url"              :  "https://stackoverflow.com/questions/12189480/why-structs-cannot-be-assigned-directly",
-                   "url retrieved date": "2022 June 03" }
+                   "url retrieved date": "2022 June 03" },
+
+
+                { "short form"        : "Python Software Foundation, 2022",
+                   "authors"          : "Python Software Foundation",
+                   "date"             :  "2022",
+                   "title"            :  "textwrap — Text wrapping and filling",
+                   "publisher"        :  "Python.org",
+                   "url"              :  "https://docs.python.org/3/library/textwrap.html",
+                   "url retrieved date": "2022 June 12" }
 
                    ]
 
@@ -70,7 +79,7 @@ for f in files:
             output = open(f+"_cite", "w")
             output.write(outputString)
             output.write(citationHeading);
-            output.write(" /* \n")
+            output.write("/* \n")
             for c in citationsInFile:
                 if "url" in c:
 

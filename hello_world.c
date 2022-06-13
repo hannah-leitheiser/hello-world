@@ -9,8 +9,6 @@
  * (Comment Syntax: 
          Kernighan & Ritchie, 1988, p. 9) */
 
-
-
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -26,39 +24,68 @@
 const char* programName; 
              /* ( Parahar, 2020, const char* meaning ) */
 
+
+bool settingsSetWidth( const char* width );
+bool settingsSetNoWrap( const char* _ );
+
 struct commandLineOption commandLineOptions[] = {
     (struct commandLineOption){"w", "width", 
        "Terminal Width in Columns for Word Wrap\n"
-       "0 for autodetect", "int", "0" },
+       "0 for autodetect", "int", "0", &settingsSetWidth },
     (struct commandLineOption){"n", "nowrap", 
-       "Disable Word Wrap", "bool", "false" },
+       "Disable Word Wrap", "bool", "false",
+                                    &settingsSetNoWrap }/*,
     (struct commandLineOption){"l", "lang", 
        "Language", "string", "" },
     (struct commandLineOption){"d", "debug", 
         "Debug Level:\n"
             "0 Error\n"
             "1 Warning\n"
-            "2 Verbose", "string", "0" } };
+            "2 Verbose", "string", "0" }*/ };
     /* ( Berger, 2012, struct literal format ) */
+    /* ( Fisher, 2016, multi-line string format ) */  
+
 const int commandLineOptionCount = 
           sizeof( commandLineOptions ) / 
                   sizeof(struct commandLineOption);
 
-/* ----------------------------- greetWorld() ----------------------------------- */
+struct helloWorldSettings settings =
+   (struct helloWorldSettings) { AUTODETECT };
+
+bool settingsSetWidth( const char* width ) {
+   return sscanf(commandLineOptions[0].currentValueString, 
+     "%d\n", &settings.textWidth); 
+}
+
+bool settingsSetNoWrap( const char* _ ) {
+   debugLog( LOG_LEVEL_VERBOSE, "settingsSetNoWrap():Entering function." );
+   settings.textWidth = NOWRAP; 
+   return true;
+}
+
+/* ---------------- greetWorld() ------------------------ *
+ *
+ * Print an appropriate greeting.
+ * Return value:
+ *  true  - success
+ *  false - failure */
 
 bool
- greetWorld() {
+ greetWorld( int width) {
         return printf( 
             wrapText( 
-               helloMessage(), 0 )
+               helloMessage(), width, "", "" )
             ); 
         }
 
-/* ----------------------------- main() ----------------------------------- */
+/* --------------------- main() ------------------------- */
 
-int main(int argc, char *argv[]) { /* ( WG14, 2018, p. 11 ) */
+int main(int argc, char *argv[]) { 
+          /* from ( WG14, 2018, p. 11 ) */
+          int width = 0;
 
     setDebugLogOutput( stdout );
+    //setDebugLogLevel( 2);
     debugLog( LOG_LEVEL_VERBOSE, "main():Entering function." );
 
     if(argc > 0) {
@@ -68,29 +95,31 @@ int main(int argc, char *argv[]) { /* ( WG14, 2018, p. 11 ) */
 
   if(argc == 1) {
         debugLog( LOG_LEVEL_VERBOSE, "main():No user-supplied command line arguments, printing hello message." );
-        greetWorld();                    
+        greetWorld( settings.textWidth );                    
     }
   else {
     int optionReadSuccess = readCommandLineOptions( commandLineOptionCount, commandLineOptions, argc, argv );
 
 
         int level;
-        sscanf(commandLineOptions[3].currentValueString, "%d\n", &level);
+        /*sscanf(commandLineOptions[3].currentValueString, "%d\n", &level);
         setDebugLogLevel( level );
 
-        int width;
         sscanf(commandLineOptions[0].currentValueString, "%d\n", &width);
-        setWrapWidth(  width );
+        //setWrapWidth(  width );
 
         debugLog( LOG_LEVEL_VERBOSE, "main():read width %d", width );
-        setNoWrap ( commandLineOptions[1].currentValueString[0] == 't' );
+        if ( commandLineOptions[1].currentValueString[0] 
+               == 't' ) {
+            width = NOWRAP;
+        }*/
 
 
 if(!optionReadSuccess) {
-        printf( helpMessage( programName, commandLineOptionCount, commandLineOptions ));  /* if any unlised command-line argument is */
+        printf( helpMessage( programName, commandLineOptionCount, commandLineOptions, settings.textWidth ));  /* if any unlised command-line argument is */
         }
     if(optionReadSuccess) {
-        greetWorld();
+        greetWorld( settings.textWidth );
         }
 
 
@@ -102,6 +131,10 @@ if(!optionReadSuccess) {
   return EXIT_SUCCESS;  /* [program exit: WG14, 2018, p. 11,
                             EXIT_SUCCESS: Thompson, 2012 ] */
 }
+
+/* -------------------- aBadEnd() ----------------------- *
+ * Sadly, we failed to greet the world.  Let the user know
+ * this program is aborting. */
 
 void aBadEnd(void) {
     if(programName) {

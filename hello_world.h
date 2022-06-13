@@ -12,6 +12,10 @@
 /* [Mutl-line string: Fisher, 2016] */
 /* [Help message format: Torbjorn & Stallman, 2022, line 93-125. ] */
 
+struct helloWorldSettings {
+    int textWidth;
+};
+
 int main(int argc, char *argv[]); /* [from WG14, 2018, p. 11] */
 
 void aBadEnd( void );

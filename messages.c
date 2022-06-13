@@ -57,12 +57,13 @@ const char* getBanner() {
 
 /******************* helpMessage  **************************/
 
-const char* helpMessage(const char* programName, int commandLineOptionC, struct commandLineOption options[]) {
+const char* helpMessage(const char* programName, int commandLineOptionC, struct commandLineOption options[], int width) {
     char* returnString;
 
 /* https://stackoverflow.com/questions/3115564/allocating-char-array-using-malloc */
 
-   asprintf(&returnString, "%sUsage: %s [OPTIONS]\n\n", getBanner(), programName); 
+   asprintf(&returnString, "%sUsage: %s [OPTIONS]\n\n", 
+       wrapText( getBanner(), width, "", ""), programName); 
 
 /* struct commandLineOption {
     char* shortForm;
@@ -72,14 +73,14 @@ const char* helpMessage(const char* programName, int commandLineOptionC, struct 
     char* currentValueString;
     }; */
 
-returnString = wrapText(returnString, 0);
+returnString = wrapText(returnString, width,"","");
 
 for(int i = 0 ; i < commandLineOptionC ; i++) {
     char* firstPart;
     asprintf(&firstPart, " -%s --%s\n", options[i].shortForm, options[i].longForm);
     char* descp;
-    descp = wrapText( options[i].description, 5);
-    firstPart = wrapText(firstPart,0);
+    descp = wrapText( options[i].description, width, "     ", "     ");
+    firstPart = wrapText(firstPart,width,"","");
     asprintf(&returnString, "%s%s%s\n", returnString, firstPart, descp);
 }
 
@@ -87,8 +88,8 @@ for(int i = 0 ; i < commandLineOptionC ; i++) {
 char* firstPart;
 asprintf(&firstPart, " -%s --%s\n", "h", "help");
 char* descp;
-descp = wrapText( "Display this message.", 5);
-firstPart = wrapText(firstPart,0);
+descp = wrapText( "Display this message.", width, "     ", "     ");
+firstPart = wrapText(firstPart,width,"","");
 asprintf(&returnString, "%s%s%s\n", returnString, firstPart, descp);
 
 

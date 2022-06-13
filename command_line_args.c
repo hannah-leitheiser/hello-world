@@ -65,6 +65,7 @@ while( currentCommandLineArg < argc ) {
                         // the next arg should be our data
                         if( options[i].dataType[0] == 'b' ) {
                             options[i].currentValueString = "true";
+                            options[i].setSetting( options[i].currentValueString );
                             found=true;
                             currentCommandLineArg= currentCommandLineArg + 1;
                             }
@@ -73,6 +74,7 @@ while( currentCommandLineArg < argc ) {
                                 options[i].currentValueString = argv [ currentCommandLineArg + 1];
                                 debugLog(LOG_LEVEL_VERBOSE, "readCommandLineOptions():set %s to %s.", options[i].longForm, options[i].currentValueString);
                                 found=true;
+                                options[i].setSetting( options[i].currentValueString );
                                 currentCommandLineArg= currentCommandLineArg + 2;
                             }
                         }
@@ -88,7 +90,7 @@ while( currentCommandLineArg < argc ) {
                         if( options[i].dataType[0] == 'b' ) {
                                 options[i].currentValueString = "true";
                             found=true;
-
+                            options[i].setSetting( options[i].currentValueString );
                             currentCommandLineArg= currentCommandLineArg + 1;
                             }
                         else {
@@ -96,6 +98,7 @@ while( currentCommandLineArg < argc ) {
                         if( currentCommandLineArg+1 < argc) {
                             options[i].currentValueString = argv [ currentCommandLineArg + 1];
                             debugLog(LOG_LEVEL_VERBOSE, "readCommandLineOptions():set %s to %s.", options[i].shortForm, options[i].currentValueString);
+                            options[i].setSetting( options[i].currentValueString );
                             found=true;
                             currentCommandLineArg= currentCommandLineArg + 2;
                         }
