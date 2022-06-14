@@ -15,8 +15,6 @@
 struct helloWorldSettings {
     int textWidth;
     const char* specifiedLanguage;
-    int debugLogLevel;
-    FILE* debugLogOutput;
 };
 
 int main(int argc, char *argv[]); /* [from WG14, 2018, p. 11] */
@@ -31,7 +29,11 @@ void aBadEnd( void );
  *
  */
 /* -------------------- Works Cited -------------------- */
- /* 
+/* 
+ * Fisher, James. (2016). "How do I write a multi-line
+ *      string literal in C?." Website.  Retrieved from
+ *      https://jameshfisher.com/2016/11/30/c-multiline-
+ *      literal/ on 2022 June 14.
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition.." Prentise
  *      Hall..  ISBN 0-13-110370-9.

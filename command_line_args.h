@@ -48,7 +48,7 @@ const char* commandLineOptionHelpString( struct commandLineOption* option );
  *
  */
 /* -------------------- Works Cited -------------------- */
- /* 
+/* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition.." Prentise
  *      Hall..  ISBN 0-13-110370-9.

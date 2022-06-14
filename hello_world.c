@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "hello_world.h"
 #include "printf.h"
@@ -22,6 +23,9 @@
 #include "debug_log.h"
 #include "word_wrap.h"
 
+#define DEBUG
+#define CONFIGURATION_FILE "hello_world.conf"
+
 const char* programName; 
              /* ( Parahar, 2020, const char* meaning ) */
 
@@ -31,13 +35,12 @@ struct helloWorldSettings settings =        /*  initial  */
    (struct helloWorldSettings)              /* settings  */
       { AUTODETECT,      /* text wrap width         */
         "",              /* system default language */
-        LOG_LEVEL_ERROR, /* log level               */
-        NULL             /* debug log output        */
       };
 
 bool settingsSetWidth( const char* width );
 bool settingsSetNoWrap( const char* _ );
 bool settingsSetDebugLogLevel( const char* level );
+bool settingsSetDebugLogOutput( const char* output );
 bool settingsSetLanguage( const char* lang );
 
 struct commandLineOption commandLineOptions[] = {
@@ -49,11 +52,17 @@ struct commandLineOption commandLineOptions[] = {
                                     &settingsSetNoWrap },
     (struct commandLineOption){"l", "lang", 
        "Language", "string", "", &settingsSetLanguage },
-    (struct commandLineOption){"d", "debug", 
+    (struct commandLineOption){"o", "debugoutput", 
+       "Debug output:\n"
+        "0 for standard output\n"
+        "otherwise a filename", 
+          "string", "", &settingsSetDebugLogOutput },
+(struct commandLineOption){"d", "debug", 
         "Debug Level:\n"
             "0 Error\n"
             "1 Warning\n"
-            "2 Verbose", "string", "0", &settingsSetDebugLogLevel } };
+            "2 Verbose", 
+            "string", "0", &settingsSetDebugLogLevel } };
     /* ( Berger, 2012, struct literal format ) */
     /* ( Fisher, 2016, multi-line string format ) */  
 
@@ -61,26 +70,81 @@ const int commandLineOptionCount =
           sizeof( commandLineOptions ) / 
                   sizeof(struct commandLineOption);
 
-bool settingsSetWidth( const char* width ) {
-   return sscanf(width, 
-     "%d\n", &settings.textWidth); 
+bool settingsSetWidth( const char* widthString ) {
+    int width;
+    if(sscanf(widthString, 
+                        "%d\n", &width)) {
+        debugLog( LOG_LEVEL_VERBOSE, 
+                "settingsSetWidth():width to %d.", width );
+        settings.textWidth = width;
+        return true;
+    }
+    return false;
 }
 
 bool settingsSetNoWrap( const char* _ ) {
-   debugLog( LOG_LEVEL_VERBOSE, "settingsSetNoWrap():Entering function." );
-   settings.textWidth = NOWRAP; 
-   return true;
+    settings.textWidth = NOWRAP;
+    debugLog( LOG_LEVEL_VERBOSE, 
+              "settingsSetNoWrap():Nowrap Set." );
+    return true;
 }
 
-bool settingsSetDebugLogLevel( const char* level ) {
-   debugLog( LOG_LEVEL_VERBOSE, "settingsSetDebugLogLevel():Entering function." );
-   return sscanf(level, 
-     "%d\n", &settings.debugLogLevel); 
+bool settingsSetDebugLogLevel( const char* levelString ) {
+   int level;
+   if( sscanf(levelString, 
+     "%d\n", &level) ) {
+        debugLog( LOG_LEVEL_VERBOSE, 
+           "settingsSetDebugLogLevel():Setting level %d.",
+                level );
+        return setDebugLogLevel( level );
+   }
+return false;
 }
 
 bool settingsSetLanguage( const char* lang ) {
-   settings.specifiedLanguage = lang;
+    if(lang) {
+        debugLog( LOG_LEVEL_VERBOSE, 
+           "settingsSetLanguage():Language to %s.",
+                lang );
+        settings.specifiedLanguage = lang;
+        return true;
+    }
+return false;
 }
+
+
+bool settingsSetDebugLogOutput( const char* output ) {
+    /* ( Parewa Labs, n.d. ) */
+    if( strcmp( output, "0" ) == 0) { 
+        debugLog( LOG_LEVEL_VERBOSE, 
+           "settingsSetDebugLogOutput():STDOUT.");
+        setDebugLogOutput( stdout );
+        return true;
+        }
+    else {
+        if(output) {
+            FILE* f = fopen( output, "w");
+            if(f) {
+                setDebugLogOutput( f );
+
+                debugLog( LOG_LEVEL_VERBOSE, 
+               "settingsSetDebugLogOutput():file \"%s\".",
+                  output );
+                return true;
+            }
+            else {
+
+                debugLog( LOG_LEVEL_WARNING, 
+                      "settingsSetDebugLogOutput():"
+                       "unable to create \"%s\"," 
+                       "not setting debug output",
+                             output );
+                return false;
+            }
+        }
+    }
+}
+
 
 /* ---------------- greetWorld() ------------------------ *
  *
@@ -89,71 +153,72 @@ bool settingsSetLanguage( const char* lang ) {
  *  true  - success
  *  false - failure */
 
-bool
- greetWorld( int width) {
-        return printf( 
-            wrapText( 
+bool greetWorld( int width) {
+    return printf( 
+        wrapText( 
                helloMessage(), width, "", "" )
-            ); 
-        }
+                    ); 
+}
 
 /* --------------------- main() ------------------------- */
 
 int main(int argc, char *argv[]) { 
           /* from ( WG14, 2018, p. 11 ) */
-          int width = 0;
 
-    FILE* configurationFile = fopen("hello_world.conf", "r");
-    readConfigurationFile(configurationFile,                        
-         commandLineOptionCount,                                    
-           commandLineOptions);   
+    debugLog( LOG_LEVEL_VERBOSE, 
+                     "main():Entering function." );
 
-    //setDebugLogOutput( stdout );
-    //setDebugLogLevel( 2);
-    debugLog( LOG_LEVEL_VERBOSE, "main():Entering function." );
+    FILE* configurationFile = fopen(CONFIGURATION_FILE
+                                                  , "r");
+    if( configurationFile ) {
+        readConfigurationFile(configurationFile,                        
+             commandLineOptionCount,                                    
+               commandLineOptions);   
+    }
+    else {
+        debugLog( LOG_LEVEL_WARNING, 
+            "main():Unable to read configuration file." );
+    }
 
     if(argc > 0) {
-        debugLog( LOG_LEVEL_VERBOSE, "main():Saving program name \"%s\" from command line arguments.", argv[0] );
+        debugLog( LOG_LEVEL_VERBOSE, 
+             "main():Saving program name \"%s\" "
+                 "from command line arguments.", argv[0] );
         programName = argv[0];
     }    
 
-  if(argc == 1) {
-        debugLog( LOG_LEVEL_VERBOSE, "main():No user-supplied command line arguments, printing hello message." );
+
+    if(argc == 1) {
+        debugLog( LOG_LEVEL_VERBOSE, 
+          "main():No user-supplied command line arguments, "
+          "printing hello message." );
         greetWorld( settings.textWidth );                    
     }
-  else {
-    int optionReadSuccess = readCommandLineOptions( commandLineOptionCount, commandLineOptions, argc, argv );
+    else {
+        bool optionReadSuccess = 
+             readCommandLineOptions( 
+                  commandLineOptionCount, 
+                  commandLineOptions, argc, argv );
 
-
-        int level;
-        /*sscanf(commandLineOptions[3].currentValueString, "%d\n", &level);
-        setDebugLogLevel( level );
-
-        sscanf(commandLineOptions[0].currentValueString, "%d\n", &width);
-        //setWrapWidth(  width );
-
-        debugLog( LOG_LEVEL_VERBOSE, "main():read width %d", width );
-        if ( commandLineOptions[1].currentValueString[0] 
-               == 't' ) {
-            width = NOWRAP;
-        }*/
-
-
-if(!optionReadSuccess) {
-        printf( helpMessage( programName, commandLineOptionCount, commandLineOptions, settings.textWidth ));  /* if any unlised command-line argument is */
+            /* if any unlised command-line argument is 
+               supplied.  By not putting --help in the 
+               options list, it will trigger this message.*/
+        if(!optionReadSuccess) {
+            printf(   helpMessage(  programName, 
+                         commandLineOptionCount, 
+                         commandLineOptions, 
+                          settings.textWidth ));  
         }
     if(optionReadSuccess) {
         greetWorld( settings.textWidth );
         }
 
 
-  }
-  /* [if statement modeled after Kernighan & Richie, 1998, p. 20
-          or similar ] */
+    }
 
     debugLog( LOG_LEVEL_VERBOSE, "main():EXIT_SUCCESS" );
-  return EXIT_SUCCESS;  /* [program exit: WG14, 2018, p. 11,
-                            EXIT_SUCCESS: Thompson, 2012 ] */
+    return EXIT_SUCCESS;  
+                /* ( WG14, 2018, p. 11, program exit. ) */
 }
 
 /* -------------------- aBadEnd() ----------------------- *
@@ -167,15 +232,20 @@ void aBadEnd(void) {
     else {
         fprintf( stderr, _("Aborting.\n"));
     }
-    exit( EXIT_FAILURE ); /* https://www.tutorialspoint.com/c_standard_library/c_function_exit.htm */
+    debugLog( LOG_LEVEL_ERROR, "aBadEnd():EXIT_FAILURE");
+    exit( EXIT_FAILURE ); /* (Tutorials Point, 2022) */
 }
 
 /* -------------------- Works Cited -------------------- */
- /* 
+/* 
  * Berger, Avi. (2012). "Why structs cannot be assigned
  *      directly?: Answer." Stackoverflow.  Retrieved from
  *      https://stackoverflow.com/questions/12189480/why-
  *      structs-cannot-be-assigned-directly on 2022 June 03.
+ * Fisher, James. (2016). "How do I write a multi-line
+ *      string literal in C?." Website.  Retrieved from
+ *      https://jameshfisher.com/2016/11/30/c-multiline-
+ *      literal/ on 2022 June 14.
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition.." Prentise
  *      Hall..  ISBN 0-13-110370-9.
@@ -185,12 +255,14 @@ void aBadEnd(void) {
  *      https://www.tutorialspoint.com/difference-between-
  *      const-char-p-char-const-p-and-const-char-const-p-
  *      in-c on 2022 June 09.
- * Thompson, Keith. (2012). "Should I return EXIT_SUCCESS or
- *      0 from main()?: Answer." Stack Overflow..  Retrieved
- *      from
- *      https://stackoverflow.com/questions/8867871/should-
- *      i-return-exit-success-or-0-from-main on 2022 June
- *      03.
+ * Parewa Labs. (n.d.). "C strcmp()." Parewa Labs Pvt. Ltd..
+ *      Retrieved from
+ *      https://www.programiz.com/c-programming/library-
+ *      function/string.h/strcmp on 2022 June 14.
+ * Tutorials Point. (2022). "C library function - exit()."
+ *      Tutorials Point.  Retrieved from https://www.tutoria
+ *      lspoint.com/c_standard_library/index.htm on 2022
+ *      June 14.
  * WG14. (2018). "Programming Languages -- C. 9899:202x
  *      (E)." ISO/IEC.  Retrieved from https://www.open-
  *      std.org/jtc1/sc22/wg14/www/docs/n2310.pdf on 2022

@@ -34,7 +34,7 @@ const char* helpMessage(const char* programName, int commandLineOptionC, struct 
  *     on 2022 June 03.
  */
 /* -------------------- Works Cited -------------------- */
- /* 
+/* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition.." Prentise
  *      Hall..  ISBN 0-13-110370-9.

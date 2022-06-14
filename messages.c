@@ -117,7 +117,11 @@ asprintf(&returnString, "%s%s%s\n", returnString, firstPart, descp);
  *     on 2022 June 03.
  */
 /* -------------------- Works Cited -------------------- */
- /* 
+/* 
+ * Fisher, James. (2016). "How do I write a multi-line
+ *      string literal in C?." Website.  Retrieved from
+ *      https://jameshfisher.com/2016/11/30/c-multiline-
+ *      literal/ on 2022 June 14.
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition.." Prentise
  *      Hall..  ISBN 0-13-110370-9.
