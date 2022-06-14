@@ -17,6 +17,7 @@
 #include "printf.h"
 #include "messages.h"
 #include "command_line_args.h"
+#include "configuration_file.h"
 #include "gettext.h"
 #include "debug_log.h"
 #include "word_wrap.h"
@@ -24,9 +25,20 @@
 const char* programName; 
              /* ( Parahar, 2020, const char* meaning ) */
 
+/* --------- settings and command line options ---------- */
+
+struct helloWorldSettings settings =        /*  initial  */
+   (struct helloWorldSettings)              /* settings  */
+      { AUTODETECT,      /* text wrap width         */
+        "",              /* system default language */
+        LOG_LEVEL_ERROR, /* log level               */
+        NULL             /* debug log output        */
+      };
 
 bool settingsSetWidth( const char* width );
 bool settingsSetNoWrap( const char* _ );
+bool settingsSetDebugLogLevel( const char* level );
+bool settingsSetLanguage( const char* lang );
 
 struct commandLineOption commandLineOptions[] = {
     (struct commandLineOption){"w", "width", 
@@ -34,14 +46,14 @@ struct commandLineOption commandLineOptions[] = {
        "0 for autodetect", "int", "0", &settingsSetWidth },
     (struct commandLineOption){"n", "nowrap", 
        "Disable Word Wrap", "bool", "false",
-                                    &settingsSetNoWrap }/*,
+                                    &settingsSetNoWrap },
     (struct commandLineOption){"l", "lang", 
-       "Language", "string", "" },
+       "Language", "string", "", &settingsSetLanguage },
     (struct commandLineOption){"d", "debug", 
         "Debug Level:\n"
             "0 Error\n"
             "1 Warning\n"
-            "2 Verbose", "string", "0" }*/ };
+            "2 Verbose", "string", "0", &settingsSetDebugLogLevel } };
     /* ( Berger, 2012, struct literal format ) */
     /* ( Fisher, 2016, multi-line string format ) */  
 
@@ -49,11 +61,8 @@ const int commandLineOptionCount =
           sizeof( commandLineOptions ) / 
                   sizeof(struct commandLineOption);
 
-struct helloWorldSettings settings =
-   (struct helloWorldSettings) { AUTODETECT };
-
 bool settingsSetWidth( const char* width ) {
-   return sscanf(commandLineOptions[0].currentValueString, 
+   return sscanf(width, 
      "%d\n", &settings.textWidth); 
 }
 
@@ -61,6 +70,16 @@ bool settingsSetNoWrap( const char* _ ) {
    debugLog( LOG_LEVEL_VERBOSE, "settingsSetNoWrap():Entering function." );
    settings.textWidth = NOWRAP; 
    return true;
+}
+
+bool settingsSetDebugLogLevel( const char* level ) {
+   debugLog( LOG_LEVEL_VERBOSE, "settingsSetDebugLogLevel():Entering function." );
+   return sscanf(level, 
+     "%d\n", &settings.debugLogLevel); 
+}
+
+bool settingsSetLanguage( const char* lang ) {
+   settings.specifiedLanguage = lang;
 }
 
 /* ---------------- greetWorld() ------------------------ *
@@ -84,7 +103,12 @@ int main(int argc, char *argv[]) {
           /* from ( WG14, 2018, p. 11 ) */
           int width = 0;
 
-    setDebugLogOutput( stdout );
+    FILE* configurationFile = fopen("hello_world.conf", "r");
+    readConfigurationFile(configurationFile,                        
+         commandLineOptionCount,                                    
+           commandLineOptions);   
+
+    //setDebugLogOutput( stdout );
     //setDebugLogLevel( 2);
     debugLog( LOG_LEVEL_VERBOSE, "main():Entering function." );
 

@@ -14,6 +14,9 @@
 
 struct helloWorldSettings {
     int textWidth;
+    const char* specifiedLanguage;
+    int debugLogLevel;
+    FILE* debugLogOutput;
 };
 
 int main(int argc, char *argv[]); /* [from WG14, 2018, p. 11] */

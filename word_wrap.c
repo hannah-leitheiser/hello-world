@@ -33,17 +33,6 @@ char* wrapText( const char* text, int width,
           const char* initialIndent, 
           const char* subsequentIndent ) {
 
-/* if the indent is longer than the target width, we are
-   going to make the indent nothing ("") */
-
-if( strlen(initialIndent) + 1 > width ) {
-    initialIndent = "";
-}
-
-if( strlen(subsequentIndent) + 1 > width ) {
-    subsequentIndent = "";
-}
-
 int inputTextIndex = 0;
 char* outputText = "";
 bool firstLine = true;
@@ -78,6 +67,17 @@ if(width < 1) {
     /* the function will hang if the width is 0 or less */
     width = DEFAULT_WIDTH;
     }
+
+/* if the indent is longer than the target width, we are
+   going to make the indent nothing ("") */
+
+if( strlen(initialIndent) + 1 > width ) {
+    initialIndent = "";
+}
+
+if( strlen(subsequentIndent) + 1 > width ) {
+    subsequentIndent = "";
+}
 
 int textColumns;
 
