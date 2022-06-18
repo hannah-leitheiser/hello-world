@@ -1,3 +1,0 @@
-Hello World!
-Version 0.1.0
-by Hannah Leitheiser
