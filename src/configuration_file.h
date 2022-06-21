@@ -34,9 +34,13 @@ int readConfigurationFile(FILE* file,
         struct commandLineOption options[]);
 
 #endif
-/* -------------------- Works Cited -------------------- */
+/* --------------------- Works Cited -------------------- */
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition.." Prentise
  *      Hall..  ISBN 0-13-110370-9.
+ * cschol. (2008). "Organization of C files: Answer."
+ *      Stackoverflow.  Retrieved from https://stackoverflow
+ *      .com/questions/47919/organization-of-c-files on 2022
+ *      June 03.
  */

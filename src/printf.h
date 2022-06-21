@@ -27,7 +27,7 @@ int printf_mine(const char *__format, ...);
  *      on 2022 June 03.
  *
  */
-/* -------------------- Works Cited -------------------- */
+/* --------------------- Works Cited -------------------- */
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition.." Prentise

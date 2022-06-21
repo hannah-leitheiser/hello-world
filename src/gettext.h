@@ -9,3 +9,10 @@
 void LanguageLocalizationInit( void );
 
 #endif
+/* --------------------- Works Cited -------------------- */
+/* 
+ * cschol. (2008). "Organization of C files: Answer."
+ *      Stackoverflow.  Retrieved from https://stackoverflow
+ *      .com/questions/47919/organization-of-c-files on 2022
+ *      June 03.
+ */

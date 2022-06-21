@@ -8,9 +8,7 @@
 
 void LanguageLocalizationInit( void ) {
 
- putenv("LANGUAGE=de_DE.UTF8");
-  
   setlocale (LC_ALL, "");
-  bindtextdomain (PACKAGE, LOCALEDIR);
+  bindtextdomain (PACKAGE, LOCALE_DIR);
   textdomain (PACKAGE);
 }

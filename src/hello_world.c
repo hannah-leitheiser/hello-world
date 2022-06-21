@@ -3,10 +3,9 @@
  * Date Created    : 2022JUN02
  * Author          : Hannah Leitheiser
  * Project Name    : Hello World
- * Description     : Print "Hello World!" to stdout.
- * Compile         : make
- *  and Run        : ./hello_world
- * (Comment Syntax: 
+ * File Summary    : Contains main() and specifies command
+ *                 : line arguments.
+ * (C Comment Syntax: 
          Kernighan & Ritchie, 1988, p. 9) */
 
 #include <stdbool.h>
@@ -179,7 +178,6 @@ int main(int argc, char *argv[]) {
 
     LanguageLocalizationInit();
 
-
     if(argc > 0) {
         debugLog( LOG_LEVEL_VERBOSE, 
              "main():Saving program name \"%s\" "
@@ -236,7 +234,39 @@ void aBadEnd(void) {
     exit( EXIT_FAILURE ); /* (Tutorials Point, 2022) */
 }
 
-/* -------------------- Works Cited -------------------- */
+/* --------------------- Works Cited -------------------- */
+/* 
+ * Berger, Avi. (2012). "Why structs cannot be assigned
+ *      directly?: Answer." Stackoverflow.  Retrieved from
+ *      https://stackoverflow.com/questions/12189480/why-
+ *      structs-cannot-be-assigned-directly on 2022 June 03.
+ * Fisher, James. (2016). "How do I write a multi-line
+ *      string literal in C?." Website.  Retrieved from
+ *      https://jameshfisher.com/2016/11/30/c-multiline-
+ *      literal/ on 2022 June 14.
+ * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
+ *      Programming Language, Second Edition.." Prentise
+ *      Hall..  ISBN 0-13-110370-9.
+ * Parahar, Mahesh. (2020). "Difference between const char*
+ *      p, char * const p, and const char * const p in C."
+ *      Tutorialspoint.  Retrieved from
+ *      https://www.tutorialspoint.com/difference-between-
+ *      const-char-p-char-const-p-and-const-char-const-p-
+ *      in-c on 2022 June 09.
+ * Parewa Labs. (n.d.). "C strcmp()." Parewa Labs Pvt. Ltd..
+ *      Retrieved from
+ *      https://www.programiz.com/c-programming/library-
+ *      function/string.h/strcmp on 2022 June 14.
+ * Tutorials Point. (2022). "C library function - exit()."
+ *      Tutorials Point.  Retrieved from https://www.tutoria
+ *      lspoint.com/c_standard_library/index.htm on 2022
+ *      June 14.
+ * WG14. (2018). "Programming Languages -- C. 9899:202x
+ *      (E)." ISO/IEC.  Retrieved from https://www.open-
+ *      std.org/jtc1/sc22/wg14/www/docs/n2310.pdf on 2022
+ *      June 03.
+ */
+/* --------------------- Works Cited -------------------- */
 /* 
  * Berger, Avi. (2012). "Why structs cannot be assigned
  *      directly?: Answer." Stackoverflow.  Retrieved from

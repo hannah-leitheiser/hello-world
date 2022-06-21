@@ -82,7 +82,7 @@ while ((read = getline(&line, &len, file)) != -1) {
 
     } 
 
-/* -------------------- Works Cited -------------------- */
+/* --------------------- Works Cited -------------------- */
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition.." Prentise

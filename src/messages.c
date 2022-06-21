@@ -116,7 +116,7 @@ asprintf(&returnString, "%s%s%s\n", returnString, firstPart, descp);
  *     https://stackoverflow.com/questions/8867871/should-i-return-exit-success-or-0-from-main
  *     on 2022 June 03.
  */
-/* -------------------- Works Cited -------------------- */
+/* --------------------- Works Cited -------------------- */
 /* 
  * Fisher, James. (2016). "How do I write a multi-line
  *      string literal in C?." Website.  Retrieved from

@@ -169,7 +169,7 @@ return outputText;
  *     https://stackoverflow.com/questions/8867871/should-i-return-exit-success-or-0-from-main
  *     on 2022 June 03.
  */
-/* -------------------- Works Cited -------------------- */
+/* --------------------- Works Cited -------------------- */
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition.." Prentise
