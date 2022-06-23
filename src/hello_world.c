@@ -161,6 +161,9 @@ bool greetWorld( int width) {
 int main(int argc, char *argv[]) { 
           /* from ( WG14, 2018, p. 11 ) */
 
+    
+    //setDebugLogOutput( stdout );
+    //setDebugLogLevel( LOG_LEVEL_VERBOSE);
     debugLog( LOG_LEVEL_VERBOSE, 
                      "main():Entering function." );
 
@@ -203,10 +206,10 @@ int main(int argc, char *argv[]) {
                options list, it will trigger this message.*/
         if(!optionReadSuccess) {
             const char* helpM = 
-            printf(   helpMessage(  programName, 
+                helpMessage(  programName, 
                          commandLineOptionCount, 
                          commandLineOptions, 
-                          settings.textWidth ));  
+                          settings.textWidth );  
             if( helpM ) {
                 if(!printf( helpM )) {
                     aBadEnd();

@@ -13,8 +13,10 @@
 #include <stdbool.h> /* https://stackoverflow.com/questions/2254075/using-true-and-false-in-c */
 #include <stdarg.h> /* https://en.cppreference.com/w/c/variadic/va_list */
 
-#include "debug_log.h"
+
 #include "printf.h" /* for nameStream() */
+#include "hello_world.h" /* for DEBUG_LOG definition */
+#include "debug_log.h"
 
 /*
 for reference
