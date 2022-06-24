@@ -110,7 +110,7 @@ return false;
 
 
 bool settingsSetDebugLogOutput( const char* output ) {
-    /* ( Parewa Labs, n.d. ) */
+    /* ( Parewa Labs, n.d., C strcmp() ) */
     if( strcmp( output, "0" ) == 0) { 
         debugLog( LOG_LEVEL_VERBOSE, 
            "settingsSetDebugLogOutput():STDOUT.");
@@ -258,7 +258,7 @@ void aBadEnd(void) {
  *      https://jameshfisher.com/2016/11/30/c-multiline-
  *      literal/ on 2022 June 14.
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
- *      Programming Language, Second Edition.." Prentise
+ *      Programming Language, Second Edition." Prentise
  *      Hall..  ISBN 0-13-110370-9.
  * Parahar, Mahesh. (2020). "Difference between const char*
  *      p, char * const p, and const char * const p in C."

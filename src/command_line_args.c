@@ -12,14 +12,14 @@
 #include "command_line_args.h"
 #include "debug_log.h"
 
-/* https://www.geeksforgeeks.org/enumeration-enum-c/ Jun23*/
-
 enum optionType { longForm, shortForm };
+/* ( GeeksforGeeks et. al., 2022: enum syntax ) */
 
 bool readOption( const char* option,
              enum optionType type,
                  const char* predicate,
-                       bool* predicateUsed,
+                       bool* predicateUsed, 
+                                /* 2nd "return value" */
                          int commandLineOptionC,           
                       struct commandLineOption options[]);
 
@@ -64,8 +64,11 @@ bool isSubstring( const char* testString,
  * (eg. --width) form, set the currentValueString and 
  * execute setSettings -- a pointer to a function that's
  * suppose to realize the setting in the program generally.
+ * return values:
+ *     true: all command line options successfully 
+ *             processed.
+ *     false: at least one option not recgonized.
  */
-
 
 /* for reference, defined in command_line_args.h:
 
@@ -80,7 +83,7 @@ struct commandLineOption {
 
 */
 
-int readCommandLineOptions(int commandLineOptionC, 
+bool readCommandLineOptions(int commandLineOptionC, 
                         struct commandLineOption options[], 
                            int argc, 
                          char *argv[]) {
@@ -156,11 +159,15 @@ int readCommandLineOptions(int commandLineOptionC,
 
         if(!found) {
 
-            debugLog(LOG_LEVEL_WARNING, "readCommandLineOptions():no match found for %s", currentArg);
+            debugLog(LOG_LEVEL_WARNING, 
+                 "readCommandLineOptions():"
+                 "no match found for %s", currentArg);
             return false;
             }
 
         if(predicateUsed) {
+            /* increment to move focus pass the consumed
+             * predicate. */
             currentCommandLineArg++;
         }
         currentCommandLineArg++;
@@ -169,7 +176,18 @@ int readCommandLineOptions(int commandLineOptionC,
     return true;
 }
 
-/* ------------------ readOption() -----------------------*/
+/* ------------------ readOption() ------------------------
+ * to be frank, this function is mostly added to reduce
+ * the indenting in readCommandLineOptions().
+ * return values:
+ *     true: option found and processed.
+ *     false: option not found.
+ * predicateUsed 'return' value:
+ *     true: the predicate was present and used.
+ *         eg. option="width", predicate="10"
+ *     false: no predicate was used, option was binary
+ *         eg. option="nowrap" -- nothing else needed
+ */
 
 /* for reference:
    enum optionType { longForm, shortForm } */
@@ -233,7 +251,12 @@ return found;
 
 /* --------------------- Works Cited -------------------- */
 /* 
+ * GeeksforGeeks, KartheekMudarakola, adnanirshad158, &
+ *      tarun18tk. (2022). "Enumeration (or enum) in C."
+ *      GeeksforGeeks.org.  Retrieved from
+ *      https://www.geeksforgeeks.org/enumeration-enum-c/ on
+ *      2022 June 23.
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
- *      Programming Language, Second Edition.." Prentise
+ *      Programming Language, Second Edition." Prentise
  *      Hall..  ISBN 0-13-110370-9.
  */

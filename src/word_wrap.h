@@ -36,7 +36,7 @@ char* wrapText( const char* text, int width,
 /* --------------------- Works Cited -------------------- */
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
- *      Programming Language, Second Edition.." Prentise
+ *      Programming Language, Second Edition." Prentise
  *      Hall..  ISBN 0-13-110370-9.
  * Python Software Foundation. (2022). "textwrap — Text
  *      wrapping and filling." Python.org.  Retrieved from

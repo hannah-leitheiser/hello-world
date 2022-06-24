@@ -29,7 +29,7 @@ const char* helpMessage( const char* programName,
 /* --------------------- Works Cited -------------------- */
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
- *      Programming Language, Second Edition.." Prentise
+ *      Programming Language, Second Edition." Prentise
  *      Hall..  ISBN 0-13-110370-9.
  * cschol. (2008). "Organization of C files: Answer."
  *      Stackoverflow.  Retrieved from https://stackoverflow

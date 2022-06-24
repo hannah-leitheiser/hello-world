@@ -1,11 +1,14 @@
-/* Filename        : hello_world.c
+/* Filename        : configuration_file.c
  * Type of File    : C Source Code
  * Date Created    : 2022JUN02
  * Author          : Hannah Leitheiser
  * Project Name    : Hello World
- * Description     : Print "Hello World!" to stdout.
- * Compile         : gcc hello_world.c -o hello_world
- *  and Run        : ./hello_world
+ * Description     : Parse a configuration file into
+ *                 : pseudo command-line arguments.
+ *                 : eg. width=10 becomes --width 10,
+ *                 : then send those strings to
+ *                 : readCommandLineOptions() for
+ *                 : processing.
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
 #include <stdbool.h>
@@ -18,16 +21,17 @@
 #include "configuration_file.h"
 
 /* for reference
-struct commandLineOption {
-    char* shortForm;
-    char* longForm;
-    char* description;
-    char* dataType;
-    char* currentValueString;
-    };
-    */
 
-int readConfigurationFile(FILE* file,                        
+struct commandLineOption {                                   
+    char* shortForm;                                         
+    char* longForm;                                          
+    char* description;                                       
+    char* dataType;                                          
+    char* currentValueString;                                
+    bool (*setSetting)(const char*);                         
+    };  */
+
+bool readConfigurationFile(FILE* file,                        
   int commandLineOptionC,                                    
         struct commandLineOption options[]) {
 
@@ -85,6 +89,6 @@ while ((read = getline(&line, &len, file)) != -1) {
 /* --------------------- Works Cited -------------------- */
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
- *      Programming Language, Second Edition.." Prentise
+ *      Programming Language, Second Edition." Prentise
  *      Hall..  ISBN 0-13-110370-9.
  */

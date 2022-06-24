@@ -5,7 +5,7 @@
  * Project Name    : Hello World
  * File Summary    : Header file.
  * (C Comment Syntax: Kernighan & Ritchie, 1988, p. 9)
- * (File Use: Stefano & Smith, 2009 ) */
+ * (File Use: Borini & Smith, 2009 ) */
 
 #ifndef __HELLO_WORLD_H /*(guard modeled on cschol, 2008)*/    
 #define __HELLO_WORLD_H 
@@ -29,8 +29,13 @@ void aBadEnd( void );
 /* --------------------- Works Cited -------------------- */
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
- *      Programming Language, Second Edition.." Prentise
+ *      Programming Language, Second Edition." Prentise
  *      Hall..  ISBN 0-13-110370-9.
+ * Smith, Jed & Borini, Stefano. (2009). "What do .c and .h
+ *      file extensions mean to C?, Answer." Stackoverflow.
+ *      Retrieved from
+ *      https://stackoverflow.com/questions/1695224/what-do-
+ *      c-and-h-file-extensions-mean-to-c on 2022 June 03.
  * WG14. (2018). "Programming Languages -- C. 9899:202x
  *      (E)." ISO/IEC.  Retrieved from https://www.open-
  *      std.org/jtc1/sc22/wg14/www/docs/n2310.pdf on 2022
