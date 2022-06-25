@@ -20,6 +20,19 @@
 
 #include "configuration_file.h"
 
+
+/* --------------- readConfigurationFile() -----------------
+ * Parse a configuration file into pseudo command-line 
+ * arguments.  
+ *     eg. width=10 becomes --width 10
+ * Then send those strings toreadCommandLineOptions() for
+ * processing.
+ * Return Values
+ *     true -- success.
+ *     false -- failure. */
+
+/* ( Walia et. al., n.d.: a general reference ) */
+
 /* for reference
 
 struct commandLineOption {                                   
@@ -35,60 +48,66 @@ bool readConfigurationFile(FILE* file,
   int commandLineOptionC,                                    
         struct commandLineOption options[]) {
 
-/* https://www.programmingsimplified.com/c-program-read-file */
-//fseek(file, 0L, SEEK_END); 
-char ch;
- ssize_t read;
-char * line = NULL;
- size_t len = 0;
-char* argument = "";
-char* predicate = "";
+    ssize_t read; /* ( mbaotpff & gsamaras, 2018 ) */
+    char* line = NULL; /* ( mbaotpff & gsamaras, 2018 ) */
+    size_t len = 0; /* ( mbaotpff & gsamaras, 2018 ) */
+    char* argument = "";
+    char* predicate = "";
 
-/* https://stackoverflow.com/questions/3501338/c-read-file-line-by-line */
-while ((read = getline(&line, &len, file)) != -1) {
+    /* https://stackoverflow.com/questions/3501338/c-read-file-line-by-line */
+    while ((read = getline(&line, &len, file)) != -1) {
+        /* (mbaotpff & gsamaras, 2018: similar code ) */
         argument = "--";
         predicate = "";
 
-        //printf("Retrieved line of length %zu:\n", read);
-        //printf("%s", line);
         /* find the "=" */
         int equalIndex = 0;
-        for( ; line[equalIndex] != '=' && line[equalIndex] != '\n' && line[equalIndex] != '\0' ; equalIndex++) {
-            asprintf( &argument, "%s%c", argument, line[equalIndex] );
+        for( ; line[equalIndex] != '=' && 
+               line[equalIndex] != '\n' && 
+               line[equalIndex] != '\0' ; 
+                 equalIndex++) {
+            asprintf( &argument, "%s%c", argument, 
+                                 line[equalIndex] );
         }
-        if(line[equalIndex] == '=')
-        {
-        equalIndex++;
+        if(line[equalIndex] == '=') {
+            equalIndex++;
 
-        for( ; line[equalIndex] != '=' && line[equalIndex] != '\n' && line[equalIndex] != '\0' ; equalIndex++) {
-            asprintf( &predicate, "%s%c", predicate, line[equalIndex] );
-        }
+            for( ; line[equalIndex] != '=' && 
+                   line[equalIndex] != '\n' && 
+                   line[equalIndex] != '\0' ; 
+                         equalIndex++) {
+            asprintf( &predicate, "%s%c", 
+                       predicate, line[equalIndex] );
+            }
         
-        char* argv[] = { "", argument, predicate };
-        int argc = 3;
-            readCommandLineOptions(commandLineOptionC, options, argc, argv);
+            char* argv[] = { "", argument, predicate };
+            int argc = 3;
+            readCommandLineOptions(commandLineOptionC, 
+                                  options, argc, argv);
 
         }
 
-        else
-        {
-
-        char* argv[] = { "", argument  };
-        int argc = 2;
-            readCommandLineOptions(commandLineOptionC, options, argc, argv);
-
-        }
-
+        else {
+            char* argv[] = { "", argument  };
+            int argc = 2;
+            readCommandLineOptions(commandLineOptionC, 
+                                     options, argc, argv);
 
         }
-
-
-
-    } 
+    }
+} 
 
 /* --------------------- Works Cited -------------------- */
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
  *      Hall..  ISBN 0-13-110370-9.
+ * Walia, D., Jonny, Goel, R., & Yogesh. (n.d.). "C read
+ *      file." Programmingsimplified.  Retrieved from
+ *      https://www.programmingsimplified.com/c-program-
+ *      read-file on 2022 June 20.
+ * mbaitoff & gsamaras. (2018). "C read file line by line:
+ *      Answer." Stackoverflow.  Retrieved from
+ *      https://stackoverflow.com/questions/3501338/c-read-
+ *      file-line-by-line on 2022 June 20.
  */

@@ -23,7 +23,7 @@
 #include "word_wrap.h"
 
 const char* programName; 
-             /* ( Parahar, 2020, const char* meaning ) */
+             /* ( Parahar, 2020: const char* meaning ) */
 
 /* --------- settings and command line options ---------- */
 
