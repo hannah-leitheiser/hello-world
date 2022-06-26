@@ -259,7 +259,7 @@ void aBadEnd(void) {
  *      literal/ on 2022 June 14.
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
- *      Hall..  ISBN 0-13-110370-9.
+ *      Hall.  ISBN 0-13-110370-9.
  * Parahar, Mahesh. (2020). "Difference between const char*
  *      p, char * const p, and const char * const p in C."
  *      Tutorialspoint.  Retrieved from

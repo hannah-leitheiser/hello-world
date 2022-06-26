@@ -258,5 +258,5 @@ return found;
  *      2022 June 23.
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
- *      Hall..  ISBN 0-13-110370-9.
+ *      Hall.  ISBN 0-13-110370-9.
  */

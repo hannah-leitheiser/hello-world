@@ -19,7 +19,7 @@
 void debugLog( int logLevel, const char* message_format, ... );
 int getDebugLogLevel( void );
 int setDebugLogLevel( int level );
-int setDebugLogOutput( FILE* file );
+bool setDebugLogOutput( FILE* file );
 
 /*  Works Cited:
  *  WG14. (2018).  Programming Languages -- C. 9899:202x (E).  ISO/IEC.
@@ -37,5 +37,5 @@ int setDebugLogOutput( FILE* file );
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
- *      Hall..  ISBN 0-13-110370-9.
+ *      Hall.  ISBN 0-13-110370-9.
  */

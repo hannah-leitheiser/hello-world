@@ -1,20 +1,19 @@
-/* Filename        : hello_world.c
+/* Filename        : debug_log.c
  * Type of File    : C Source Code
  * Date Created    : 2022JUN02
  * Author          : Hannah Leitheiser
  * Project Name    : Hello World
- * Description     : Print "Hello World!" to stdout.
- * Compile         : gcc hello_world.c -o hello_world
- *  and Run        : ./hello_world
- * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
+ * Description     : Provides functions for logging debug
+ *                 : information to a given output.
+ * ( Kernighan & Ritchie, 1988, p. 9: Comment Syntax ) */
 
 #define _GNU_SOURCE
-#include <stdio.h> /* [Kernighan & Ritchie, 1988, p. 6] */
-#include <stdbool.h> /* https://stackoverflow.com/questions/2254075/using-true-and-false-in-c */
+#include <stdio.h> /* ( Kernighan & Ritchie, 1988, p. 6 ) */
+#include <stdbool.h> /* ( Jester-Young, 2010 ) */
 #include <stdarg.h> /* https://en.cppreference.com/w/c/variadic/va_list */
 
 
-#include "printf.h" /* for nameStream() */
+#include "printf.h"      /* for nameStream() */
 #include "hello_world.h" /* for DEBUG_LOG definition */
 #include "debug_log.h"
 
@@ -26,30 +25,15 @@ for reference
 #define LOG_LEVEL_VERBOSE  2 
 */
 
-FILE* debugLogOutput;
+FILE* debugLogOutput = NULL;
 int debugLogLevel = LOG_LEVEL_ERROR;
 
-char* logLevelString( int level ) {
+char* logLevelString( int level );
 
-    char* levelString = NULL;
-    switch( level ) {
-        case LOG_LEVEL_ERROR:
-            levelString = "Error ";
-            break;
-        case LOG_LEVEL_WARNING:
-            levelString = "Warning";
-            break;
-        case LOG_LEVEL_VERBOSE:
-            levelString = "Verbose";
-            break;
-        default:
-            debugLog( LOG_LEVEL_WARNING, "logLevelString():Log level %d not recgonized.", level );
-        }
-    return levelString; // may be NULL
+/* ------------------ debugLog() -------------------------*/
 
-}
-
-void debugLog( int logLevel, const char* message_format, ... ) {
+void debugLog( int logLevel, 
+       const char* message_format, ... ) {
     #ifdef DEBUG_LOG
     
     if(debugLogOutput && logLevel <= debugLogLevel) {
@@ -69,64 +53,108 @@ void debugLog( int logLevel, const char* message_format, ... ) {
     }
 
     #endif
+    return;
 }
 
+/* -------------- getDebugLogLevel() ---------------------*/
 
 int getDebugLogLevel( void ) {
     char* levelString = logLevelString(debugLogLevel);
     if(levelString) {
-        debugLog( LOG_LEVEL_VERBOSE, "getDebugLogLevel():Log level %d:%s", debugLogLevel, levelString );
+        debugLog( LOG_LEVEL_VERBOSE, 
+               "getDebugLogLevel():"
+           "Log level %d:%s", debugLogLevel, levelString );
         return debugLogLevel;
     }
     else {
-        debugLog( LOG_LEVEL_WARNING, "getDebugLogLevel():Log level %d not recgonized.", debugLogLevel );
+        debugLog( LOG_LEVEL_WARNING, 
+            "getDebugLogLevel():"
+            "Log level %d not recgonized.", debugLogLevel );
         return -1;
     }
 }
 
+/* ------------------ setDebugLogLevel() ---------------- */
 
 int setDebugLogLevel( int level ) {
     char* levelString = logLevelString(level);
     if(levelString) {
         debugLogLevel = level;
-        debugLog( LOG_LEVEL_VERBOSE, "setDebugLogLevel():Log level set to %d:%s", debugLogLevel, levelString );
+        debugLog( LOG_LEVEL_VERBOSE, 
+            "setDebugLogLevel():"
+            "Log level set to %d:%s", 
+                       debugLogLevel, levelString );
     }
     else {
         levelString = logLevelString(debugLogLevel);
         if (levelString ) {
-            debugLog( LOG_LEVEL_WARNING, "setDebugLogLevel():Log level %d not recgonized, log level remains %d:%s.", level, debugLogLevel, levelString );
+            debugLog( LOG_LEVEL_WARNING, 
+                  "setDebugLogLevel():"
+                  "Log level %d not recgonized, "
+                  "log level remains %d:%s.", 
+                      level, debugLogLevel, levelString );
+        }
+        else {
+            debugLog( LOG_LEVEL_WARNING, 
+                  "setDebugLogLevel():"
+                  "Log level %d not recgonized, "
+                  "log level remains %d:??????.", 
+                      level, debugLogLevel );
         }
     }
     return debugLogLevel;
 }
 
-int setDebugLogOutput( FILE* file ) {
+/* ----------------- setDebugLogOutput() ---------------- */
+
+bool setDebugLogOutput( FILE* file ) {
     if(file) {
         debugLogOutput = file;
-        debugLog( LOG_LEVEL_VERBOSE, "setDebugLogOutput():Log output stream set to %s.", nameStream( debugLogOutput ) );
+        debugLog( LOG_LEVEL_VERBOSE, 
+            "setDebugLogOutput():"
+            "Log output stream set to %s.", 
+                        nameStream( debugLogOutput ) );
         return true;
     }
     else {
-        debugLog( LOG_LEVEL_WARNING, "setDebugLogOutput():NULL file supplied, log output stream remains %s.", nameStream ( debugLogOutput ) );
+        debugLog( LOG_LEVEL_WARNING, 
+                "setDebugLogOutput():"
+                "NULL file supplied, "
+                "log output stream remains %s.", 
+                       nameStream ( debugLogOutput ) );
         return false;
     }
 }
 
-/*  Works Cited:
- *  WG14. (2018).  Programming Languages -- C. 9899:202x (E).  ISO/IEC.
- *     Retrieved from https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf
- *     on 2022 June 03.
- *  Kernighan, Brian W. & Ritchie, Dennis M.  (1988).  The C Programming Language.  
- *     Second Edition.  Prentise Hall.  ISBN 0-13-110370-9. 
- *  Thompson, Keith.  2012.  "Should I return EXIT_SUCCESS or 0 
- *     from main()?: Answer."  Stack Overflow.  
- *     Retrieved from 
- *     https://stackoverflow.com/questions/8867871/should-i-return-exit-success-or-0-from-main
- *     on 2022 June 03.
- */
+/* ----------------- logLevelString() ------------------- */
+
+char* logLevelString( int level ) {
+
+    char* levelString = NULL;
+    switch( level ) {
+        case LOG_LEVEL_ERROR:
+            levelString = "Error ";
+            break;
+        case LOG_LEVEL_WARNING:
+            levelString = "Warning";
+            break;
+        case LOG_LEVEL_VERBOSE:
+            levelString = "Verbose";
+            break;
+        default:
+            debugLog( LOG_LEVEL_WARNING, 
+                   "logLevelString():"
+                   "Log level %d not recgonized.", level );
+        }
+    return levelString; // may be NULL
+}
 /* --------------------- Works Cited -------------------- */
 /* 
+ * Jester-Young, Chris. (2010). "Using true and false in C:
+ *      Answer." Stackoverflow.  Retrieved from
+ *      https://stackoverflow.com/questions/2254075/using-
+ *      true-and-false-in-c on 2022 June 18.
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
- *      Hall..  ISBN 0-13-110370-9.
+ *      Hall.  ISBN 0-13-110370-9.
  */

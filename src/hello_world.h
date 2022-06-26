@@ -30,7 +30,7 @@ void aBadEnd( void );
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
- *      Hall..  ISBN 0-13-110370-9.
+ *      Hall.  ISBN 0-13-110370-9.
  * Smith, Jed & Borini, Stefano. (2009). "What do .c and .h
  *      file extensions mean to C?, Answer." Stackoverflow.
  *      Retrieved from

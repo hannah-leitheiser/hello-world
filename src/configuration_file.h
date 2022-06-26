@@ -4,8 +4,6 @@
  * Author          : Hannah Leitheiser
  * Project Name    : Hello World
  * Description     : Print "Hello World!" to stdout.
- * Compile         : gcc hello_world.c -o hello_world
- *  and Run        : ./hello_world
  * (Kernighan & Ritchie, 1988, p. 9: comment syntax]
  * (Borini & Smith, 2009, project file breakdown) */
 
@@ -25,7 +23,7 @@ bool readConfigurationFile(FILE* file,
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
- *      Hall..  ISBN 0-13-110370-9.
+ *      Hall.  ISBN 0-13-110370-9.
  * Smith, Jed & Borini, Stefano. (2009). "What do .c and .h
  *      file extensions mean to C?, Answer." Stackoverflow.
  *      Retrieved from

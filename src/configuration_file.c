@@ -14,6 +14,7 @@
 #include <stdbool.h>
 #define _GNU_SOURCE  
 #include <stdio.h>
+/* ( Brouwer, 2001, Synopsis: direct quote ) */
 #include <stdlib.h>
 #include "command_line_args.h"
 #include "debug_log.h"
@@ -48,13 +49,16 @@ bool readConfigurationFile(FILE* file,
   int commandLineOptionC,                                    
         struct commandLineOption options[]) {
 
+    debugLog(LOG_LEVEL_VERBOSE, 
+                      "readConfigurationFile():"
+                      "entering function." );
+
     ssize_t read; /* ( mbaotpff & gsamaras, 2018 ) */
     char* line = NULL; /* ( mbaotpff & gsamaras, 2018 ) */
     size_t len = 0; /* ( mbaotpff & gsamaras, 2018 ) */
     char* argument = "";
     char* predicate = "";
 
-    /* https://stackoverflow.com/questions/3501338/c-read-file-line-by-line */
     while ((read = getline(&line, &len, file)) != -1) {
         /* (mbaotpff & gsamaras, 2018: similar code ) */
         argument = "--";
@@ -66,42 +70,92 @@ bool readConfigurationFile(FILE* file,
                line[equalIndex] != '\n' && 
                line[equalIndex] != '\0' ; 
                  equalIndex++) {
-            asprintf( &argument, "%s%c", argument, 
-                                 line[equalIndex] );
+            char* toFree = argument;
+            if ( asprintf( &argument, "%s%c", argument, 
+                        line[equalIndex] ) == -1) {
+                /* ( Brouwer, 2001, Return Value ) */
+                debugLog(LOG_LEVEL_WARNING, 
+                      "readConfigurationFile():"
+                      "unsuccessful using asprintf() "
+                      "to save argument %s%c to a string. "
+                      "Exiting function.",
+                      argument, line[equalIndex] ); 
+                return false;
+            }
+            if( equalIndex > 1) {
+                /* free memory, but not the string literal
+                   "--" */ 
+                free( toFree );
+            }
         }
         if(line[equalIndex] == '=') {
             equalIndex++;
+            int equalIndexBegin = equalIndex;
 
             for( ; line[equalIndex] != '=' && 
                    line[equalIndex] != '\n' && 
                    line[equalIndex] != '\0' ; 
                          equalIndex++) {
-            asprintf( &predicate, "%s%c", 
-                       predicate, line[equalIndex] );
+                char* toFree = predicate;
+                if( asprintf( &predicate, "%s%c", 
+                    predicate, line[equalIndex] ) == -1) {
+                
+                    /* ( Brouwer, 2001, Return Value ) */
+                    debugLog(LOG_LEVEL_WARNING, 
+                      "readConfigurationFile():"
+                      "unsuccessful using asprintf() "
+                      "to save predicate %s%c to a string. "
+                      "Exiting function.",
+                      predicate, line[equalIndex] ); 
+                return false;
+                }
+                if( equalIndex > equalIndexBegin+ 1) {
+                    /* again we need to avoid freeing the
+                     * string literal "" */
+                    free( toFree );
+                }
             }
         
             char* argv[] = { "", argument, predicate };
             int argc = 3;
-            readCommandLineOptions(commandLineOptionC, 
-                                  options, argc, argv);
+            if( !readCommandLineOptions(commandLineOptionC, 
+                                  options, argc, argv) ) {
+                debugLog(LOG_LEVEL_WARNING, 
+                      "readConfigurationFile():"
+                      "unsuccessful parse of --%s %s. "
+                      "Exiting function.",
+                      argument, predicate);
+                return false;
+            }
 
         }
 
         else {
             char* argv[] = { "", argument  };
             int argc = 2;
-            readCommandLineOptions(commandLineOptionC, 
-                                     options, argc, argv);
+            if( !readCommandLineOptions(commandLineOptionC, 
+                                     options, argc, argv)) {
+                debugLog(LOG_LEVEL_WARNING, 
+                      "readConfigurationFile():"
+                      "unsuccessful parse of --%s, "
+                      "(no predicate). "
+                      "Exiting function.",
+                      argument);
+                return false;
+            }
 
         }
+    
+    free(line);
     }
+return true;
 } 
 
 /* --------------------- Works Cited -------------------- */
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
- *      Hall..  ISBN 0-13-110370-9.
+ *      Hall.  ISBN 0-13-110370-9.
  * Walia, D., Jonny, Goel, R., & Yogesh. (n.d.). "C read
  *      file." Programmingsimplified.  Retrieved from
  *      https://www.programmingsimplified.com/c-program-
