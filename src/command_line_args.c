@@ -18,8 +18,8 @@ enum optionType { longForm, shortForm };
 bool readOption( const char* option,
              enum optionType type,
                  const char* predicate,
-                       bool* predicateUsed, 
                                 /* 2nd "return value" */
+                        bool* predicateUsed, 
                          int commandLineOptionC,           
                       struct commandLineOption options[]);
 

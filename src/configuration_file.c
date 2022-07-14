@@ -9,7 +9,7 @@
  *                 : then send those strings to
  *                 : readCommandLineOptions() for
  *                 : processing.
- * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
+ * ( Kernighan & Ritchie, 1988, p. 9: Comment Syntax ) */
 
 #include <stdbool.h>
 #define _GNU_SOURCE  
@@ -20,7 +20,6 @@
 #include "debug_log.h"
 
 #include "configuration_file.h"
-
 
 /* --------------- readConfigurationFile() -----------------
  * Parse a configuration file into pseudo command-line 
@@ -153,6 +152,10 @@ return true;
 
 /* --------------------- Works Cited -------------------- */
 /* 
+ * Brouwer, Andries. (2001). "asprintf(3) — Linux manual
+ *      page." GNU Linux.  Retrieved from
+ *      https://man7.org/linux/man-
+ *      pages/man3/asprintf.3.html on 2022 June 25.
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
  *      Hall.  ISBN 0-13-110370-9.
