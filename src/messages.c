@@ -26,8 +26,15 @@ const char* helloMessage(void) {
 /* ---------------- helpMessage() ----------------------- */
 
 /* Helper function prototypes: */
-const char* helpMessageAsprintfFail();
+
 const char* getBanner();
+const char* generateCommandLineOptionString(
+        const char* shortForm,
+        const char* longForm,
+        const char* description,
+        int width );
+const char* helpMessageAsprintfFail();
+const char* generateCommandLineOptionStringAsprintfFail();
 
 const char* helpMessage(    const char* programName, 
                                     int commandLineOptionC, 
@@ -47,6 +54,10 @@ const char* helpMessage(    const char* programName,
          return helpMessageAsprintfFail();
     }
 
+    toFree = (void*)returnString;
+    returnString = wrapText(returnString, width,"","");
+    free( toFree );
+
     /* for reference:
     struct commandLineOption {
         const char* shortForm;
@@ -58,27 +69,40 @@ const char* helpMessage(    const char* programName,
         };
         */
 
+    for(int i = 0 ; i < commandLineOptionC ; i++) {
+        const char* optionString = 
+           generateCommandLineOptionString(
+               options[i].shortForm,
+               options[i].longForm,
+               options[i].description,
+               width);
+        toFree = (void*)returnString;
+        asprintfReturn = asprintf(&returnString, 
+                      "%s%s", returnString, optionString);
+    
+        /* (Brouwer, 2001: return value) */
+        if(asprintfReturn < 0) {
+             return helpMessageAsprintfFail();
+        }
+        free(toFree);
+
+    }
+
+    const char* optionString = 
+           generateCommandLineOptionString(
+               "h",
+               "help",
+               "Display this message.",
+               width);
     toFree = (void*)returnString;
-    returnString = wrapText(returnString, width,"","");
-    free( toFree );
+    asprintfReturn = asprintf(&returnString, 
+                  "%s%s", returnString, optionString);
 
-for(int i = 0 ; i < commandLineOptionC ; i++) {
-    char* firstPart;
-    asprintf(&firstPart, " -%s --%s\n", options[i].shortForm, options[i].longForm);
-    char* descp;
-    descp = wrapText( options[i].description, width, "     ", "     ");
-    firstPart = wrapText(firstPart,width,"","");
-    asprintf(&returnString, "%s%s%s\n", returnString, firstPart, descp);
-}
-
-
-char* firstPart;
-asprintf(&firstPart, " -%s --%s\n", "h", "help");
-char* descp;
-descp = wrapText( "Display this message.", width, "     ", "     ");
-firstPart = wrapText(firstPart,width,"","");
-asprintf(&returnString, "%s%s%s\n", returnString, firstPart, descp);
-
+    /* (Brouwer, 2001: return value) */
+    if(asprintfReturn < 0) {
+         return helpMessageAsprintfFail();
+    }
+    free(toFree);
 
     return returnString;
 }
@@ -91,9 +115,59 @@ const char* getBanner() {
    return defaultBanner;
 }
 
+const char* generateCommandLineOptionString(
+        const char* shortForm,
+        const char* longForm,
+        const char* description,
+        int width ) {
+    char* returnString;
+    char* firstPart;
+    int   asprintfReturn;
+    void* toFree;
+    
+    asprintfReturn = asprintf(&firstPart, " -%s, --%s\n", 
+                    shortForm, longForm);
+
+    /* (Brouwer, 2001: return value) */
+    if(asprintfReturn < 0) {
+         return 
+             generateCommandLineOptionStringAsprintfFail();
+    }
+
+    char* descp;
+    descp = wrapText( description, width, "     ", "     ");
+
+    toFree = (void*)firstPart;
+    firstPart = wrapText(firstPart,width,"","");
+    free(toFree);
+    asprintfReturn = asprintf(&returnString, 
+                       "%s%s\n", firstPart, descp);
+
+    free(firstPart);
+    free(descp);
+
+    /* (Brouwer, 2001: return value) */
+    if(asprintfReturn < 0) {
+         return 
+             generateCommandLineOptionStringAsprintfFail();
+    }
+
+    return (const char*) returnString;
+    }
+
+
 const char* helpMessageAsprintfFail() {
     debugLog(LOG_LEVEL_WARNING,
              "helpMessageAsprintfFail:Unable to produce "
+             "help message due to asprintf failure.");  
+    return "";
+}
+
+
+const char* generateCommandLineOptionStringAsprintfFail() {
+    debugLog(LOG_LEVEL_WARNING,
+             "generateCommandLineOptionStringAsprintfFail:"
+             "Unable to produce "
              "help message due to asprintf failure.");  
     return "";
 }
