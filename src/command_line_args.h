@@ -26,7 +26,7 @@ struct commandLineOption {
 /* ( Parewa Labs, n.d., C struct ) */ 
 /* ( GeeksforGeeks, 2018 ) */
 
-/* -----------readCommandLineOptions -------------------- */ 
+/* -----------readCommandLineOptions() ------------------ */ 
 /* compare the command-line options supplied to main()       
  * to the command line options array.  In the event of a     
  * match for either the short (eg. -w) or long               

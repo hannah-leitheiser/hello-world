@@ -12,10 +12,9 @@
  * ( Kernighan & Ritchie, 1988, p. 9: Comment Syntax ) */
 
 #include <stdbool.h>
-#define _GNU_SOURCE  
-#include <stdio.h>
-/* ( Brouwer, 2001, Synopsis: direct quote ) */
-#include <stdlib.h>
+#define _GNU_SOURCE /* ( Brouwer, 2001, Synopsis )        */ 
+#include <stdio.h>  /* ( Brouwer, 2001, Synopsis )        */
+#include <stdlib.h> /* (Koenig & Kerrisk, 2018, Synopsis) */
 #include "command_line_args.h"
 #include "debug_log.h"
 
@@ -159,6 +158,10 @@ return true;
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
  *      Hall.  ISBN 0-13-110370-9.
+ * Koenig, Thomas & Kerrisk, Michael. (2018). "malloc(3) —
+ *      Linux manual page." GNU Linux.  Retrieved from
+ *      https://man7.org/linux/man-pages/man3/malloc.3.html
+ *      on 2022 July 14.
  * Walia, D., Jonny, Goel, R., & Yogesh. (n.d.). "C read
  *      file." Programmingsimplified.  Retrieved from
  *      https://www.programmingsimplified.com/c-program-

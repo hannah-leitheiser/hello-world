@@ -8,9 +8,11 @@
  *                 : arguments and responses.
  * (Comment Syntax: Kernighan & Ritchie, 1988, p. 9) */
 
-#include <stdbool.h>
-#include "command_line_args.h"
+#include <stdbool.h> /*(IEEE, Inc & The Open Group, 2018) */
+
 #include "debug_log.h"
+
+#include "command_line_args.h"
 
 enum optionType { longForm, shortForm };
 /* ( GeeksforGeeks et. al., 2022: enum syntax ) */
@@ -256,6 +258,11 @@ return found;
  *      GeeksforGeeks.org.  Retrieved from
  *      https://www.geeksforgeeks.org/enumeration-enum-c/ on
  *      2022 June 23.
+ * Institute of Electrical and Electronics Engineers, Inc, &
+ *      The Open Group. (2018). "stdbool.h(0p) — Linux
+ *      manual page." GNU Linux.  Retrieved from
+ *      https://man7.org/linux/man-
+ *      pages/man0/stdbool.h.0p.html on 2022 July 16.
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
  *      Hall.  ISBN 0-13-110370-9.
