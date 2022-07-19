@@ -10,32 +10,30 @@
 
 /* https://pvs-studio.com/en/blog/posts/a0023/ */
 
+#ifndef __DEBUG_LOG_H 
+#define __DEBUG_LOG_H
+/* (cschol, 2008: header guard) */
+
 #include <stdio.h>
 
 #define LOG_LEVEL_ERROR    0
 #define LOG_LEVEL_WARNING  1
 #define LOG_LEVEL_VERBOSE  2
 
-void debugLog( int logLevel, const char* message_format, ... );
+void debugLog( int logLevel, 
+                const char* message_format, ... );
 int getDebugLogLevel( void );
 int setDebugLogLevel( int level );
 bool setDebugLogOutput( FILE* file );
 
-/*  Works Cited:
- *  WG14. (2018).  Programming Languages -- C. 9899:202x (E).  ISO/IEC.
- *     Retrieved from https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf
- *     on 2022 June 03.
- *  Kernighan, Brian W. & Ritchie, Dennis M.  (1988).  The C Programming Language.  
- *     Second Edition.  Prentise Hall.  ISBN 0-13-110370-9. 
- *  Thompson, Keith.  2012.  "Should I return EXIT_SUCCESS or 0 
- *     from main()?: Answer."  Stack Overflow.  
- *     Retrieved from 
- *     https://stackoverflow.com/questions/8867871/should-i-return-exit-success-or-0-from-main
- *     on 2022 June 03.
- */
+#endif
 /* --------------------- Works Cited -------------------- */
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
  *      Hall.  ISBN 0-13-110370-9.
+ * cschol. (2008). "Organization of C files: Answer."
+ *      Stackoverflow.  Retrieved from https://stackoverflow
+ *      .com/questions/47919/organization-of-c-files on 2022
+ *      June 03.
  */

@@ -12,7 +12,6 @@
 #include <stdbool.h> /* ( Jester-Young, 2010 )            */
 #include <stdarg.h>  /* ( cppreference.com, 2020 )        */
 
-
 #include "printf.h"      /* for nameStream() */
 #include "hello_world.h" /* for DEBUG_LOG definition */
 
@@ -32,6 +31,12 @@ int debugLogLevel = LOG_LEVEL_ERROR;
 char* logLevelString( int level );
 
 /* ------------------ debugLog() -------------------------*/
+/* Output appropriate debug messages to the appropriate
+ * output.  Mute messages below debugLogLevel setting 
+ * eg. mute VERBOSE when level is set to WARNING and above.
+ */
+
+void debugLogPrintError();
 
 void debugLog( int logLevel, 
        const char* message_format, ... ) {
@@ -40,18 +45,39 @@ void debugLog( int logLevel,
     if(debugLogOutput && logLevel <= debugLogLevel) {
 
         char* levelString = logLevelString(logLevel);
+        int printfReturn;
 
         if(!levelString) {
             levelString = "???????";
         }
 
-        fprintf( debugLogOutput, "Log:%s:", levelString);
+        printfReturn = 
+          fprintf( debugLogOutput, "Log:%s:", levelString );
+
+        if(printfReturn < 0) {
+            debugLogPrintError();
+            return;
+        }
         
         va_list argptr;
         va_start(argptr,message_format);
          /* ( cppreference.com, 2020, va_start, example ) */
-        vfprintf( debugLogOutput,message_format, argptr);
-        fprintf( debugLogOutput, "\n" );
+
+        printfReturn = 
+          vfprintf( debugLogOutput,message_format, argptr);
+
+        if(printfReturn < 0) {
+            debugLogPrintError();
+            return;
+        }
+
+        printfReturn = fprintf( debugLogOutput, "\n" );
+
+        if(printfReturn < 0) {
+            debugLogPrintError();
+            return;
+        }
+
         va_end(argptr);
          /* ( cppreference.com, 2020, va_start, example ) */
     }
@@ -60,7 +86,22 @@ void debugLog( int logLevel,
     return;
 }
 
-/* -------------- getDebugLogLevel() ---------------------*/
+/* ------------- debugLogPrintError() ------------------- */
+
+bool debugLogErrorPrinted = false;
+
+void debugLogPrintError() {
+    /* let's not make too many of these */
+    if(!debugLogErrorPrinted) {
+        fprintf( stderr, 
+              "Unable to print debug messages." );
+        debugLogErrorPrinted = true;
+    }
+    return;
+
+}
+
+/* -------------- getDebugLogLevel() -------------------- */
 
 int getDebugLogLevel( void ) {
     char* levelString = logLevelString(debugLogLevel);
@@ -165,4 +206,12 @@ char* logLevelString( int level ) {
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
  *      Hall.  ISBN 0-13-110370-9.
+ * cppreference.com. (2020). "va_list." cppreference.com.
+ *      Retrieved from
+ *      https://en.cppreference.com/w/c/variadic/va_list on
+ *      2022 July 16.
+ * cppreference.com. (2020). "va_start." cppreference.com.
+ *      Retrieved from
+ *      https://en.cppreference.com/w/c/variadic/va_start on
+ *      2022 July 16.
  */
