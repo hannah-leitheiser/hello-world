@@ -10,7 +10,7 @@
 #ifndef __HELLO_WORLD_H /*(guard modeled on cschol, 2008)*/    
 #define __HELLO_WORLD_H 
 
-#define DEBUG_LOG                                                
+#define DEBUG_LOG 
 #define CONFIGURATION_FILE "hello_world.conf"
 #define PACKAGE "hello_world"
 #define LOCALE_DIR "po/"

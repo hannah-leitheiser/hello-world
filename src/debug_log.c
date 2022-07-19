@@ -17,8 +17,11 @@
 
 #include "debug_log.h"
 
+/* ( Karpov, 2008:
+                  reviewed before writing this document ) */
+
 /*
-for reference
+for reference, from debug_log.h:
 
 #define LOG_LEVEL_ERROR    0 
 #define LOG_LEVEL_WARNING  1 
@@ -28,7 +31,10 @@ for reference
 FILE* debugLogOutput = NULL;
 int debugLogLevel = LOG_LEVEL_ERROR;
 
+
+#ifdef DEBUG_LOG
 char* logLevelString( int level );
+#endif
 
 /* ------------------ debugLog() -------------------------*/
 /* Output appropriate debug messages to the appropriate
@@ -36,7 +42,10 @@ char* logLevelString( int level );
  * eg. mute VERBOSE when level is set to WARNING and above.
  */
 
+
+#ifdef DEBUG_LOG
 void debugLogPrintError();
+#endif
 
 void debugLog( int logLevel, 
        const char* message_format, ... ) {
@@ -67,15 +76,15 @@ void debugLog( int logLevel,
           vfprintf( debugLogOutput,message_format, argptr);
 
         if(printfReturn < 0) {
+            va_end(argptr);
             debugLogPrintError();
             return;
         }
 
         printfReturn = fprintf( debugLogOutput, "\n" );
 
-        if(printfReturn < 0) {
+        if(printfReturn < 0) {    
             debugLogPrintError();
-            return;
         }
 
         va_end(argptr);
@@ -88,22 +97,27 @@ void debugLog( int logLevel,
 
 /* ------------- debugLogPrintError() ------------------- */
 
+
+#ifdef DEBUG_LOG
 bool debugLogErrorPrinted = false;
 
 void debugLogPrintError() {
     /* let's not make too many of these */
     if(!debugLogErrorPrinted) {
         fprintf( stderr, 
-              "Unable to print debug messages." );
+              "Unable to print debug messages.\n"
+              "Specified debug output file may not be "
+              "writable by this program.\n" );
         debugLogErrorPrinted = true;
     }
     return;
-
 }
+#endif
 
 /* -------------- getDebugLogLevel() -------------------- */
 
 int getDebugLogLevel( void ) {
+    #ifdef DEBUG_LOG
     char* levelString = logLevelString(debugLogLevel);
     if(levelString) {
         debugLog( LOG_LEVEL_VERBOSE, 
@@ -117,11 +131,16 @@ int getDebugLogLevel( void ) {
             "Log level %d not recgonized.", debugLogLevel );
         return -1;
     }
+    #endif
+    #ifndef DEBUG_LOG
+    return -1;
+    #endif
 }
 
 /* ------------------ setDebugLogLevel() ---------------- */
 
 int setDebugLogLevel( int level ) {
+    #ifdef DEBUG_LOG
     char* levelString = logLevelString(level);
     if(levelString) {
         debugLogLevel = level;
@@ -148,11 +167,16 @@ int setDebugLogLevel( int level ) {
         }
     }
     return debugLogLevel;
+    #endif
+    #ifndef DEBUG_LOG
+    return -1;
+    #endif
 }
 
 /* ----------------- setDebugLogOutput() ---------------- */
 
 bool setDebugLogOutput( FILE* file ) {
+    #ifdef DEBUG_LOG
     if(file) {
         debugLogOutput = file;
         debugLog( LOG_LEVEL_VERBOSE, 
@@ -169,10 +193,15 @@ bool setDebugLogOutput( FILE* file ) {
                        nameStream ( debugLogOutput ) );
         return false;
     }
+    #endif
+    #ifndef DEBUG_LOG
+    return false;
+    #endif
 }
 
 /* ----------------- logLevelString() ------------------- */
 
+#ifdef DEBUG_LOG
 char* logLevelString( int level ) {
 
     char* levelString = NULL;
@@ -193,8 +222,14 @@ char* logLevelString( int level ) {
         }
     return levelString; // may be NULL
 }
+#endif
+
 /* --------------------- Works Cited -------------------- */
 /* 
+ * Andrey Karpov. (2008). "Building of systems of automatic
+ *      C/C++ code logging." PVS-Studio.  Retrieved from
+ *      https://pvs-studio.com/en/blog/posts/a0023/ on 2022
+ *      June 16.
  * Brouwer, Andries. (2001). "asprintf(3) — Linux manual
  *      page." GNU Linux.  Retrieved from
  *      https://man7.org/linux/man-

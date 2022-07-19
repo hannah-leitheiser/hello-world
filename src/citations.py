@@ -172,7 +172,37 @@ citations = [  { "short form"         : "WG14, 2018",
                    "title"            :  "stdbool.h(0p) — Linux manual page",
                    "publisher"        :  "GNU Linux",
                    "url"              :  "https://man7.org/linux/man-pages/man0/stdbool.h.0p.html",
-                   "url retrieved date": "2022 July 16" }
+                   "url retrieved date": "2022 July 16" },
+
+
+
+
+                { "short form"        : "cppreference.com, 2020",
+                   "authors"          : "cppreference.com",
+                   "date"             :  "2020",
+                   "title"            :  "va_list",
+                   "publisher"        :  "cppreference.com",
+                   "url"              :  "https://en.cppreference.com/w/c/variadic/va_list",
+                   "url retrieved date": "2022 July 16" },
+
+
+                { "short form"        : "cppreference.com, 2020, va_start",
+                   "authors"          : "cppreference.com",
+                   "date"             :  "2020",
+                   "title"            :  "va_start",
+                   "publisher"        :  "cppreference.com",
+                   "url"              :  "https://en.cppreference.com/w/c/variadic/va_start",
+                   "url retrieved date": "2022 July 16" },
+
+
+                { "short form"        : "Karpov, 2008",
+                   "authors"          : "Andrey Karpov",
+                   "date"             :  "2008",
+                   "title"            :  "Building of systems of automatic C/C++ code logging",
+                   "publisher"        :  "PVS-Studio",
+                   "url"              :  "https://pvs-studio.com/en/blog/posts/a0023/",
+                   "url retrieved date": "2022 June 16" }
+
 
                    ]
 

@@ -8,8 +8,6 @@
  *  and Run        : ./hello_world
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
-/* https://pvs-studio.com/en/blog/posts/a0023/ */
-
 #ifndef __DEBUG_LOG_H 
 #define __DEBUG_LOG_H
 /* (cschol, 2008: header guard) */
@@ -22,8 +20,8 @@
 
 void debugLog( int logLevel, 
                 const char* message_format, ... );
-int getDebugLogLevel( void );
-int setDebugLogLevel( int level );
+int  getDebugLogLevel(  void );
+int  setDebugLogLevel(  int level );
 bool setDebugLogOutput( FILE* file );
 
 #endif

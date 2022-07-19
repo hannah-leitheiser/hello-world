@@ -47,18 +47,24 @@ struct commandLineOption commandLineOptions[] = {
        "Disable Word Wrap", "bool", "false",
                                     &settingsSetNoWrap },
     (struct commandLineOption){"l", "lang", 
-       "Language", "string", "", &settingsSetLanguage },
+       "Language", "string", "", &settingsSetLanguage }
+    
+    #ifdef DEBUG_LOG
+    ,
     (struct commandLineOption){"o", "debugoutput", 
        "Debug output:\n"
         "0 for standard output\n"
         "otherwise a filename", 
           "string", "", &settingsSetDebugLogOutput },
-(struct commandLineOption){"d", "debug", 
+    (struct commandLineOption){"d", "debug", 
         "Debug Level:\n"
             "0 Error\n"
             "1 Warning\n"
             "2 Verbose", 
-            "string", "0", &settingsSetDebugLogLevel } };
+            "string", "0", &settingsSetDebugLogLevel }
+    #endif
+
+            };
     /* ( Berger, 2012, struct literal format ) */
     /* ( Fisher, 2016, multi-line string format ) */  
 
