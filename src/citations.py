@@ -155,9 +155,24 @@ citations = [  { "short form"         : "WG14, 2018",
                    "title"            :  "malloc(3) — Linux manual page",
                    "publisher"        :  "GNU Linux",
                    "url"              :  "https://man7.org/linux/man-pages/man3/malloc.3.html",
-                   "url retrieved date": "2022 July 14" }
+                   "url retrieved date": "2022 July 14" },
+
+                { "short form"        : "Stackoverflow, 2022",
+                   "authors"          : "Stackoverflow",
+                   "date"             :  "2022",
+                   "title"            :  "sprintf function's buffer overflow?",
+                   "publisher"        :  "Stackoverflow",
+                   "url"              :  "https://stackoverflow.com/questions/4282281/sprintf-functions-buffer-overflow",
+                   "url retrieved date": "2022 June 18" },
 
 
+                { "short form"        : "IEEE, Inc & The Open Group, 2018",
+                   "authors"          : "Institute of Electrical and Electronics Engineers, Inc, & The Open Group",
+                   "date"             :  "2018",
+                   "title"            :  "stdbool.h(0p) — Linux manual page",
+                   "publisher"        :  "GNU Linux",
+                   "url"              :  "https://man7.org/linux/man-pages/man0/stdbool.h.0p.html",
+                   "url retrieved date": "2022 July 16" }
 
                    ]
 

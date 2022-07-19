@@ -7,14 +7,15 @@
  *                 : information to a given output.
  * ( Kernighan & Ritchie, 1988, p. 9: Comment Syntax ) */
 
-#define _GNU_SOURCE
-#include <stdio.h> /* ( Kernighan & Ritchie, 1988, p. 6 ) */
-#include <stdbool.h> /* ( Jester-Young, 2010 ) */
-#include <stdarg.h> /* https://en.cppreference.com/w/c/variadic/va_list */
+#define _GNU_SOURCE  /* ( Brouwer, 2001, Synopsis )       */ 
+#include <stdio.h>   /* ( Brouwer, 2001, Synopsis )       */ 
+#include <stdbool.h> /* ( Jester-Young, 2010 )            */
+#include <stdarg.h>  /* ( cppreference.com, 2020 )        */
 
 
 #include "printf.h"      /* for nameStream() */
 #include "hello_world.h" /* for DEBUG_LOG definition */
+
 #include "debug_log.h"
 
 /*
@@ -48,8 +49,11 @@ void debugLog( int logLevel,
         
         va_list argptr;
         va_start(argptr,message_format);
+         /* ( cppreference.com, 2020, va_start, example ) */
         vfprintf( debugLogOutput,message_format, argptr);
         fprintf( debugLogOutput, "\n" );
+        va_end(argptr);
+         /* ( cppreference.com, 2020, va_start, example ) */
     }
 
     #endif
@@ -150,6 +154,10 @@ char* logLevelString( int level ) {
 }
 /* --------------------- Works Cited -------------------- */
 /* 
+ * Brouwer, Andries. (2001). "asprintf(3) — Linux manual
+ *      page." GNU Linux.  Retrieved from
+ *      https://man7.org/linux/man-
+ *      pages/man3/asprintf.3.html on 2022 June 25.
  * Jester-Young, Chris. (2010). "Using true and false in C:
  *      Answer." Stackoverflow.  Retrieved from
  *      https://stackoverflow.com/questions/2254075/using-

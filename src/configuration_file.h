@@ -11,7 +11,6 @@
 #define __CONFIGURATION_FILE_H
 /* (cschol, 2008: header guard) */
 
-#include <stdbool.h>
 #include "command_line_args.h"
 
 bool readConfigurationFile(FILE* file, 

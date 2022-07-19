@@ -11,10 +11,11 @@
  *                 : processing.
  * ( Kernighan & Ritchie, 1988, p. 9: Comment Syntax ) */
 
-#include <stdbool.h>
 #define _GNU_SOURCE /* ( Brouwer, 2001, Synopsis )        */ 
 #include <stdio.h>  /* ( Brouwer, 2001, Synopsis )        */
 #include <stdlib.h> /* (Koenig & Kerrisk, 2018, Synopsis) */
+#include <stdbool.h>/* (IEEE, Inc & The Open Group, 2018) */
+
 #include "command_line_args.h"
 #include "debug_log.h"
 
@@ -155,6 +156,11 @@ return true;
  *      page." GNU Linux.  Retrieved from
  *      https://man7.org/linux/man-
  *      pages/man3/asprintf.3.html on 2022 June 25.
+ * Institute of Electrical and Electronics Engineers, Inc, &
+ *      The Open Group. (2018). "stdbool.h(0p) — Linux
+ *      manual page." GNU Linux.  Retrieved from
+ *      https://man7.org/linux/man-
+ *      pages/man0/stdbool.h.0p.html on 2022 July 16.
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
  *      Hall.  ISBN 0-13-110370-9.
