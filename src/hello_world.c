@@ -8,10 +8,16 @@
  * (C Comment Syntax: 
          Kernighan & Ritchie, 1988, p. 9) */
 
-#include <stdbool.h>
+#include <stdbool.h> /*(IEEE, Inc & The Open Group, 2018) */
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+/* GNULib*/
+#include "../lib/progname.h" /* ( Haertel, et. al., 2022, 
+                           src/hello.c, line 32 ) */
+
+/* src/ headers */
 
 #include "hello_world.h"
 #include "printf.h"
@@ -33,35 +39,81 @@ struct helloWorldSettings settings =        /*  initial  */
         "",              /* system default language */
       };
 
+
+bool getHelp( const char* width ) {}
+bool getVersion( const char* width ) {}
+
 bool settingsSetWidth( const char* width );
 bool settingsSetNoWrap( const char* _ );
-bool settingsSetDebugLogLevel( const char* level );
-bool settingsSetDebugLogOutput( const char* output );
 bool settingsSetLanguage( const char* lang );
 
+#ifdef DEBUG_LOG
+bool settingsSetDebugLogLevel( const char* level );
+bool settingsSetDebugLogOutput( const char* output );
+#endif
+
 struct commandLineOption commandLineOptions[] = {
-    (struct commandLineOption){"w", "width", 
+    (struct commandLineOption)
+        {"w", "width", 
        "Terminal Width in Columns for Word Wrap\n"
-       "0 for autodetect", "int", "0", &settingsSetWidth },
+       "0 for autodetect", 
+       true, 
+       true, 
+       false,
+       "",
+       &settingsSetWidth },
     (struct commandLineOption){"n", "nowrap", 
-       "Disable Word Wrap", "bool", "false",
-                                    &settingsSetNoWrap },
+       "Disable Word Wrap", 
+       false, 
+       false,
+       false,
+       "",
+       &settingsSetNoWrap },
     (struct commandLineOption){"l", "lang", 
-       "Language", "string", "", &settingsSetLanguage }
-    
+       "Language",
+       true, 
+       true,
+       false,
+       "",
+       &settingsSetLanguage },
+
+    (struct commandLineOption){"h?", "help", 
+       "Get Help Message", 
+       false, 
+       false, 
+       true,
+       "",
+       &getHelp },
+   
+    (struct commandLineOption){"v", "version", 
+       "Version Information", 
+       false, 
+       false, 
+       true,
+       "",
+       &getVersion },
+
     #ifdef DEBUG_LOG
-    ,
+    
     (struct commandLineOption){"o", "debugoutput", 
        "Debug output:\n"
         "0 for standard output\n"
         "otherwise a filename", 
-          "string", "", &settingsSetDebugLogOutput },
-    (struct commandLineOption){"d", "debug", 
+          true,
+          true,
+          false, 
+          "",
+          &settingsSetDebugLogOutput },
+    (struct commandLineOption){"d", "debuglevel", 
         "Debug Level:\n"
             "0 Error\n"
             "1 Warning\n"
             "2 Verbose", 
-            "string", "0", &settingsSetDebugLogLevel }
+            true,
+            true,
+            false, 
+            "",
+            &settingsSetDebugLogLevel }
     #endif
 
             };
@@ -91,18 +143,6 @@ bool settingsSetNoWrap( const char* _ ) {
     return true;
 }
 
-bool settingsSetDebugLogLevel( const char* levelString ) {
-   int level;
-   if( sscanf(levelString, 
-     "%d\n", &level) ) {
-        debugLog( LOG_LEVEL_VERBOSE, 
-           "settingsSetDebugLogLevel():Setting level %d.",
-                level );
-        return setDebugLogLevel( level );
-   }
-return false;
-}
-
 bool settingsSetLanguage( const char* lang ) {
     if(lang) {
         debugLog( LOG_LEVEL_VERBOSE, 
@@ -114,6 +154,26 @@ bool settingsSetLanguage( const char* lang ) {
 return false;
 }
 
+
+#ifdef DEBUG_LOG
+
+bool settingsSetDebugLogLevel( const char* levelString ) {
+   int level;
+   if( sscanf(levelString, 
+     "%d\n", &level) ) {
+        debugLog( LOG_LEVEL_VERBOSE, 
+           "settingsSetDebugLogLevel():Setting level %d.",
+                level );
+        return setDebugLogLevel( level ) == level;
+   }
+   else {
+       debugLog( LOG_LEVEL_WARNING, 
+           "settingsSetDebugLogLevel():Level %s not "
+              "recognized.",
+                levelString );
+       return false;
+   }
+}
 
 bool settingsSetDebugLogOutput( const char* output ) {
     /* ( Parewa Labs, n.d., C strcmp() ) */
@@ -147,6 +207,7 @@ bool settingsSetDebugLogOutput( const char* output ) {
     }
 }
 
+#endif
 
 /* ---------------- greetWorld() ------------------------ *
  *
@@ -168,8 +229,8 @@ int main(int argc, char *argv[]) {
           /* from ( WG14, 2018, p. 11 ) */
 
     
-    //setDebugLogOutput( stdout );
-    //setDebugLogLevel( LOG_LEVEL_VERBOSE);
+    setDebugLogOutput( stdout );
+//    setDebugLogLevel( LOG_LEVEL_WARNING);
     debugLog( LOG_LEVEL_VERBOSE, 
                      "main():Entering function." );
 
@@ -178,7 +239,8 @@ int main(int argc, char *argv[]) {
     if( configurationFile ) {
         readConfigurationFile(configurationFile,                        
              commandLineOptionCount,                                    
-               commandLineOptions);   
+               commandLineOptions);
+        fclose( configurationFile ); 
     }
     else {
         debugLog( LOG_LEVEL_WARNING, 
@@ -191,7 +253,10 @@ int main(int argc, char *argv[]) {
         debugLog( LOG_LEVEL_VERBOSE, 
              "main():Saving program name \"%s\" "
                  "from command line arguments.", argv[0] );
-        programName = argv[0];
+        set_program_name( argv[0] );
+              /* ( Haertel, et. al., 2022, src/hello.c, 
+                   line 137 ) */
+        programName = program_name;
     }    
 
 
@@ -239,19 +304,25 @@ int main(int argc, char *argv[]) {
 }
 
 /* -------------------- aBadEnd() ----------------------- *
+ *
+ * "You are having a bad problem and will not go to space 
+ * today." - ( Munroe, 2012 )
+ *
  * Sadly, we failed to greet the world.  Let the user know
  * this program is aborting. */
 
-void aBadEnd(void) {
-    if(programName) {
-        fprintf( stderr, _("Aborting %s.\n"), programName);
+    void aBadEnd(void) {
+        if(programName) {
+            fprintf( stderr, _("Aborting %s.\n"), 
+                     programName);
+        }
+        else {
+            fprintf( stderr, _("Aborting.\n"));
+        }
+        debugLog( LOG_LEVEL_ERROR, 
+                 "aBadEnd():EXIT_FAILURE");
+        exit( EXIT_FAILURE ); /* (Tutorials Point, 2022) */
     }
-    else {
-        fprintf( stderr, _("Aborting.\n"));
-    }
-    debugLog( LOG_LEVEL_ERROR, "aBadEnd():EXIT_FAILURE");
-    exit( EXIT_FAILURE ); /* (Tutorials Point, 2022) */
-}
 
 /* --------------------- Works Cited -------------------- */
 /* 
@@ -263,9 +334,16 @@ void aBadEnd(void) {
  *      string literal in C?." Website.  Retrieved from
  *      https://jameshfisher.com/2016/11/30/c-multiline-
  *      literal/ on 2022 June 14.
+ * Institute of Electrical and Electronics Engineers, Inc, &
+ *      The Open Group. (2018). "stdbool.h(0p) — Linux
+ *      manual page." GNU Linux.  Retrieved from
+ *      https://man7.org/linux/man-
+ *      pages/man0/stdbool.h.0p.html on 2022 July 16.
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
  *      Hall.  ISBN 0-13-110370-9.
+ * Munroe, Randall. (2012). "Up Goer Five." XKCD.  Retrieved
+ *      from https://xkcd.com/1133/ on 2022 July 19.
  * Parahar, Mahesh. (2020). "Difference between const char*
  *      p, char * const p, and const char * const p in C."
  *      Tutorialspoint.  Retrieved from

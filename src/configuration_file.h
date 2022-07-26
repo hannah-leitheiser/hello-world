@@ -3,7 +3,12 @@
  * Date Created    : 2022JUN02
  * Author          : Hannah Leitheiser
  * Project Name    : Hello World
- * Description     : Print "Hello World!" to stdout.
+ * Description     : Parse a configuration file into         
+ *                 : pseudo command-line arguments.          
+ *                 : eg. width=10 becomes --width 10,        
+ *                 : then send those strings to              
+ *                 : readCommandLineOptions() for            
+ *                 : processing.  
  * (Kernighan & Ritchie, 1988, p. 9: comment syntax]
  * (Borini & Smith, 2009, project file breakdown) */
 
@@ -18,6 +23,7 @@ bool readConfigurationFile(FILE* file,
         struct commandLineOption options[]);
 
 #endif
+
 /* --------------------- Works Cited -------------------- */
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C

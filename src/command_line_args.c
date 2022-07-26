@@ -8,9 +8,19 @@
  *                 : arguments and responses.
  * (Comment Syntax: Kernighan & Ritchie, 1988, p. 9) */
 
+
+#define _GNU_SOURCE /* (Brouwer, 2001, Synopsis )         */ 
+#include <stdio.h>  /* (Kernighan & Ritchie, 1988, p. 6)  */ 
 #include <stdbool.h> /*(IEEE, Inc & The Open Group, 2018) */
+#include <string.h>
+#include <stdlib.h>
+ #include <getopt.h>
+#include <unistd.h>
+
+
 
 #include "debug_log.h"
+#include "error.h"
 
 #include "command_line_args.h"
 
@@ -75,13 +85,15 @@ bool isSubstring( const char* testString,
 /* for reference, defined in command_line_args.h:
 
 struct commandLineOption {                                   
-    char* shortForm;                                         
-    char* longForm;                                          
-    char* description;                                       
-    char* dataType;                                          
-    char* currentValueString;                                
+    const char* shortForm;                                   
+    const char* longForm;                                    
+    const char* description;                                 
+    bool        takesArgument;                               
+    bool        requiresArgument;                            
+    bool        endsProgram;                                 
+    const char* argument;                          
     bool (*setSetting)(const char*);                         
-    };
+    };                                                       
 
 */
 
@@ -89,6 +101,99 @@ bool readCommandLineOptions(int commandLineOptionC,
                         struct commandLineOption options[], 
                            int argc, 
                          char *argv[]) {
+    
+/* (Koenig & Kerrisk, 2008) */
+/*  struct option {
+               const char *name;
+               int         has_arg;
+               int        *flag;
+               int         val;
+           }; */
+
+struct option* getOptStruct = 
+      malloc( sizeof( struct option) * (commandLineOptionC + 1 ) );
+char* shortOptionString = ":";
+
+for(int i = 0 ; i < commandLineOptionC ; i++) {
+    getOptStruct[i].name = options[i].longForm;
+    if( options[i].takesArgument &&
+         options[i].requiresArgument) {
+        getOptStruct[i].has_arg = required_argument;
+    }
+
+    if( options[i].takesArgument &&
+         !options[i].requiresArgument) {
+        getOptStruct[i].has_arg = optional_argument;
+    }
+
+    if( !options[i].takesArgument &&
+         !options[i].requiresArgument) {
+        getOptStruct[i].has_arg = no_argument;
+    }
+    getOptStruct[i].flag=0;
+    getOptStruct[i].val=0;
+    for(int ii = 0 ; options[i].shortForm[ii] != '\0' ;
+              ii++) {
+
+        
+        asprintf(&shortOptionString, "%s%c", shortOptionString, 
+          options[i].shortForm[ii]);
+        
+        if( options[i].takesArgument) {
+
+        asprintf(&shortOptionString, "%s%c", shortOptionString, ':');
+        
+    
+            if( !options[i].requiresArgument) {
+
+            asprintf(&shortOptionString, "%s%c", shortOptionString, ':');
+            }
+        }
+
+    }
+}
+getOptStruct[ commandLineOptionC ] = (struct option){
+    0, 0, 0, 0 };
+    
+
+int getoptReturn;
+int option_index;
+while( (getoptReturn = getopt_long(argc, argv, shortOptionString,
+                        getOptStruct, &option_index))
+                        != -1) {
+    if(optopt != NULL) {
+    printf("optopt: %c\n", optopt);
+    }
+    
+    if(getoptReturn == 0) {
+    }
+    else {
+        for(int i = 0 ; i < commandLineOptionC ; i++) {
+        
+            for(int ii = 0 ; options[i].shortForm[ii] != '\0' ;
+              ii++) {
+                if(getoptReturn == options[i].shortForm[ii]) {
+                    option_index = i;
+                }
+            }
+
+        }
+
+    }
+    options[option_index].argument = optarg;
+
+    int setSettingReturn = 
+                        options[option_index].setSetting( 
+                         options[option_index].argument );
+    printf("%s\n", options[option_index].longForm );
+    
+
+}
+
+
+
+/*
+
     int currentCommandLineArg = 1; 
 
     while( currentCommandLineArg < argc ) {
@@ -101,10 +206,10 @@ bool readCommandLineOptions(int commandLineOptionC,
             bool found = false;
             bool predicateUsed = false;
             /* is the first character a '-' ? */
-            if( currentArg[0] == '-' ) {
-                if( currentArg[1] == '-' ) {
+//            if( currentArg[0] == '-' ) {
+  //              if( currentArg[1] == '-' ) {
                     /* long form */
-
+/*
                     debugLog(LOG_LEVEL_VERBOSE, 
                             "readCommandLineOptions():"
                          "detected long form option in %s", 
@@ -163,18 +268,18 @@ bool readCommandLineOptions(int commandLineOptionC,
 
             debugLog(LOG_LEVEL_WARNING, 
                  "readCommandLineOptions():"
-                 "no match found for %s", currentArg);
+                 "not able to process %s", currentArg);
             return false;
             }
 
-        if(predicateUsed) {
+        if(predicateUsed) { */
             /* increment to move focus pass the consumed
-             * predicate. */
+             * predicate. */ /*
             currentCommandLineArg++;
         }
         currentCommandLineArg++;
     }
-
+*/
     return true;
 }
 
@@ -200,7 +305,8 @@ bool readOption( const char* option,
                        bool* predicateUsed,
                          int commandLineOptionC,           
                       struct commandLineOption options[]) {
-
+    bool problemInSettingSetting = false;
+/*
     if( predicate ) {
         debugLog(LOG_LEVEL_VERBOSE, 
         "readOption():starting looking for %s, "
@@ -214,6 +320,23 @@ bool readOption( const char* option,
                              option);
     }
 
+    switch( type ) {
+        case longForm:
+            if( strcmp( option, "help") == 0 ) {
+                debugLog(LOG_LEVEL_VERBOSE, 
+                "readOption():user wants help menu.");
+                return false;
+            }
+            break;
+        case shortForm:
+            if( strcmp( option, "h") == 0 ) {
+                debugLog(LOG_LEVEL_VERBOSE, 
+                "readOption():user wants help menu.");
+                return false;
+            }
+            break;
+    }
+    
     bool found = false;
 
     for(int i = 0 ; i < commandLineOptionC ; i++) {
@@ -227,8 +350,22 @@ bool readOption( const char* option,
         if(isSubstring( optionI, option )) {
             if( options[i].dataType[0] == 'b' ) {
                 options[i].currentValueString = "true";
-                options[i].setSetting( 
+                debugLog(LOG_LEVEL_VERBOSE, 
+                        "readOption():set %s to %s.", 
+                             optionI, 
+                             options[i].currentValueString);
+                int setSettingReturn = 
+                    options[i].setSetting( 
                         options[i].currentValueString );
+                if(!setSettingReturn) {
+                    problemInSettingSetting = true;
+
+                    debugLog(LOG_LEVEL_WARNING, 
+                        "readOption():could not set %s "
+                                    "to %s.", 
+                             optionI, 
+                             options[i].currentValueString);
+                    }
                 found=true;
                 *predicateUsed = false;
                 }
@@ -241,14 +378,28 @@ bool readOption( const char* option,
                              optionI, 
                              options[i].currentValueString);
                     found=true;
-                    options[i].setSetting( 
+                    int setSettingReturn = 
+                        options[i].setSetting( 
                          options[i].currentValueString );
+
+                    if(!setSettingReturn) {
+                        problemInSettingSetting = true;
+
+                        debugLog(LOG_LEVEL_WARNING, 
+                        "readOption():could not set %s "
+                                    "to %s.", 
+                             optionI, 
+                             options[i].currentValueString);
+                        }
                     *predicateUsed = true;
                 }
             }
         }
     }
-return found;
+if(problemInSettingSetting) {
+    return false;
+    }
+return found;*/
 }
 
 /* --------------------- Works Cited -------------------- */

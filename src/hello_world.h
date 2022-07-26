@@ -12,7 +12,6 @@
 
 #define DEBUG_LOG 
 #define CONFIGURATION_FILE "hello_world.conf"
-#define PACKAGE "hello_world"
 #define LOCALE_DIR "po/"
 
 struct helloWorldSettings {
@@ -26,6 +25,7 @@ int main(int argc, char *argv[]);
 void aBadEnd( void );
 
 #endif
+
 /* --------------------- Works Cited -------------------- */
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C

@@ -28,12 +28,12 @@ for reference, from debug_log.h:
 #define LOG_LEVEL_VERBOSE  2 
 */
 
+#ifdef DEBUG_LOG
+
 FILE* debugLogOutput = NULL;
 int debugLogLevel = LOG_LEVEL_ERROR;
-
-
-#ifdef DEBUG_LOG
 char* logLevelString( int level );
+
 #endif
 
 /* ------------------ debugLog() -------------------------*/
@@ -131,8 +131,7 @@ int getDebugLogLevel( void ) {
             "Log level %d not recgonized.", debugLogLevel );
         return -1;
     }
-    #endif
-    #ifndef DEBUG_LOG
+    #else
     return -1;
     #endif
 }
@@ -167,8 +166,7 @@ int setDebugLogLevel( int level ) {
         }
     }
     return debugLogLevel;
-    #endif
-    #ifndef DEBUG_LOG
+    #else
     return -1;
     #endif
 }
@@ -193,8 +191,7 @@ bool setDebugLogOutput( FILE* file ) {
                        nameStream ( debugLogOutput ) );
         return false;
     }
-    #endif
-    #ifndef DEBUG_LOG
+    #else
     return false;
     #endif
 }

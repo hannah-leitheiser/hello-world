@@ -121,7 +121,7 @@ bool readConfigurationFile(FILE* file,
                                   options, argc, argv) ) {
                 debugLog(LOG_LEVEL_WARNING, 
                       "readConfigurationFile():"
-                      "unsuccessful parse of --%s %s. "
+                      "unsuccessful parse of %s %s. "
                       "Exiting function.",
                       argument, predicate);
                 return false;
@@ -136,7 +136,7 @@ bool readConfigurationFile(FILE* file,
                                      options, argc, argv)) {
                 debugLog(LOG_LEVEL_WARNING, 
                       "readConfigurationFile():"
-                      "unsuccessful parse of --%s, "
+                      "unsuccessful parse of %s, "
                       "(no predicate). "
                       "Exiting function.",
                       argument);
@@ -145,7 +145,7 @@ bool readConfigurationFile(FILE* file,
 
         }
     
-    free(line);
+        free(line);
     }
 return true;
 } 

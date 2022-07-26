@@ -3,9 +3,8 @@
  * Date Created    : 2022JUN02
  * Author          : Hannah Leitheiser
  * Project Name    : Hello World
- * Description     : Print "Hello World!" to stdout.
- * Compile         : gcc hello_world.c -o hello_world
- *  and Run        : ./hello_world
+ * Description     : Provides functions for logging debug    
+ *                 : information to a given output.
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
 #ifndef __DEBUG_LOG_H 
@@ -25,6 +24,7 @@ int  setDebugLogLevel(  int level );
 bool setDebugLogOutput( FILE* file );
 
 #endif
+
 /* --------------------- Works Cited -------------------- */
 /* 
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C

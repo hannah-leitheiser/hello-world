@@ -3,7 +3,9 @@
  * Date Created    : 2022JUN02
  * Author          : Hannah Leitheiser
  * Project Name    : Hello World
- * Description     : Print "Hello World!" to stdout.
+ * Description     : Generates text associated with 
+                     message to greet the world and 
+                     help message.
  * (Kernighan & Ritchie, 1988, p. 9: Comment Syntax ) */
 
 #define _GNU_SOURCE /* (Brouwer, 2001, Synopsis )         */
@@ -20,7 +22,7 @@
 /* ---------------- helloMessage() ---------------------- */
 
 const char* helloMessage(void) {
-    return _("Hello World!\n");
+    return _("Hello, world!");
 }
 
 /* ---------------- helpMessage() ----------------------- */
@@ -36,6 +38,8 @@ const char* generateCommandLineOptionString(
         int width );
 const char* helpMessageAsprintfFail();
 const char* generateCommandLineOptionStringAsprintfFail();
+
+/* function */
 
 const char* helpMessage(    const char* programName, 
                                     int commandLineOptionC, 

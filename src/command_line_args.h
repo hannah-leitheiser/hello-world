@@ -18,8 +18,10 @@ struct commandLineOption {
     const char* shortForm;
     const char* longForm;
     const char* description;
-    const char* dataType;
-    const char* currentValueString;
+    bool        takesArgument;
+    bool        requiresArgument;
+    bool        endsProgram;
+    const char* argument;
     bool (*setSetting)(const char*);
     };
 
