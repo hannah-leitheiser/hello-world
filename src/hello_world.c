@@ -296,7 +296,7 @@ int main(int argc, char *argv[]) {
           /* from ( WG14, 2018, p. 11 ) */
     
     setDebugLogOutput( stdout );
-//    setDebugLogLevel( LOG_LEVEL_WARNING);
+    //setDebugLogLevel( LOG_LEVEL_WARNING);
     debugLog( LOG_LEVEL_VERBOSE, 
                      "main():Entering function." );
 
@@ -400,6 +400,11 @@ int main(int argc, char *argv[]) {
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
  *      Hall.  ISBN 0-13-110370-9.
+ * Mike Haertel, David MacKenzie, Jan Brittenson, Roland
+ *      McGrath, Charles Hannum, Bruce Korb, Karl
+ *      Eichwalder, Karl Berry, & The King. (2022). "GNU
+ *      Hello World." GNU Savanna.  Retrieved from
+ *      https://ftp.gnu.org/gnu/hello/ on 2022 July 20.
  * Munroe, Randall. (2012). "Up Goer Five." XKCD.  Retrieved
  *      from https://xkcd.com/1133/ on 2022 July 19.
  * Parahar, Mahesh. (2020). "Difference between const char*

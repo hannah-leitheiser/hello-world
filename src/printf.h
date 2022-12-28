@@ -10,6 +10,7 @@
  * [File Use: Stefano & Smith, 2009 ] */
 
 #define printf printf_mine
+
 char* nameStream( FILE* __stream);
 int printf_mine(const char *__format, ...);
 

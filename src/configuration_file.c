@@ -58,11 +58,6 @@ bool readConfigurationFile(FILE* file,
     char* argument = "";
     char* predicate = "";
 
-
-    struct error* readOptError = 
-           malloc( sizeof( struct error ) );
-    *readOptError = (struct error) { true, "" };
-
     while ((read = getline(&line, &len, file)) != -1) {
         /* (mbaotpff & gsamaras, 2018: similar code ) */
         argument = "--";

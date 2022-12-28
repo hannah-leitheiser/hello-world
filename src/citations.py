@@ -201,7 +201,33 @@ citations = [  { "short form"         : "WG14, 2018",
                    "title"            :  "Building of systems of automatic C/C++ code logging",
                    "publisher"        :  "PVS-Studio",
                    "url"              :  "https://pvs-studio.com/en/blog/posts/a0023/",
-                   "url retrieved date": "2022 June 16" }
+                   "url retrieved date": "2022 June 16" },
+
+
+                { "short form"        : "Munroe, 2012",
+                   "authors"          : "Munroe, Randall",
+                   "date"             :  "2012",
+                   "title"            :  "Up Goer Five",
+                   "publisher"        :  "XKCD",
+                   "url"              :  "https://xkcd.com/1133/",
+                   "url retrieved date": "2022 July 19" },
+
+                { "short form"        : "Haertel, et. al., 2022",
+                   "authors"          : "Mike Haertel, David MacKenzie, Jan Brittenson, Roland McGrath, Charles Hannum, Bruce Korb, Karl Eichwalder, Karl Berry, & The King",
+                   "date"             :  "2022",
+                   "title"            :  "GNU Hello World",
+                   "publisher"        :  "GNU Savanna",
+                   "url"              :  "https://ftp.gnu.org/gnu/hello/",
+                   "url retrieved date": "2022 July 20" },
+
+
+                { "short form"        : "Koenig & Kerrisk, 2008",
+                   "authors"          : "Koenig, Thomas & Kerrisk, Michael",
+                   "date"             :  "2008",
+                   "title"            :  "getopt(3) — Linux manual page",
+                   "publisher"        :  "GNU Linux",
+                   "url"              :  "https://www.man7.org/linux/man-pages/man3/getopt.3.html",
+                   "url retrieved date": "2022 July 22" },
 
 
                    ]

@@ -18,7 +18,6 @@
 #include <unistd.h>
 
 #include "debug_log.h"
-#include "error.h"
 
 #include "command_line_args.h"
 
@@ -55,20 +54,34 @@ bool readCommandLineOptions( int commandLineOptionC,
                            int argc, 
                          char *argv[]) {
     
+/* Here we develop a structure that getopt.h will like */
+
+/*  from getopt.h
+/*   -   struct option {
+     -             const char *name;
+     -             int         has_arg;
+     -             int        *flag;
+     -             int         val;
+     -         }; */
 /* (Koenig & Kerrisk, 2008) */
-/*  struct option {
-               const char *name;
-               int         has_arg;
-               int        *flag;
-               int         val;
-           }; */
+
+/* I had originally written my own code to process command
+     line arguments, but switched to getopt.h which will
+     be more standard, but no less complicated.  */
 
 struct option* getOptStruct = 
-      malloc( sizeof( struct option) * (commandLineOptionC + 1 ) );
+      malloc( sizeof( struct option) * 
+                    (commandLineOptionC + 1 ) );
+
 char* shortOptionString = ":";
 
 for(int i = 0 ; i < commandLineOptionC ; i++) {
     getOptStruct[i].name = options[i].longForm;
+
+    /* no_argument, required_argument, optional_argument
+       are constants defined in getopt.h, pick the best
+       one. */
+
     if( options[i].takesArgument &&
          options[i].requiresArgument) {
         getOptStruct[i].has_arg = required_argument;
@@ -83,78 +96,135 @@ for(int i = 0 ; i < commandLineOptionC ; i++) {
          !options[i].requiresArgument) {
         getOptStruct[i].has_arg = no_argument;
     }
+
+    /* The getopt_long() return value will be used. */
+
     getOptStruct[i].flag=0;
     getOptStruct[i].val=0;
+
+    /* generate an shortOptionString to pass to 
+       getops_long() */
+
     for(int ii = 0 ; options[i].shortForm[ii] != '\0' ;
               ii++) {
+        asprintf(&shortOptionString, "%s%c", 
+             shortOptionString, 
+                  options[i].shortForm[ii]);
+        
+        /* one colon for requires argument, 
+           two for optional argument. */
 
-        
-        asprintf(&shortOptionString, "%s%c", shortOptionString, 
-          options[i].shortForm[ii]);
-        
         if( options[i].takesArgument) {
 
-        asprintf(&shortOptionString, "%s%c", shortOptionString, ':');
+            asprintf(&shortOptionString, "%s%c", 
+                  shortOptionString, ':');
         
-    
             if( !options[i].requiresArgument) {
 
-            asprintf(&shortOptionString, "%s%c", shortOptionString, ':');
+                asprintf(&shortOptionString, "%s%c", 
+                shortOptionString, ':');
             }
         }
 
     }
 }
+
+/* "The last element of the array has to be filled with 
+    zeros." - Koenig & Kerrisk, 2008. */
+
 getOptStruct[ commandLineOptionC ] = (struct option){
     0, 0, 0, 0 };
     
 
+#define UNSET -1
 int getoptReturn;
-int option_index;
-while( (getoptReturn = getopt_long(argc, argv, shortOptionString,
-                        getOptStruct, &option_index))
+int option_index = UNSET;
+int longoption = UNSET;
+while( (getoptReturn = getopt_long(argc, argv, 
+              shortOptionString, getOptStruct, &longoption))
                         != -1) {
-    if(optopt != NULL) {
-    //printf("optopt: %c\n", optopt);
-    }
     
-    if(getoptReturn == 0) {
+    /* log and unrecgonized option.  getoptReturn will
+       be a question mark, which will trigger help. */
+
+    if(optopt != NULL) {
+        debugLog( LOG_LEVEL_VERBOSE,                         
+           "readCommandLineOptions():optopt: %c.",   
+                   (char)optopt);
+
     }
     else {
+        debugLog( LOG_LEVEL_VERBOSE,                         
+           "readCommandLineOptions():optopt=NULL.",   
+                   optopt);
+    }
+
+    if(getoptReturn == 0) {
+        debugLog( LOG_LEVEL_VERBOSE,                         
+           "readCommandLineOptions():getoptReturn=0.");
+        }
+    
+     /* if longoption was not set, check ourselves to find
+        which short option coresponds to the return value
+        */
+     if(longoption == UNSET) {
+
+        debugLog( LOG_LEVEL_VERBOSE,                         
+           "readCommandLineOptions():getoptReturn(n)=%d,"
+            " (c)=%c.", getoptReturn, (char)getoptReturn);
+
         for(int i = 0 ; i < commandLineOptionC ; i++) {
         
-            for(int ii = 0 ; options[i].shortForm[ii] != '\0' ;
-              ii++) {
-                if(getoptReturn == options[i].shortForm[ii]) {
+            for(int ii = 0 ; 
+                  options[i].shortForm[ii] != '\0' ;
+                        ii++) {
+                if(getoptReturn == 
+                           options[i].shortForm[ii]) {
                     option_index = i;
                 }
             }
+          } 
+      }
+      else {
+         option_index = longoption; 
+      }
+     
+    if(option_index >= 0) {
+   
 
-        }
+     debugLog( LOG_LEVEL_VERBOSE,                         
+           "readCommandLineOptions():optarg: %s.",   
+                   optarg);
+    
+    /* We're dealing with string pointers, which will
+       probably get overwritten when the next argument
+       is processed.  */
 
-    }
-    options[option_index].argument = optarg;
+    char* optarg_static;
+    asprintf(&optarg_static, "%s", optarg); 
+    options[option_index].argument = optarg_static;
+
+    /* Execute the function to process the command line
+       option. */
 
     int setSettingReturn = 
                         options[option_index].setSetting( 
                          options[option_index].argument );
-    //printf("%s\n", options[option_index].longForm );
+     }
     
-
+longoption=UNSET;
 }
 
 
 
     return true;
 }
-
 /* --------------------- Works Cited -------------------- */
 /* 
- * GeeksforGeeks, KartheekMudarakola, adnanirshad158, &
- *      tarun18tk. (2022). "Enumeration (or enum) in C."
- *      GeeksforGeeks.org.  Retrieved from
- *      https://www.geeksforgeeks.org/enumeration-enum-c/ on
- *      2022 June 23.
+ * Brouwer, Andries. (2001). "asprintf(3) — Linux manual
+ *      page." GNU Linux.  Retrieved from
+ *      https://man7.org/linux/man-
+ *      pages/man3/asprintf.3.html on 2022 June 25.
  * Institute of Electrical and Electronics Engineers, Inc, &
  *      The Open Group. (2018). "stdbool.h(0p) — Linux
  *      manual page." GNU Linux.  Retrieved from
@@ -163,4 +233,8 @@ while( (getoptReturn = getopt_long(argc, argv, shortOptionString,
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
  *      Hall.  ISBN 0-13-110370-9.
+ * Koenig, Thomas & Kerrisk, Michael. (2008). "getopt(3) —
+ *      Linux manual page." GNU Linux.  Retrieved from
+ *      https://www.man7.org/linux/man-
+ *      pages/man3/getopt.3.html on 2022 July 22.
  */
