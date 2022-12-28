@@ -77,6 +77,11 @@ bool readCommandLineOptions( int commandLineOptionC,
      line arguments, but switched to getopt.h which will
      be more standard, but no less complicated.  */
 
+/* This function is also used for the configuration file,
+   so we must make sure things are reset. */
+
+optind = 0;
+
 struct option* getOptStruct = 
       malloc( sizeof( struct option) * 
                     (commandLineOptionC + 1 ) );
@@ -253,6 +258,10 @@ const char* commandLineArgsAsprintfFail() {
  *      page." GNU Linux.  Retrieved from
  *      https://man7.org/linux/man-
  *      pages/man3/asprintf.3.html on 2022 June 25.
+ * Fisher, James. (2016). "How do I write a multi-line
+ *      string literal in C?." Website.  Retrieved from
+ *      https://jameshfisher.com/2016/11/30/c-multiline-
+ *      literal/ on 2022 June 14.
  * Institute of Electrical and Electronics Engineers, Inc, &
  *      The Open Group. (2018). "stdbool.h(0p) — Linux
  *      manual page." GNU Linux.  Retrieved from

@@ -136,21 +136,10 @@ const char* helpMessage(    const char* programName,
 
     }
 
-    const char* optionString = 
-           generateCommandLineOptionString(
-               "h",
-               "help",
-               "Display this message.",
-               width);
-    toFree = (void*)returnString;
-    asprintfReturn = asprintf(&returnString, 
-                  "%s%s", returnString, optionString);
-
     /* (Brouwer, 2001: return value) */
     if(asprintfReturn < 0) {
          return helpMessageAsprintfFail();
     }
-    free(toFree);
 
     return returnString;
 }

@@ -78,15 +78,7 @@ struct commandLineOption commandLineOptions[] = {
        false,
        "",
        &settingsSetLanguage },
-
-    (struct commandLineOption){"h?", "help", 
-       "Get Help Message", 
-       false, 
-       false, 
-       true,
-       "",
-       &getHelp },
-   
+ 
     (struct commandLineOption){"v", "version", 
        "Version Information", 
        false, 
@@ -94,6 +86,7 @@ struct commandLineOption commandLineOptions[] = {
        true,
        "",
        &getVersion },
+
 
     #ifdef DEBUG_LOG
     
@@ -115,8 +108,16 @@ struct commandLineOption commandLineOptions[] = {
             true,
             false, 
             "",
-            &settingsSetDebugLogLevel }
+            &settingsSetDebugLogLevel },
     #endif
+
+    (struct commandLineOption){"h?", "help", 
+       "Get Help Message", 
+       false, 
+       false, 
+       true,
+       "",
+       &getHelp }
 
             };
     /* ( Berger, 2012, struct literal format ) */
@@ -244,9 +245,9 @@ bool greetWorld( int width) {
 }
 
 
-/* ---------------- showHelp() ------------------------ *
+/* ------------------- showHelp() ------------------------ *
  *
- * Print an appropriate greeting.
+ * Print help message.
  * Return value:
  *  true  - success
  *  false - failure */
@@ -272,7 +273,7 @@ bool showHelp(    const char* programName,
 
 /* ---------------- showVersion() ------------------------ *
  *
- * Print an appropriate greeting.
+ * Print version info.
  * Return value:
  *  true  - success
  *  false - failure */
@@ -280,15 +281,14 @@ bool showHelp(    const char* programName,
 bool showVersion( int width ) {
 	const char* versionM = 
                 versionMessage( width );  
-        if( versionM ) {
+    if( versionM ) {
         	return printf( versionM );
-            }
-        else {
+    }
+    else {
 		return false;
-            }
+    }
 
 }
-
 
 /* --------------------- main() ------------------------- */
 
@@ -296,7 +296,7 @@ int main(int argc, char *argv[]) {
           /* from ( WG14, 2018, p. 11 ) */
     
     setDebugLogOutput( stdout );
-    //setDebugLogLevel( LOG_LEVEL_WARNING);
+    //setDebugLogLevel( LOG_LEVEL_VERBOSE);
     debugLog( LOG_LEVEL_VERBOSE, 
                      "main():Entering function." );
 
@@ -343,20 +343,23 @@ int main(int argc, char *argv[]) {
 			aBadEnd();
 			}
 
-    		debugLog( LOG_LEVEL_VERBOSE, "main():EXIT_SUCCESS" );
+    		debugLog( LOG_LEVEL_VERBOSE, 
+                 "main():help displayed, EXIT_SUCCESS" );
     		return EXIT_SUCCESS;  
 	}
 	if(displayVersion) {
 		if(!showVersion( settings.textWidth)) {
 				aBadEnd();
 			}
-    		debugLog( LOG_LEVEL_VERBOSE, "main():EXIT_SUCCESS" );
+    		debugLog( LOG_LEVEL_VERBOSE, 
+                  "main():version displayed, EXIT_SUCCESS");
     		return EXIT_SUCCESS;
 	}  
 
     greetWorld( settings.textWidth );
 
-    debugLog( LOG_LEVEL_VERBOSE, "main():EXIT_SUCCESS" );
+    debugLog( LOG_LEVEL_VERBOSE, 
+         "main():said hello, EXIT_SUCCESS" );
     return EXIT_SUCCESS;  
                 /* ( WG14, 2018, p. 11, program exit. ) */
 }
@@ -369,18 +372,18 @@ int main(int argc, char *argv[]) {
  * Sadly, we failed to greet the world.  Let the user know
  * this program is aborting. */
 
-    void aBadEnd(void) {
-        if(programName) {
-            fprintf( stderr, _("Aborting %s.\n"), 
-                     programName);
-        }
-        else {
-            fprintf( stderr, _("Aborting.\n"));
-        }
-        debugLog( LOG_LEVEL_ERROR, 
-                 "aBadEnd():EXIT_FAILURE");
-        exit( EXIT_FAILURE ); /* (Tutorials Point, 2022) */
+void aBadEnd(void) {
+    if(programName) {
+        fprintf( stderr, _("Aborting %s.\n"), 
+                 programName);
     }
+    else {
+        fprintf( stderr, _("Aborting.\n"));
+    }
+    debugLog( LOG_LEVEL_ERROR, 
+             "aBadEnd():EXIT_FAILURE");
+    exit( EXIT_FAILURE ); /* (Tutorials Point, 2022) */
+}
 
 /* --------------------- Works Cited -------------------- */
 /* 
