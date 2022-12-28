@@ -49,6 +49,14 @@ struct commandLineOption {
 
 */
 
+/* Helper functions */
+
+bool isCharacterInString(const char* string, 
+                                          char character);
+
+
+const char* commandLineArgsAsprintfFail();
+
 bool readCommandLineOptions( int commandLineOptionC, 
                         struct commandLineOption options[], 
                            int argc, 
@@ -107,9 +115,14 @@ for(int i = 0 ; i < commandLineOptionC ; i++) {
 
     for(int ii = 0 ; options[i].shortForm[ii] != '\0' ;
               ii++) {
-        asprintf(&shortOptionString, "%s%c", 
+        if( asprintf(&shortOptionString, "%s%c", 
              shortOptionString, 
-                  options[i].shortForm[ii]);
+                  options[i].shortForm[ii]) < 0) {
+            commandLineArgsAsprintfFail();
+            return false;
+        }
+
+
         
         /* one colon for requires argument, 
            two for optional argument. */
@@ -147,25 +160,17 @@ while( (getoptReturn = getopt_long(argc, argv,
     /* log and unrecgonized option.  getoptReturn will
        be a question mark, which will trigger help. */
 
-    if(optopt != NULL) {
-        debugLog( LOG_LEVEL_VERBOSE,                         
+    debugLog( LOG_LEVEL_VERBOSE,                         
            "readCommandLineOptions():optopt: %c.",   
                    (char)optopt);
-
-    }
-    else {
-        debugLog( LOG_LEVEL_VERBOSE,                         
-           "readCommandLineOptions():optopt=NULL.",   
-                   optopt);
-    }
-
+    
     if(getoptReturn == 0) {
         debugLog( LOG_LEVEL_VERBOSE,                         
            "readCommandLineOptions():getoptReturn=0.");
         }
     
      /* if longoption was not set, check ourselves to find
-        which short option coresponds to the return value
+        which short option coresponds to the return value.
         */
      if(longoption == UNSET) {
 
@@ -175,16 +180,13 @@ while( (getoptReturn = getopt_long(argc, argv,
 
         for(int i = 0 ; i < commandLineOptionC ; i++) {
         
-            for(int ii = 0 ; 
-                  options[i].shortForm[ii] != '\0' ;
-                        ii++) {
-                if(getoptReturn == 
-                           options[i].shortForm[ii]) {
+            if( isCharacterInString( options[i].shortForm,
+                  getoptReturn) ) {
                     option_index = i;
                 }
             }
           } 
-      }
+      
       else {
          option_index = longoption; 
       }
@@ -212,13 +214,39 @@ while( (getoptReturn = getopt_long(argc, argv,
                          options[option_index].argument );
      }
     
-longoption=UNSET;
-}
+    longoption=UNSET;
+    }
 
-
-
+    free(getOptStruct);
     return true;
 }
+
+
+bool isCharacterInString(const char* string, 
+                                char character) {
+    if(!string) {
+        debugLog( LOG_LEVEL_WARNING,                         
+           "isCharacterInString():string=NULL");
+        return false;
+        }
+    for(int i = 0 ; string[i] != '\0' ; i++) {
+        if(character == string[i]) {
+            return true;
+            }
+        }
+    return false;
+}
+
+
+const char* commandLineArgsAsprintfFail() {
+    debugLog(LOG_LEVEL_WARNING,
+             "readCommandLineOptions:Unable to process "
+             "command line arguments due to asprintf "
+             "failure.");
+                /* ( Fisher, 2016: multi-line string ) */ 
+    return "";
+}
+
 /* --------------------- Works Cited -------------------- */
 /* 
  * Brouwer, Andries. (2001). "asprintf(3) — Linux manual
