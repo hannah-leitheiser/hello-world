@@ -29,6 +29,8 @@
 #include "word_wrap.h"
 
 const char* programName; 
+bool displayHelp = false;
+bool displayVersion = false;
              /* ( Parahar, 2020: const char* meaning ) */
 
 /* --------- settings and command line options ---------- */
@@ -40,8 +42,8 @@ struct helloWorldSettings settings =        /*  initial  */
       };
 
 
-bool getHelp( const char* width ) {}
-bool getVersion( const char* width ) {}
+bool getHelp( const char* _ );
+bool getVersion( const char* _ );
 
 bool settingsSetWidth( const char* width );
 bool settingsSetNoWrap( const char* _ );
@@ -125,7 +127,12 @@ const int commandLineOptionCount =
                   sizeof(struct commandLineOption);
 
 bool settingsSetWidth( const char* widthString ) {
-    int width;
+if(!widthString || *widthString == '\0')
+{
+    settings.textWidth=0;
+    return false;
+}
+int width;
     if(sscanf(widthString, 
                         "%d\n", &width)) {
         debugLog( LOG_LEVEL_VERBOSE, 
@@ -207,7 +214,21 @@ bool settingsSetDebugLogOutput( const char* output ) {
     }
 }
 
+
 #endif
+
+bool getHelp( const char* _ ) {
+        debugLog( LOG_LEVEL_VERBOSE, 
+           "getHelp():displayHelp = true;\n");
+	displayHelp = true;
+}
+
+
+bool getVersion( const char* _ ) {
+        debugLog( LOG_LEVEL_VERBOSE, 
+           "getVersion():displayVersion = true;\n");
+	displayVersion = true;
+}
 
 /* ---------------- greetWorld() ------------------------ *
  *
@@ -218,16 +239,61 @@ bool settingsSetDebugLogOutput( const char* output ) {
 
 bool greetWorld( int width) {
     return printf( 
-        wrapText( 
-               helloMessage(), width, "", "" )
-                    ); 
+         
+               helloMessage(width)); 
 }
+
+
+/* ---------------- showHelp() ------------------------ *
+ *
+ * Print an appropriate greeting.
+ * Return value:
+ *  true  - success
+ *  false - failure */
+
+bool showHelp(    const char* programName, 
+                                    int commandLineOptionC, 
+               struct commandLineOption options[], 
+                                    int width) {
+	const char* helpM = 
+                helpMessage(  programName, 
+                         commandLineOptionCount, 
+                         commandLineOptions, 
+                          width );  
+        if( helpM ) {
+        	return printf( helpM );
+            }
+        else {
+		return false;
+            }
+
+}
+
+
+/* ---------------- showVersion() ------------------------ *
+ *
+ * Print an appropriate greeting.
+ * Return value:
+ *  true  - success
+ *  false - failure */
+
+bool showVersion( int width ) {
+	const char* versionM = 
+                versionMessage( width );  
+        if( versionM ) {
+        	return printf( versionM );
+            }
+        else {
+		return false;
+            }
+
+}
+
 
 /* --------------------- main() ------------------------- */
 
 int main(int argc, char *argv[]) { 
           /* from ( WG14, 2018, p. 11 ) */
-
     
     setDebugLogOutput( stdout );
 //    setDebugLogLevel( LOG_LEVEL_WARNING);
@@ -260,43 +326,35 @@ int main(int argc, char *argv[]) {
     }    
 
 
-    if(argc == 1) {
-        debugLog( LOG_LEVEL_VERBOSE, 
-          "main():No user-supplied command line arguments, "
-          "printing hello message." );
-        greetWorld( settings.textWidth );                    
-    }
-    else {
-        bool optionReadSuccess = 
-             readCommandLineOptions( 
-                  commandLineOptionCount, 
-                  commandLineOptions, argc, argv );
+	bool optionReadSuccess = 
+	     readCommandLineOptions(
+		  commandLineOptionCount, 
+		  commandLineOptions, argc, argv );
 
-            /* if any unlised command-line argument is 
-               supplied.  By not putting --help in the 
-               options list, it will trigger this message.*/
-        if(!optionReadSuccess) {
-            const char* helpM = 
-                helpMessage(  programName, 
-                         commandLineOptionCount, 
-                         commandLineOptions, 
-                          settings.textWidth );  
-            if( helpM ) {
-                if(!printf( helpM )) {
-                    aBadEnd();
-                }
-            }
-            else {
-                aBadEnd();
-            }
-        }
-    
-        if(optionReadSuccess) {
-            greetWorld( settings.textWidth );
-            }
+	    /* if any unlised command-line argument is 
+	       supplied.  By not putting --help in the 
+	       options list, it will trigger this message.*/
+	if(!optionReadSuccess | displayHelp) {
 
+		if(!showHelp( programName, 
+			      commandLineOptionCount, 
+			      commandLineOptions, 
+			      settings.textWidth)) {
+			aBadEnd();
+			}
 
-    }
+    		debugLog( LOG_LEVEL_VERBOSE, "main():EXIT_SUCCESS" );
+    		return EXIT_SUCCESS;  
+	}
+	if(displayVersion) {
+		if(!showVersion( settings.textWidth)) {
+				aBadEnd();
+			}
+    		debugLog( LOG_LEVEL_VERBOSE, "main():EXIT_SUCCESS" );
+    		return EXIT_SUCCESS;
+	}  
+
+    greetWorld( settings.textWidth );
 
     debugLog( LOG_LEVEL_VERBOSE, "main():EXIT_SUCCESS" );
     return EXIT_SUCCESS;  

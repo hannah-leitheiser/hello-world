@@ -14,6 +14,8 @@
 
 #include <stdbool.h>
 
+#include "error.h"
+
 struct commandLineOption {
     const char* shortForm;
     const char* longForm;
@@ -41,10 +43,12 @@ struct commandLineOption {
  *     false: at least one option not recgonized.            
  */ 
 
+
+
 bool readCommandLineOptions(int commandLineOptionC, 
-                        struct commandLineOption options[], 
-                           int argc, 
-                         char *argv[]);
+                         struct commandLineOption options[], 
+                            int argc, 
+                          char *argv[]);
 
 #endif
 

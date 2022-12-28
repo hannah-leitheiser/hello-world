@@ -14,7 +14,12 @@
 
 /* returns greeting string -- probably "Hello World!" */
 
-const char* helloMessage(void);
+const char* helloMessage( int width );
+
+
+/* returns greeting string -- probably "Hello World!" */
+
+const char* versionMessage( int width );
 
 /* returns response to command line argument to --help or
    the response when an unrecgonized command line argument

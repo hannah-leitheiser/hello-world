@@ -21,8 +21,31 @@
 
 /* ---------------- helloMessage() ---------------------- */
 
-const char* helloMessage(void) {
-    return _("Hello, world!");
+const char* helloMessage(int width) {
+        return wrapText( 
+               _("Hello, world!"), 
+		width, "", "" );
+}
+
+
+/* ------------- versionMessage() ----------------------- */
+
+/* Helper function prototypes: */
+
+const char* getBanner();
+
+const char* versionMessage( int width ) {
+    return wrapText(
+            _( getBanner() ),
+            width, "", "");
+}
+
+const char* defaultBanner = 
+   #include "banner.txt"
+   ;
+
+const char* getBanner() {
+   return defaultBanner;
 }
 
 /* ---------------- helpMessage() ----------------------- */
@@ -130,14 +153,6 @@ const char* helpMessage(    const char* programName,
     free(toFree);
 
     return returnString;
-}
-
-const char* defaultBanner = 
-   #include "banner.txt"
-   ;
-
-const char* getBanner() {
-   return defaultBanner;
 }
 
 const char* defaultDescription = 
