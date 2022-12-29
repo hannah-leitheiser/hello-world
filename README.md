@@ -36,7 +36,7 @@ $cd hello-world
     - Language
 
 * -v, --version
-    - Version Information
+    - Version Information and Exit
 
 * -o, --debugoutput
     - Debug output:
@@ -50,7 +50,7 @@ $cd hello-world
     - 2 Verbose
 
 * -h -?, --help
-   -  Get Help Message
+   -  Get Help Message and Exit
 
 ## Configuration File
 

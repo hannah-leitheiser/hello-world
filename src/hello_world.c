@@ -80,7 +80,7 @@ struct commandLineOption commandLineOptions[] = {
        &settingsSetLanguage },
  
     (struct commandLineOption){"v", "version", 
-       "Version Information", 
+       "Get Version Information and Exit", 
        false, 
        false, 
        true,
@@ -112,7 +112,7 @@ struct commandLineOption commandLineOptions[] = {
     #endif
 
     (struct commandLineOption){"h?", "help", 
-       "Get Help Message", 
+       "Get Help Message and Exit", 
        false, 
        false, 
        true,

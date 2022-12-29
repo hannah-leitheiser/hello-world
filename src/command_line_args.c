@@ -162,7 +162,7 @@ while( (getoptReturn = getopt_long(argc, argv,
               shortOptionString, getOptStruct, &longoption))
                         != -1) {
     
-    /* log and unrecgonized option.  getoptReturn will
+    /* log an unrecgonized option.  getoptReturn will
        be a question mark, which will trigger help. */
 
     debugLog( LOG_LEVEL_VERBOSE,                         
