@@ -330,7 +330,7 @@ END_TEST
 /* Modeled on "3.5 Creating a Suite" in 
  ( Malec, Archer, et. al., 2020 ) */
 
-Suite * money_suite(void)
+Suite * word_wrap_suite(void)
 {
     Suite *s;
     TCase *tc_core;
@@ -356,7 +356,7 @@ Suite * money_suite(void)
     int number_failed;
     Suite *s;
     SRunner *sr;
-    s = money_suite();
+    s = word_wrap_suite();
     sr = srunner_create(s);
 
     srunner_run_all(sr, CK_NORMAL);
