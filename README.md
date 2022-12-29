@@ -51,3 +51,15 @@ $cd hello-world
 
 * -h -?, --help
    -  Get Help Message
+
+## Configuration File
+
+By default: hello_world.conf.  An optional text file that can contain any command line option in the form: [long form option]=[value] or [long form option] if there is no argument.  One option per line.
+
+Example:
+
+```
+debugoutput=hello_world.log
+debuglevel=2
+nowrap
+``` 
