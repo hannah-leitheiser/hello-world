@@ -223,6 +223,11 @@ const char* generateCommandLineOptionStringAsprintfFail() {
  *      page." GNU Linux.  Retrieved from
  *      https://man7.org/linux/man-
  *      pages/man3/asprintf.3.html on 2022 June 25.
+ * David Metcalfe. (1993). "strdup(3) — Linux manual page."
+ *      GNU Linux.  Retrieved from
+ *      https://man7.org/linux/man-
+ *      pages/man3/strdup.3.license.html on 2022 December
+ *      28.
  * Fisher, James. (2016). "How do I write a multi-line
  *      string literal in C?." Website.  Retrieved from
  *      https://jameshfisher.com/2016/11/30/c-multiline-

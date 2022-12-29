@@ -296,16 +296,18 @@ int main(int argc, char *argv[]) {
           /* from ( WG14, 2018, p. 11 ) */
     
     setDebugLogOutput( stdout );
-    //setDebugLogLevel( LOG_LEVEL_VERBOSE);
     debugLog( LOG_LEVEL_VERBOSE, 
                      "main():Entering function." );
 
     FILE* configurationFile = fopen(CONFIGURATION_FILE
                                                   , "r");
     if( configurationFile ) {
-        readConfigurationFile(configurationFile,                        
+        if( !readConfigurationFile(configurationFile,                        
              commandLineOptionCount,                                    
-               commandLineOptions);
+               commandLineOptions)) { 
+        debugLog( LOG_LEVEL_WARNING, 
+            "main():error in configuration file." );
+        }
         fclose( configurationFile ); 
     }
     else {
@@ -313,6 +315,11 @@ int main(int argc, char *argv[]) {
             "main():Unable to read configuration file." );
     }
 
+
+	if(displayHelp) {
+        debugLog( LOG_LEVEL_WARNING, 
+            "main():Configuration file triggered help." );
+    }
     LanguageLocalizationInit();
 
     if(argc > 0) {

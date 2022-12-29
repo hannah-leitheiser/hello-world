@@ -15,6 +15,7 @@
 #include <stdio.h>  /* ( Brouwer, 2001, Synopsis )        */
 #include <stdlib.h> /* (Koenig & Kerrisk, 2018, Synopsis) */
 #include <stdbool.h>/* (IEEE, Inc & The Open Group, 2018) */
+#include <string.h>
 
 #include "command_line_args.h"
 #include "debug_log.h"
@@ -60,6 +61,7 @@ bool readConfigurationFile(FILE* file,
 
     while ((read = getline(&line, &len, file)) != -1) {
         /* (mbaotpff & gsamaras, 2018: similar code ) */
+
         argument = "--";
         predicate = "";
 
@@ -115,6 +117,7 @@ bool readConfigurationFile(FILE* file,
                 }
             }
 
+
         
             char* argv[] = { "", argument, predicate };
             int argc = 3;
@@ -131,22 +134,23 @@ bool readConfigurationFile(FILE* file,
         }
 
         else {
-            char* argv[] = { "", argument  };
-            int argc = 2;
-            if( !readCommandLineOptions(commandLineOptionC, 
-                                     options, argc, argv)) {
-                debugLog(LOG_LEVEL_WARNING, 
-                      "readConfigurationFile():"
-                      "unsuccessful parse of %s, "
-                      "(no predicate). "
-                      "Exiting function.",
-                      argument);
-                return false;
+            if( strlen(argument) > 0) {
+                char* argv[] = { "", argument  };
+                int argc = 2;
+                if( !readCommandLineOptions(commandLineOptionC, 
+                                         options, argc, argv)) {
+                    debugLog(LOG_LEVEL_WARNING, 
+                          "readConfigurationFile():"
+                          "unsuccessful parse of %s, "
+                          "(no predicate). "
+                          "Exiting function.",
+                          argument);
+                    return false;
+                }
             }
 
         }
     
-        free(line);
     }
 return true;
 } 
