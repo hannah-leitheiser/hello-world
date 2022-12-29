@@ -11,7 +11,7 @@ Hello, world!
 ## Build (Ubuntu)
 
 ```console
-$sudo apt-get install automake gnulib
+$sudo apt-get install automake gnulib check
 $git clone https://github.com/hannah-leitheiser/hello-world
 $cd hello-world
 /hello-world$gnulib-tool --import progname vasprintf
