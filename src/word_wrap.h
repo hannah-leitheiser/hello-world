@@ -25,7 +25,7 @@ int getTerminalWidth(void);
 
 /* https://stackoverflow.com/questions/479207/how-to-achieve-function-overloading-in-c */
 
-char* wrapText( const char* text, int width,                 
+const char* wrapText( const char* text, int width,                 
           const char* initialIndent,                         
           const char* subsequentIndent );
    /* arguments modeled after 

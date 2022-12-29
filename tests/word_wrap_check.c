@@ -1,3 +1,13 @@
+/* Filename        : word_wrap_check.c                           
+ * Type of File    : C Source Code                           
+ * Date Created    : 2022DEC28                               
+ * Author          : Hannah Leitheiser                       
+ * Project Name    : Hello World                             
+ * File Summary    : Unit test for wrap_text.h's
+ *                 : wrapText().   
+ * (C Comment Syntax:                                        
+         Kernighan & Ritchie, 1988, p. 9) */    
+
 #include <check.h> /* ( Malec, Archer, et. al., 2020 ) */
 #include <stdlib.h>
 
@@ -9,7 +19,7 @@
 
 START_TEST(word_wrap_hello) {
     const char* helloWorld="Hello, world!\n";
-    char*       text;
+    const char*       text;
 
 
     /* we don't know what that should be, except that it
@@ -121,7 +131,7 @@ START_TEST(word_wrap_long) {
     "And miles to go before I sleep.\n";
                         /* (Frost, 1923) */
 
-    char*       text;
+    const char*       text;
 
     /* no wrap, no change */
     text = wrapText( woods, NOWRAP, "", "");
@@ -129,7 +139,6 @@ START_TEST(word_wrap_long) {
     free(text);
 
 
-    /* no wrap, no change */
     text = wrapText( woods, 10, "", "");
     ck_assert_str_eq(text,  
          "Whose\n"
@@ -222,7 +231,7 @@ START_TEST(word_wrap_indent) {
     "To watch his woods fill up with snow.\n";
                         /* (Frost, 1923), excerpt */
 
-    char*       text;
+    const char*       text;
 
     /* no wrap, no change */
     text = wrapText( woods, NOWRAP, "", "");
@@ -383,6 +392,9 @@ Suite * money_suite(void)
  *      manual version 0.15.2." Libcheck.  Retrieved from ht
  *      tps://libcheck.github.io/check/doc/check_html/index.
  *      html on 2022 December 28.
+ * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
+ *      Programming Language, Second Edition." Prentise
+ *      Hall.  ISBN 0-13-110370-9.
  * Robert Frost. (1923.). ""Stopping by woods on a snowy
  *      evening" in New Hampshire, A Poem; with Notes and
  *      Grace Notes." Henry Holt & Company, NY.  Retrieved

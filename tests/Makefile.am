@@ -1,4 +1,10 @@
-TESTS = check_word_wrap
+TESTS = check_word_wrap hello_simple_check.sh
+
+
+TESTS_ENVIRONMENT = \
+  PATH=$(top_srcdir):$(PATH) \
+  export PATH;
+
 check_PROGRAMS = check_word_wrap
 check_DIR = $(top_builddir)/tests $(top_builddir)/src
 check_word_wrap_SOURCES = word_wrap_check.c

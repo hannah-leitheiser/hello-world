@@ -37,7 +37,9 @@ int getTerminalWidth(void) {
 
 /* -------------------- wrapText() ---------------------- */
 
-char* wrapText( const char* text, int width, 
+void wrapTextAsprintfFail();
+
+const char* wrapText( const char* text, int width, 
           const char* initialIndent, 
           const char* subsequentIndent ) {
 
@@ -45,18 +47,44 @@ int inputTextIndex = 0;
 char* outputText = "";
 bool firstLine = true;
 
+char* tempString;
+
 int inputTextLength = strlen(text);
     /* ( Parewa Labs, n.d., C strlen() ) */
 
 if(width == NOWRAP) {
+
     /* we still need to add the indent */
 
-    asprintf( &outputText, "%s", initialIndent); 
-    for( ; inputTextIndex < inputTextLength; inputTextIndex++) {
+    if( asprintf( &outputText, "%s", initialIndent) < 0) {
 
-        asprintf(&outputText, "%s%c", outputText, text[inputTextIndex]);
-        if( text[inputTextIndex] == '\n' && inputTextIndex < inputTextLength-1 ) {
-        asprintf(&outputText, "%s%s", outputText, subsequentIndent);
+        /* for any asprintf failure, probably due to low 
+         * memory, log the event and return the original 
+         * text as a fall-back. */
+        wrapTextAsprintfFail();
+        return text;
+    }
+
+    for( ; inputTextIndex < inputTextLength; 
+                                     inputTextIndex++) {
+
+        tempString = outputText;
+        if( asprintf(&outputText, "%s%c", outputText, 
+                                text[inputTextIndex]) < 0) {
+            wrapTextAsprintfFail();
+            return text;
+        }
+        free( tempString );
+        
+        if( text[inputTextIndex] == '\n' && 
+                    inputTextIndex < inputTextLength-1 ) {
+            tempString = outputText;
+            if( asprintf(&outputText, "%s%s", outputText, 
+                                subsequentIndent) < 0) {
+                wrapTextAsprintfFail();
+                return text;
+            }
+            free( tempString );
         }
 
     }
@@ -89,8 +117,6 @@ if( strlen(subsequentIndent) + 1 > width ) {
 
 int textColumns;
 
-//debugLog( LOG_LEVEL_VERBOSE, "wrapText():columns:%d, textColumns:%d, indent: %d", columns, textColumns, indent );
-
 while( inputTextIndex < inputTextLength) {
     char* indent;
     if(firstLine) {
@@ -105,29 +131,40 @@ while( inputTextIndex < inputTextLength) {
 
     char* line = malloc( sizeof(char) * (textColumns+1) );
 
-
     int breakPoint;
 
-    /* trim out spaces, but only if textColumns is greater than 1 */
+    /* trim out spaces, but only 
+     * if textColumns is greater than 1 */
     while( text[inputTextIndex] == ' ') {
         if( textColumns < 5 ) {
-            /* if we are in 1 to 4 columns, make spaces new lines. */
-            asprintf( &outputText, "%s%s\n", outputText, indent); 
+            /* if we are in 1 to 4 columns, 
+             * make spaces new lines. */
+            tempString = outputText;
+            if( asprintf( &outputText, "%s%s\n", 
+                outputText, indent) < 0 ) {
+                wrapTextAsprintfFail();
+                return text;
             }
+            free( tempString );
+        }
         inputTextIndex++;
     }
 
     if( inputTextIndex + textColumns < inputTextLength ) {
 
-        debugLog( LOG_LEVEL_VERBOSE, "wrapText():line has to be split" );
+        debugLog( LOG_LEVEL_VERBOSE,
+                      "wrapText():line has to be split" );
         /* we have to find a breakpoint */
         breakPoint = textColumns-1;
-        while( (text[inputTextIndex + breakPoint] != ' ' && text[inputTextIndex + breakPoint] != '\n')  && (breakPoint >= 0) ) {
+        while( (text[inputTextIndex + breakPoint] != ' ' && 
+            text[inputTextIndex + breakPoint] != '\n')   &&
+                                (breakPoint >= 0) ) {
             breakPoint--;
             }
         if(breakPoint == -1) {
 
-            debugLog( LOG_LEVEL_VERBOSE, "wrapText():no good split found." );
+            debugLog( LOG_LEVEL_VERBOSE, 
+                      "wrapText():no good split found." );
             breakPoint = textColumns;
         }
     }
@@ -135,24 +172,39 @@ while( inputTextIndex < inputTextLength) {
         breakPoint = inputTextLength - inputTextIndex;
 
         
-        debugLog( LOG_LEVEL_VERBOSE, "wrapText():last line, breakpoint=%d", breakPoint );
+        debugLog( LOG_LEVEL_VERBOSE, 
+                 "wrapText():last line, breakpoint=%d", 
+                                              breakPoint );
     }
         int i;
-        for(i = 0 ; i < breakPoint && text[inputTextIndex] != '\n' ; i++) {
-            debugLog( LOG_LEVEL_VERBOSE, "wrapText():char to line:%c, i=%d", text[inputTextIndex], i );
+        for(i = 0 ; i < breakPoint && 
+                    text[inputTextIndex] != '\n' ; i++) {
+            debugLog( LOG_LEVEL_VERBOSE, 
+                "wrapText():char to line:%c, i=%d", 
+                       text[inputTextIndex], i );
             line[i] = text[inputTextIndex];
             inputTextIndex++;
         }
 
-        debugLog( LOG_LEVEL_VERBOSE, "wrapText():termination i=%d", i );
+        debugLog( LOG_LEVEL_VERBOSE, \
+                    "wrapText():termination i=%d", i );
         if( line[i-1] == '\n') {
-            line[i-1] = '\0'; /* it will add a return, so don't double. */
-        }
+            /* it will add a return, so don't double. */
+            line[i-1] = '\0';         }
         else {
             line[i] = '\0';
         }
         
-        asprintf( &outputText, "%s%s%s\n", outputText, indent, line);
+        /* trim trailing whitespace */
+        while( line[ strlen( line ) - 1 ] == ' ' ) {
+            line[ strlen( line ) - 1 ] == '\0';
+            }
+
+        if ( asprintf( &outputText, "%s%s%s\n", 
+            outputText, indent, line) < 0 ) {
+            wrapTextAsprintfFail();
+            return text;
+        }
         /* alternately, if the new line is next, go past that */
         if( text[ inputTextIndex ] == '\n') {
             inputTextIndex++; } 
@@ -168,6 +220,15 @@ if( text[ inputTextLength-1 ] != '\n' ) {
 
 return outputText;
 }
+
+void wrapTextAsprintfFail() {  
+    debugLog(LOG_LEVEL_WARNING,                              
+             "wrapTextAsprintfFail():"  
+             "Unable to wrap text "                            
+             "due to asprintf failure.");       
+    return;                                               
+}
+
 
 /* --------------------- Works Cited -------------------- */
 /* 
