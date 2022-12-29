@@ -19,9 +19,6 @@ Hello, world!
 * -l, --lang
     - Language
 
-* -h?, --help
-   -  Get Help Message
-
 * -v, --version
     - Version Information
 
@@ -36,6 +33,5 @@ Hello, world!
     - 1 Warning
     - 2 Verbose
 
-* -h, --help
-     - Display this message.
-
+* -h -?, --help
+   -  Get Help Message
