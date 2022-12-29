@@ -14,13 +14,13 @@ Hello, world!
 $sudo apt-get install automake gnulib check
 $git clone https://github.com/hannah-leitheiser/hello-world
 $cd hello-world
-/hello-world$gnulib-tool --import progname vasprintf
-/hello-world$touch config.rpath
-/hello-world$autoreconf --install
-/hello-world$./configure
-/hello-world$make
-/hello-world$cd src
-/hello-world/src$./hello_world
+hello-world$gnulib-tool --import progname vasprintf
+hello-world$touch config.rpath
+hello-world$autoreconf --install
+hello-world$./configure
+hello-world$make
+hello-world$cd src
+hello-world/src$./hello_world
 ```
 
 ## Command Line Options
