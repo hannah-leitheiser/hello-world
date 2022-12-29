@@ -15,7 +15,6 @@
 #include <stdlib.h> /*https://www.tutorialspoint.com/c_standard_library/c_function_exit.htm*/
 #include <stdarg.h> /* https://en.cppreference.com/w/c/variadic/va_list */
 #include "gettext.h"
-#include "hello_world.h"
 #include "printf.h"
 
 char* nameStream( FILE* __stream) {
@@ -57,11 +56,11 @@ int vfprintf_mine(FILE* __stream, const char *__format, va_list argptr) { /* htt
         char* errorMessage;
         asprintf(&errorMessage, _("Failure in attempting to print \"%s\" to %s"), whatWeTriedtoPrint, whereWeTriedToPrintIt);
         perror( errorMessage);
-        aBadEnd();
+        return -1;
     }
     if(flushReturn == EOF )  { /* https://www.tutorialspoint.com/c_standard_library/c_function_fflush.htm */ 
         perror( _("Attempting to flush STDOUT") );
-        aBadEnd();
+        return -1;
     }
     return fprintfReturn;
 

@@ -1,9 +1,11 @@
-/* Filename        : hello_world.c
+/* Filename        : word_wrap.c
  * Type of File    : C Source Code
  * Date Created    : 2022JUN02
  * Author          : Hannah Leitheiser
  * Project Name    : Hello World
- * Description     : Print "Hello World!" to stdout.
+ * Description     : Provide function for detecting terminal
+ *                 : width and reformating text shortened
+ *                 : and wraped to that length.
  * (Kernighan & Ritchie, 1988, p. 9: comment syntax) */
 
 #define _GNU_SOURCE
@@ -11,19 +13,29 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <sys/ioctl.h>
+#include <sys/ioctl.h>  /* ( Regents, 1991 ) */
 #include <unistd.h>
+
+/* src/ headers */
 
 #include "word_wrap.h"
 #include "debug_log.h"
 
-int getTerminalWidth(void) { 
-/* https://stackoverflow.com/questions/1022957/getting-terminal-width-in-c */
-    struct winsize w;
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+/* ------------ getTerminalWidth() ---------------------- */
 
-    return w.ws_col;
+int getTerminalWidth(void) { 
+
+    struct winsize w;
+
+    /* ( T, 2009 ) */
+    if ( ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) ) {
+        /* ( Regents, 1991 ) */
+        return w.ws_col;
+    }
+    return NOWRAP;
 }
+
+/* -------------------- wrapText() ---------------------- */
 
 char* wrapText( const char* text, int width, 
           const char* initialIndent, 
@@ -33,8 +45,8 @@ int inputTextIndex = 0;
 char* outputText = "";
 bool firstLine = true;
 
-/*https://www.programiz.com/c-programming/library-function/string.h/strlen*/
 int inputTextLength = strlen(text);
+    /* ( Parewa Labs, n.d., C strlen() ) */
 
 if(width == NOWRAP) {
     /* we still need to add the indent */
@@ -98,8 +110,8 @@ while( inputTextIndex < inputTextLength) {
 
     /* trim out spaces, but only if textColumns is greater than 1 */
     while( text[inputTextIndex] == ' ') {
-        if( textColumns < 3 ) {
-            /* if we are in 1 or 2 columns, make spaces new lines. */
+        if( textColumns < 5 ) {
+            /* if we are in 1 to 4 columns, make spaces new lines. */
             asprintf( &outputText, "%s%s\n", outputText, indent); 
             }
         inputTextIndex++;
@@ -147,6 +159,13 @@ while( inputTextIndex < inputTextLength) {
     free ( line);
     }
 
+/* was there no trailing '\n' in the input? */
+if( text[ inputTextLength-1 ] != '\n' ) {
+    /* then take it out of the output */
+    outputText[ strlen(outputText) - 1 ] = '\0';
+    }
+
+
 return outputText;
 }
 
@@ -155,4 +174,16 @@ return outputText;
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
  *      Hall.  ISBN 0-13-110370-9.
+ * Parewa Labs. (n.d.). "C strlen()." Parewa Labs Pvt. Ltd..
+ *      Retrieved from
+ *      https://www.programiz.com/c-programming/library-
+ *      function/string.h/strlen on 2022 December 28.
+ * Regents of the University of California. (1991).
+ *      "ioctl(2) — Linux manual page." GNU Linux.
+ *      Retrieved from https://man7.org/linux/man-
+ *      pages/man2/ioctl.2.html on 2022 December 28.
+ * T, John. (2009). "Getting terminal width in C?: Answer."
+ *      Stackoverflow.  Retrieved from
+ *      https://stackoverflow.com/questions/1022957/getting-
+ *      terminal-width-in-c on 2022 December 28.
  */

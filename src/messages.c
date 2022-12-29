@@ -23,7 +23,7 @@
 
 const char* helloMessage(int width) {
         return wrapText( 
-               _("Hello, world!"), 
+               _("Hello, world!\n"), 
 		width, "", "" );
 }
 
