@@ -1,4 +1,4 @@
-SUBDIRS = src . tests
+SUBDIRS = lib src . tests
 ACLOCAL_AMFLAGS = -I m4
 AM_CPPFLAGS = -I$(top_builddir)/lib -I$(top_srcdir)/lib
 EXTRA_DIST = \
