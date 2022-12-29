@@ -4,7 +4,7 @@ C code to greet the world!
 ## Example Use
 
 ```console
-:~$./hello_world
+$./hello_world
 Hello, world!
 ```
 
@@ -14,10 +14,12 @@ Hello, world!
 $sudo apt-get install automake gnulib
 $git clone https://github.com/hannah-leitheiser/hello-world
 $cd hello-world
-$gnulib-tool --import progname vasprintf
-$autoreconf --install
-$./configure
-$make
+/hello-world$gnulib-tool --import progname vasprintf
+/hello-world$autoreconf --install
+/hello-world$./configure
+/hello-world$make
+/hello-world$cd src
+/hello-world/src$./hello_world
 ```
 
 ## Command Line Options
