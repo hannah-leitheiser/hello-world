@@ -1,5 +1,5 @@
 # hello-world
-Well-written C code to greet the world!
+C code to greet the world!
 
 ## Example Use
 
@@ -11,13 +11,13 @@ Hello, world!
 ## Build (Ubuntu)
 
 ```console
-:~$sudo apt-get install automake gnulib
-:~$git clone https://github.com/hannah-leitheiser/hello-world
-:~$cd hello-world
-:~$gnulib-tool --import progname vasprintf
-:~$autoreconf --install
-:~$./configure
-:~$make
+$sudo apt-get install automake gnulib
+$git clone https://github.com/hannah-leitheiser/hello-world
+$cd hello-world
+$gnulib-tool --import progname vasprintf
+$autoreconf --install
+$./configure
+$make
 ```
 
 ## Command Line Options
