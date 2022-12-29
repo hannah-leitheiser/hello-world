@@ -28,12 +28,10 @@ START_TEST(word_wrap_hello) {
     text = wrapText( helloWorld, AUTODETECT, "", "");
     ck_assert_ptr_ne(text, NULL);
     ck_assert_int_ge( strlen(helloWorld), strlen(text));
-    free(text);
 
     /* no wrap, no change */
     text = wrapText( helloWorld, NOWRAP, "", "");
     ck_assert_str_eq(helloWorld, text);
-    free(text);
 
     text = wrapText( helloWorld, 1, "", "");
     ck_assert_str_eq(text, "H\n"
@@ -49,8 +47,6 @@ START_TEST(word_wrap_hello) {
                            "l\n"
                            "d\n"
                            "!\n");
-    free(text);
-
 
     text = wrapText( helloWorld, 2, "", "");
     ck_assert_str_eq(text, "He\n"
@@ -60,8 +56,6 @@ START_TEST(word_wrap_hello) {
                            "wo\n"
                            "rl\n"
                            "d!\n");
-    free(text);
-
 
     text = wrapText( helloWorld, 3, "", "");
     ck_assert_str_eq(text, "Hel\n"
@@ -69,7 +63,6 @@ START_TEST(word_wrap_hello) {
                            "\n"
                            "wor\n"
                            "ld!\n");
-    free(text);
 
     text = wrapText( helloWorld, 4, "", "");
     ck_assert_str_eq(text, "Hell\n"
@@ -77,21 +70,17 @@ START_TEST(word_wrap_hello) {
                            "\n"
                            "worl\n"
                            "d!\n");
-    free(text);
-
 
     text = wrapText( helloWorld, 5, "", "");
     ck_assert_str_eq(text, "Hello\n"
                            ",\n"
                            "world\n"
                            "!\n");
-    free(text);
 
     for(int i = 6 ; i < 14 ; i++) {
         text = wrapText( helloWorld, i, "", "");
         ck_assert_str_eq(text, "Hello,\n"
                                "world!\n");
-        free(text);
     }
 
     /* Once there's sufficient space, the line should be
@@ -100,7 +89,6 @@ START_TEST(word_wrap_hello) {
     for(int i = 14 ; i < 120 ; i++) {
         text = wrapText( helloWorld, i, "", "");
         ck_assert_str_eq(helloWorld, text);
-        free(text);
     }
 
 
@@ -136,8 +124,6 @@ START_TEST(word_wrap_long) {
     /* no wrap, no change */
     text = wrapText( woods, NOWRAP, "", "");
     ck_assert_str_eq(woods, text);
-    free(text);
-
 
     text = wrapText( woods, 10, "", "");
     ck_assert_str_eq(text,  
@@ -217,7 +203,6 @@ START_TEST(word_wrap_long) {
          "before I\n"
          "sleep.\n"
     );
-    free(text);
 
 }
 END_TEST
@@ -236,8 +221,6 @@ START_TEST(word_wrap_indent) {
     /* no wrap, no change */
     text = wrapText( woods, NOWRAP, "", "");
     ck_assert_str_eq(woods, text);
-    free(text);
-
 
     /* subsequent indent test */
     text = wrapText( woods, 10, "", "$$$$ ");
@@ -276,7 +259,6 @@ START_TEST(word_wrap_indent) {
          "$$$$ with\n"
          "$$$$ snow.\n"
     );
-    free(text);
 
     /* initial and subsequent indent test */
     text = wrapText( woods, 10, ">>>> ", "> ");
@@ -306,7 +288,6 @@ START_TEST(word_wrap_indent) {
          "> with\n"
          "> snow.\n"
     );
-    free(text);
 
     /* subsequent indent only test */
     text = wrapText( woods, 10, "", ">> ");
@@ -340,7 +321,6 @@ START_TEST(word_wrap_indent) {
          ">> snow.\n"
 
     );
-    free(text);
 
 
 }
