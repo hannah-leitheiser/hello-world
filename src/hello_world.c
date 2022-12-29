@@ -339,8 +339,7 @@ int main(int argc, char *argv[]) {
 		  commandLineOptions, argc, argv );
 
 	    /* if any unlised command-line argument is 
-	       supplied.  By not putting --help in the 
-	       options list, it will trigger this message.*/
+	       supplied it will trigger this message.*/
 	if(!optionReadSuccess | displayHelp) {
 
 		if(!showHelp( programName, 
