@@ -11,6 +11,7 @@
 #define _GNU_SOURCE /* (Brouwer, 2001, Synopsis )         */
 #include <stdio.h>  /* (Kernighan & Ritchie, 1988, p. 6)  */
 #include <stdlib.h> /* (Koenig & Kerrisk, 2018, Synopsis) */
+#include <string.h> /* ( Metcalfe, 1993 )                 */ 
 
 #include "gettext.h"
 #include "command_line_args.h"
@@ -86,7 +87,9 @@ const char* helpMessage(    const char* programName,
     }
 
     toFree = (void*)returnString;
-    returnString = wrapText(returnString, width,"","");
+                  /* ( Metcalfe, 1993 ) */ 
+    returnString = strdup(
+              wrapText(returnString, width,"",""));
     free( toFree );
 
     
@@ -172,10 +175,12 @@ const char* generateCommandLineOptionString(
     }
 
     char* descp;
-    descp = wrapText( description, width, "     ", "     ");
+                                /* ( Metcalfe, 1993 ) */  
+    descp = strdup( 
+         wrapText( description, width, "     ", "     "));
 
     toFree = (void*)firstPart;
-    firstPart = wrapText(firstPart,width,"","");
+    firstPart = strdup( wrapText(firstPart,width,"","") );
     free(toFree);
     asprintfReturn = asprintf(&returnString, 
                        "%s%s\n", firstPart, descp);

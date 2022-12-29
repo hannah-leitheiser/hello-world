@@ -15,6 +15,7 @@ $sudo apt-get install automake gnulib
 $git clone https://github.com/hannah-leitheiser/hello-world
 $cd hello-world
 /hello-world$gnulib-tool --import progname vasprintf
+/hello-world$touch config.rpath
 /hello-world$autoreconf --install
 /hello-world$./configure
 /hello-world$make
