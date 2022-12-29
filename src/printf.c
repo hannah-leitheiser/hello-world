@@ -1,11 +1,10 @@
-/* Filename        : hello_world.c
+/* Filename        : printf.c
  * Type of File    : C Source Code
  * Date Created    : 2022JUN02
  * Author          : Hannah Leitheiser
  * Project Name    : Hello World
- * Description     : Print "Hello World!" to stdout.
- * Compile         : gcc hello_world.c -o hello_world
- *  and Run        : ./hello_world
+ * Description     : Attempt to create a robust print
+ *                 : situation.
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
 #define _GNU_SOURCE /* ( shadowchaser, 2020 ) */
