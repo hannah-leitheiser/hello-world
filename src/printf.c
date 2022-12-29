@@ -8,12 +8,10 @@
  *  and Run        : ./hello_world
  * [Comment Syntax: Kernighan & Ritchie, 1988, p. 9] */
 
-/* https://stackoverflow.com/questions/41841527/why-printf-does-not-output-to-a-file-when-stdout-is-redirected-to-that-file */
-
-#define _GNU_SOURCE
+#define _GNU_SOURCE /* ( shadowchaser, 2020 ) */
 #include <stdio.h> /* [Kernighan & Ritchie, 1988, p. 6] */
-#include <stdlib.h> /*https://www.tutorialspoint.com/c_standard_library/c_function_exit.htm*/
-#include <stdarg.h> /* https://en.cppreference.com/w/c/variadic/va_list */
+#include <stdlib.h> 
+#include <stdarg.h> /* ( cppreference.com, 2020 ) */
 #include "gettext.h"
 #include "printf.h"
 
@@ -30,35 +28,39 @@ char* nameStream( FILE* __stream) {
         return "a file";
 }
 
-/* https://stackoverflow.com/questions/61306157/unable-to-compile-program-due-to-function-asprintf */
-
 /******************* printf_mine() **************************
- * Perform an explicit flush, see [1].
+ * Perform an explicit flush.
  * Check for stdio errors. */
 
-/* https://stackoverflow.com/questions/205529/passing-variable-number-of-arguments-around */
-int vfprintf_mine(FILE* __stream, const char *__format, va_list argptr) { /* https://github.com/lattera/glibc/blob/master/libio/stdio.h */
+int vfprintf_mine(FILE* __stream, const char *__format, 
+                                          va_list argptr) { 
+                      /* ( Meyers, et. al, 2018 ) */
     int fprintfReturn = vfprintf(__stream, __format, argptr);
     int flushReturn = 0;
     if(fprintfReturn >= 0) {
         if(fprintfReturn > 0) {
+            /* ( sureshkumar, 2017 ) */
+            /* Try to make printing a bit more robust. */
             flushReturn = fflush(__stream);
         }
     }
     else {
         /* Something went very wrong */
-        /* https://www.cplusplus.com/reference/cstdio/printf/ */
-        /* https://en.cppreference.com/w/c/io/perror */
+        /* ( cplusplus.com, n. d.) */
         char* whatWeTriedtoPrint;
         vasprintf( &whatWeTriedtoPrint, __format, argptr);
         char* whereWeTriedToPrintIt = nameStream(__stream);
         
         char* errorMessage;
-        asprintf(&errorMessage, _("Failure in attempting to print \"%s\" to %s"), whatWeTriedtoPrint, whereWeTriedToPrintIt);
+        asprintf(&errorMessage, 
+           _("Failure in attempting to print \"%s\" to %s"), 
+               whatWeTriedtoPrint, whereWeTriedToPrintIt);
+        /* ( cppreference.com, 2021 ) */
         perror( errorMessage);
         return -1;
     }
-    if(flushReturn == EOF )  { /* https://www.tutorialspoint.com/c_standard_library/c_function_fflush.htm */ 
+    /* ( Tutorialspoint, 2022 ) */
+    if(flushReturn == EOF )  {  
         perror( _("Attempting to flush STDOUT") );
         return -1;
     }
@@ -67,26 +69,52 @@ int vfprintf_mine(FILE* __stream, const char *__format, va_list argptr) { /* htt
 }
 
 int printf_mine(const char *__format, ...) {
+    /* ( smacL, 2008 ) */
     va_list argptr;
     va_start(argptr,__format);
     return vfprintf_mine(stdout, __format, argptr);
 }
 
-/*  Works Cited:
- *  WG14. (2018).  Programming Languages -- C. 9899:202x (E).  ISO/IEC.
- *     Retrieved from https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2310.pdf
- *     on 2022 June 03.
- *  Kernighan, Brian W. & Ritchie, Dennis M.  (1988).  The C Programming Language.  
- *     Second Edition.  Prentise Hall.  ISBN 0-13-110370-9. 
- *  Thompson, Keith.  2012.  "Should I return EXIT_SUCCESS or 0 
- *     from main()?: Answer."  Stack Overflow.  
- *     Retrieved from 
- *     https://stackoverflow.com/questions/8867871/should-i-return-exit-success-or-0-from-main
- *     on 2022 June 03.
- */
 /* --------------------- Works Cited -------------------- */
 /* 
+ * Joseph Meyers, Ulrich Drepper, Zack Weinberg, et. al..
+ *      (2018). "studio.h." glibc.  Retrieved from https://g
+ *      ithub.com/lattera/glibc/blob/master/libio/stdio.h on
+ *      2022 June 09.
  * Kernighan, Brian W. & Ritchie, Dennis M.. (1988). "The C
  *      Programming Language, Second Edition." Prentise
  *      Hall.  ISBN 0-13-110370-9.
+ * Tutorialspoint. (2022). "C library function - fflush()."
+ *      Tutorialspoint.  Retrieved from https://www.tutorial
+ *      spoint.com/c_standard_library/c_function_fflush.htm
+ *      on 2022 June 09.
+ * cplusplus.com. (n. d.). "printf." cplusplus.com.
+ *      Retrieved from
+ *      https://cplusplus.com/reference/cstdio/printf/ on
+ *      2022 June 09.
+ * cppreference.com. (2020). "va_list." cppreference.com.
+ *      Retrieved from
+ *      https://en.cppreference.com/w/c/variadic/va_list on
+ *      2022 July 16.
+ * cppreference.com. (2021). "perror." cppreference.com.
+ *      Retrieved from
+ *      https://en.cppreference.com/w/c/io/perror on 2022
+ *      December 28.
+ * shadowchaser. (2020). "unable to compile program due to
+ *      function asprintf: Answer." Stackoverflow.
+ *      Retrieved from
+ *      https://stackoverflow.com/questions/61306157/unable-
+ *      to-compile-program-due-to-function-asprintf on 2022
+ *      December 28.
+ * smacL. (2020). "Passing variable number of arguments
+ *      around: Answer." Stackoverflow.  Retrieved from
+ *      https://stackoverflow.com/questions/205529/passing-
+ *      variable-number-of-arguments-around on 2022 December
+ *      28.
+ * sureshkumar. (2017). "Why printf() does not output to a
+ *      file, when stdout is redirected to that file?:
+ *      Answer." Stackoverflow.  Retrieved from
+ *      https://stackoverflow.com/questions/41841527/why-
+ *      printf-does-not-output-to-a-file-when-stdout-is-
+ *      redirected-to-that-file on 2022 December 28.
  */
